@@ -3,7 +3,8 @@ var $INIT_SIZE = 20;
 var $INIT_X = 10;
 var $INIT_Y = 40;
 var $LEVEL = '1';
-var $DATA = '0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0;0,1,1,0,1,1,1,1,1,0,1,1,1,0,0,0;0,1,0,1,0,1,1,1,0,0,1,1,1,1,0,0;0,0,1,0,0,1,1,1,1,1,1,1,1,1,1,0;0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0;1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0;1,0,1,0,0,1,0,0,0,0,0,0,1,1,1,0;1,1,1,1,0,1,0,1,0,0,1,0,0,0,1,0;1,0,0,0,0,1,0,1,0,0,1,0,0,0,1,0;0,1,1,1,1,0,0,0,0,0,0,0,0,1,1,0;0,1,1,1,1,1,1,0,0,0,0,1,1,0,1,0;0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0;0,1,1,1,1,0,1,1,1,1,1,1,0,1,0,0;0,1,1,1,1,1,0,0,0,0,0,1,1,0,0,0;0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0;0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0;0,0,1,1,1,1,1,0,1,1,0,1,1,1,1,0;0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,1;0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,1;0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,1;0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,0;0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,0;0,0,1,1,0,0,1,1,1,1,1,1,0,1,1,0;0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,0;0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,0;0,1,1,1,1,1,0,0,0,0,1,1,1,1,1,0;1,0,1,1,1,1,0,0,0,0,1,1,1,1,0,1;1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,'
+var $COLORS = ["red", "blue", "black"];
+var $DATA = '0,1,1,1,0,0,2,2,2,0,;1,1,1,1,1,2,2,2,2,2,;1,1,1,1,2,2,2,2,2,2,;1,1,1,1,2,2,2,2,0,2,;1,1,1,1,2,2,2,2,0,2,;0,1,1,1,2,2,2,0,2,2,;0,0,3,0,0,2,2,2,2,0,;0,0,3,3,0,3,3,0,0,0,;0,0,0,3,3,3,0,0,0,0,;0,0,0,0,3,0,0,0,0,0,'
 
 var draw_points = [];
 var vertical_numbers = [];
@@ -16,16 +17,7 @@ var opacitySquare;
 
 var clicked = false;
 var totalValidated = false;
-
 var size;
-
-var specialCount;
-var isAnimating = false;
-var animation;
-var columnCount;
-var lineCount;
-var columnCountAux;
-var lineCountAux;
 
 function clean() {
 	draw_points = [];
@@ -52,9 +44,6 @@ function initialize() {
 	}
 	getNumbers();
 	totalValidated = false;
-	specialCount = 4;
-	label_special = document.getElementById("label_special");
-	label_special.textContent = specialCount;
 	size = $INIT_SIZE;
 	var pos_x = $INIT_X + horizontal_numbers[0].length * size;
 	var pos_y = $INIT_Y + vertical_numbers[0].length * size;
@@ -104,46 +93,62 @@ function getNumbers() {
 		horizontal_numbers[k] = new Array(horizontalNumbers);
 	for (k = 0; k < draw_points[0].length; k++)
 		vertical_numbers[k] = new Array(verticalNumbers);
-	var count, numbers;
+	var count, numbers, aux, counting;
 	for (i = 0; i < draw_points.length; i++) {
 		count = 0;
 		numbers = 0;
+		aux = -1;
+		counting = false;
 		for (j = draw_points[0].length - 1; j >= 0; j--) {
-			if (draw_points[i][j] == 1)
+			if (counting) {
 				count++;
-			else if (count > 0) {
-				horizontal_numbers[i][numbers] = count.toString();
-				count = 0;
-				numbers++;
-			}
+				if (draw_points[i][j] == 0 || draw_points[i][j] != aux) {
+					if (draw_points[i][j] == 0)
+						counting = false;
+					horizontal_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux-1] };
+					count = 0;
+					numbers++;
+				}
+			} else if (draw_points[i][j] > 0 && draw_points[i][j] != aux)
+				counting = true;
+			aux = draw_points[i][j];
 		}
 		if (count > 0) {
-			horizontal_numbers[i][numbers] = count.toString();
+			count++;
+			horizontal_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux-1] };
 			numbers++;
 		}
 		while (numbers < horizontalNumbers) {
-			horizontal_numbers[i][numbers] = " ";
+			horizontal_numbers[i][numbers] = { number: " ", color: "white" };
 			numbers++;
 		}
 	}
 	for (i = 0; i < draw_points[0].length; i++) {
 		count = 0;
 		numbers = 0;
+		aux = -1;
+		counting = false;
 		for (j = draw_points.length - 1; j >= 0; j--) {
-			if (draw_points[j][i] == 1)
+			if (counting) {
 				count++;
-			else if (count > 0) {
-				vertical_numbers[i][numbers] = count.toString();
-				count = 0;
-				numbers++;
-			}
+				if (draw_points[j][i] == 0 || draw_points[j][i] != aux) {
+					if (draw_points[j][i] == 0)
+						counting = false;
+					vertical_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux-1] };
+					count = 0;
+					numbers++;
+				}
+			} else if (draw_points[j][i] > 0 && draw_points[j][i] != aux)
+				counting = true;
+			aux = draw_points[j][i];
 		}
 		if (count > 0) {
-			vertical_numbers[i][numbers] = count.toString();
+			count++;
+			vertical_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux-1] };
 			numbers++;
 		}
 		while (numbers < verticalNumbers) {
-			vertical_numbers[i][numbers] = " ";
+			vertical_numbers[i][numbers] = { number: " ", color: "white" };
 			numbers++;
 		}
 	}
@@ -151,19 +156,23 @@ function getNumbers() {
 
 function getHorizontalNumbers() {
 	var bigger = 0;
-	var count, numbers;
+	var numbers, aux, counting;
 	for (i = 0; i < draw_points.length; i++) {
-		count = 0;
 		numbers = 0;
+		aux = -1;
+		counting = false;
 		for (j = draw_points[0].length - 1; j >= 0; j--) {
-			if (draw_points[i][j] == 1)
-				count++;
-			else if (count > 0) {
-				count = 0;
-				numbers++;
-			}
+			if (counting) {
+				if (draw_points[i][j] == 0 || draw_points[i][j] != aux) {
+					if (draw_points[i][j] == 0)
+						counting = false;
+					numbers++;
+				}
+			} else if (draw_points[i][j] > 0 && draw_points[i][j] != aux)
+				counting = true;
+			aux = draw_points[i][j];
 		}
-		if (count > 0)
+		if (counting)
 			numbers++;
 		if (numbers > bigger)
 			bigger = numbers;
@@ -173,19 +182,23 @@ function getHorizontalNumbers() {
 
 function getVerticalNumbers() {
 	var bigger = 0;
-	var count, numbers;
+	var numbers, aux, counting;
 	for (i = 0; i < draw_points[0].length; i++) {
-		count = 0;
 		numbers = 0;
+		aux = -1;
+		counting = false;
 		for (j = draw_points.length - 1; j >= 0; j--) {
-			if (draw_points[j][i] == 1)
-				count++;
-			else if (count > 0) {
-				count = 0;
-				numbers++;
-			}
+			if (counting) {
+				if (draw_points[j][i] == 0 || draw_points[j][i] != aux) {
+					if (draw_points[j][i] == 0)
+						counting = false;
+					numbers++;
+				}
+			} else if (draw_points[j][i] > 0 && draw_points[j][i] != aux)
+				counting = true;
+			aux = draw_points[j][i];
 		}
-		if (count > 0)
+		if (counting)
 			numbers++;
 		if (numbers > bigger)
 			bigger = numbers;
@@ -256,16 +269,17 @@ function createLine(pos_x, pos_y, orientation, i) {
 function createSquareNumber(pos_x, pos_y, orientation, i, j) {
 	var squareNumber = document.createElementNS($SVG_LIB, "rect");
 	squareNumber.setAttribute("id", "squareNumber_" + orientation + "." + i + "." + (j - 1));
-	squareNumber.setAttribute("fill", "black");
 	squareNumber.setAttribute("opacity", "1");
 	squareNumber.setAttribute("height", size);
 	squareNumber.setAttribute("width", size);
 	if (orientation == 0) {
 		squareNumber.setAttribute("x", pos_x + i * size);
 		squareNumber.setAttribute("y", pos_y - j * size);
+		squareNumber.setAttribute("fill", vertical_numbers[i][j - 1].color);
 	} else {
 		squareNumber.setAttribute("x", pos_x - j * size);
 		squareNumber.setAttribute("y", pos_y + i * size);
+		squareNumber.setAttribute("fill", horizontal_numbers[i][j - 1].color);
 	}
 	squareNumber.onclick = markSquareNumber;
 	document.getElementById("area").appendChild(squareNumber);
@@ -282,11 +296,11 @@ function createNumber(pos_x, pos_y, orientation, i, j) {
 	if (orientation == 0) {
 		number.setAttribute("x", pos_x + i * size + 0.5 * size);
 		number.setAttribute("y", pos_y - j * size + 0.8 * size);
-		number.textContent = vertical_numbers[i][j - 1];
+		number.textContent = vertical_numbers[i][j - 1].number;
 	} else {
 		number.setAttribute("x", pos_x - j * size + 0.5 * size);
 		number.setAttribute("y", pos_y + i * size + 0.8 * size);
-		number.textContent = horizontal_numbers[i][j - 1];
+		number.textContent = horizontal_numbers[i][j - 1].number;
 	}
 	number.onclick = markNumber;
 	document.getElementById("area").appendChild(number);
@@ -327,7 +341,7 @@ function autoFill() {
 			break;
 	}
 	var count = 0;
-	var square, rectangle = null;
+	var square = null;
 	var chosenColumns = new Array(draw_points[0].length);
 	var chosenLines = new Array(draw_points[0].length);
 	while (count < numberRanksToFill) {
@@ -339,9 +353,9 @@ function autoFill() {
 			else {
 				chosenColumns.push(randColumn);
 				for (i = 0; i < draw_points[0].length; i++) {
-					if (draw_points[randColumn][i] == 1) {
+					if (draw_points[randColumn][i] > 0) {
 						square = document.getElementById("square_" + i + "." + randColumn);
-						square.setAttribute("fill", "black");
+						square.setAttribute("fill", $COLORS[draw_points[randColumn][i]-1]);
 						square.setAttribute("opacity", "1");
 					}
 				}
@@ -355,9 +369,9 @@ function autoFill() {
 			else {
 				chosenLines.push(randLine);
 				for (i = 0; i < draw_points.length; i++) {
-					if (draw_points[i][randLine] == 1) {
+					if (draw_points[i][randLine] > 0) {
 						square = document.getElementById("square_" + randLine + "." + i);
-						square.setAttribute("fill", "black");
+						square.setAttribute("fill", $COLORS[draw_points[i][randLine]-1]);
 						square.setAttribute("opacity", "1");
 					}
 				}
@@ -377,7 +391,7 @@ function contains(array, obj) {
 }
 
 function highlightSquare(evt) {
-	if (!totalValidated && !isAnimating) {
+	if (!totalValidated) {
 		var id = evt.target.getAttribute("id");
 		id = id.replace("square_", "");
 		var idSplited = id.split('.');
@@ -411,7 +425,7 @@ function highlightSquare(evt) {
 }
 
 function fadeSquare(evt) {
-	if (!totalValidated && !isAnimating) {
+	if (!totalValidated) {
 		var id = evt.target.getAttribute("id");
 		id = id.replace("square_", "");
 		var idSplited = id.split('.');
@@ -445,7 +459,7 @@ function fadeSquare(evt) {
 }
 
 function initColorsChange(evt) {
-	if (!totalValidated && !isAnimating) {
+	if (!totalValidated) {
 		var id = evt.target.getAttribute("id");
 		id = id.replace("square_", "");
 		var idSplited = id.split('.');
@@ -496,7 +510,7 @@ function initColorsChange(evt) {
 }
 
 function changeColorSquares(evt) {
-	if (!totalValidated && !isAnimating) {
+	if (!totalValidated) {
 		var id = evt.target.getAttribute("id");
 		id = id.replace("square_", "");
 		var idSplited = id.split('.');
@@ -546,14 +560,14 @@ function changeColorSquares(evt) {
 }
 
 function endColorsChange(evt) {
-	if (!totalValidated && !isAnimating) {
+	if (!totalValidated) {
 		clicked = false;
 		validate();
 	}
 }
 
 function markSquareNumber(evt) {
-	if (!totalValidated && !isAnimating) {
+	if (!totalValidated) {
 		var opacity = evt.target.getAttribute("opacity");
 		var id = evt.target.getAttribute("id");
 		id = id.replace("squareNumber_", "");
@@ -562,19 +576,22 @@ function markSquareNumber(evt) {
 		var i = parseInt(idSplited[1]);
 		var j = parseInt(idSplited[2]);
 		var number = document.getElementById("number_" + orientation + "." + i + "." + j);
+		console.log(evt.target);
 		if (opacity == "1") {
 			evt.target.setAttribute("opacity", "0");
-			number.setAttribute("fill", "black");
+			number.setAttribute("fill", evt.target.getAttribute("fill"));
+			number.setAttribute("font-weight", "bold");		
 		}
 		else {
 			evt.target.setAttribute("opacity", "1");
 			number.setAttribute("fill", "white");
+			number.setAttribute("font-weight", "normal");	
 		}
 	}
 }
 
 function markNumber(evt) {
-	if (!totalValidated && !isAnimating) {
+	if (!totalValidated) {
 		var fill = evt.target.getAttribute("fill");
 		var id = evt.target.getAttribute("id");
 		id = id.replace("number_", "");
@@ -584,18 +601,19 @@ function markNumber(evt) {
 		var j = parseInt(idSplited[2]);
 		var squareNumber = document.getElementById("squareNumber_" + orientation + "." + i + "." + j);
 		if (fill == "white") {
-			evt.target.setAttribute("fill", "black");
 			squareNumber.setAttribute("opacity", "0");
+			evt.target.setAttribute("fill", squareNumber.getAttribute("fill"));
+			evt.target.setAttribute("font-weight", "bold");
 		}
 		else {
-			evt.target.setAttribute("fill", "white");
 			squareNumber.setAttribute("opacity", "1");
+			evt.target.setAttribute("fill", "white");
+			evt.target.setAttribute("font-weight", "normal");
 		}
 	}
 }
 
 function validate() {
-	var count = 0;
 	var validated, square, color, rectangle, squareNumber, number;
 	totalValidated = true;
 	for (i = 0; i < vertical_numbers.length; i++) {
@@ -783,97 +801,6 @@ function changeSquareNumberSize(pos_x, pos_y, orientation, i, j) {
 	} else {
 		squareNumber.setAttribute("x", pos_x - j * size);
 		squareNumber.setAttribute("y", pos_y + i * size);
-	}
-}
-
-function executeSpecial() {
-	if (specialCount > 0) {
-		format_special_button = document.getElementById("format_special_button");
-		if (!isAnimating) {
-			format_special_button.setAttribute("opacity", "0.5");
-			animation = setInterval('travelTable();', 50);
-			columnCount = 0;
-			lineCount = 0;
-			columnCountAux = null;
-			lineCountAux = null;
-			isAnimating = true;
-		}
-		else {
-			format_special_button.setAttribute("opacity", "1");
-			specialCount--;
-			label_special = document.getElementById("label_special");
-			label_special.textContent = specialCount;
-			var square;
-			clearInterval(animation);
-			if (lineCount != 0) {
-				for (i = 0; i < vertical_numbers.length; i++) {
-					square = document.getElementById("square_" + i + "." + (lineCount - 1));
-					if (draw_points[lineCount - 1][i] == 1) {
-						square.setAttribute("fill", "black");
-						square.setAttribute("opacity", "1");
-					}
-					else {
-						square.setAttribute("fill", "white");
-						square.setAttribute("opacity", "0");
-					}
-				}
-				rectangleAux = document.getElementById("rectangle_aux_1." + (lineCount - 1));
-				rectangleAux.setAttribute("opacity", "0");
-			}
-			else {
-				for (i = 0; i < horizontal_numbers.length; i++) {
-					square = document.getElementById("square_" + (columnCount - 1) + "." + i);
-					if (draw_points[i][columnCount - 1] == 1) {
-						square.setAttribute("fill", "black");
-						square.setAttribute("opacity", "1");
-					}
-					else {
-						square.setAttribute("fill", "white");
-						square.setAttribute("opacity", "0");
-					}
-				}
-				rectangleAux = document.getElementById("rectangle_aux_0." + (columnCount - 1));
-				rectangleAux.setAttribute("opacity", "0");
-			}
-			validate();
-			isAnimating = false;
-		}
-	}
-}
-
-function travelTable() {
-	var squareAux = null;
-	if (columnCount < vertical_numbers.length) {
-		if (columnCountAux != null) {
-			rectangleAux = document.getElementById("rectangle_aux_0." + columnCountAux);
-			rectangleAux.setAttribute("opacity", "0");
-		}
-		rectangleAux = document.getElementById("rectangle_aux_0." + columnCount);
-		rectangleAux.setAttribute("opacity", "1");
-		columnCountAux = columnCount;
-		columnCount++;
-	}
-	else if (lineCount < horizontal_numbers.length) {
-		if (columnCountAux != null) {
-			rectangleAux = document.getElementById("rectangle_aux_0." + columnCountAux);
-			rectangleAux.setAttribute("opacity", "0");
-			columnCountAux = null;
-		}
-		if (lineCountAux != null) {
-			rectangleAux = document.getElementById("rectangle_aux_1." + lineCountAux);
-			rectangleAux.setAttribute("opacity", "0");
-		}
-		rectangleAux = document.getElementById("rectangle_aux_1." + lineCount);
-		rectangleAux.setAttribute("opacity", "1");
-		lineCountAux = lineCount;
-		lineCount++;
-	}
-	else {
-		rectangleAux = document.getElementById("rectangle_aux_1." + lineCountAux);
-		rectangleAux.setAttribute("opacity", "0");
-		lineCountAux = null;
-		columnCount = 0;
-		lineCount = 0;
 	}
 }
 
