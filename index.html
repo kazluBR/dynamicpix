@@ -1,0 +1,82 @@
+<html>
+
+<head>
+	<title>Dynamic Pix</title>
+	<style>
+		#area:hover {
+			cursor: pointer
+		}
+
+		#max_button:hover {
+			cursor: pointer
+		}
+
+		#min_button:hover {
+			cursor: pointer
+		}
+
+		#special_button:hover {
+			cursor: pointer
+		}
+
+		#solve_button:hover {
+			cursor: pointer
+		}
+
+		#reset_button:hover {
+			cursor: pointer
+		}
+	</style>
+	<script src="control.js"></script>
+</head>
+
+<body>
+	<div oncontextmenu="return false">
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm" onload="initialize()">
+
+			<g id="display_position">
+				<rect id="format_display_position" stroke-width="1" stroke="black" fill="none" height="25" width="70"
+					y="5" x="25" />
+				<text id="position" text-anchor="middle" font-family="serif" font-size="18" y="25" x="60"> </text>
+			</g>
+
+			<g id="max_button" onclick="increaseAreaSize()">
+				<rect id="format_max_button" stroke-width="1" stroke="none" fill="blue" height="25" width="35" y="5"
+					x="175" />
+				<text id="label_max" text-anchor="middle" font-family="serif" font-size="20" y="25" x="192">+</text>
+			</g>
+
+			<g id="min_button" onclick="decreaseAreaSize()">
+				<rect id="format_min_button" stroke-width="1" stroke="none" fill="blue" height="25" width="35" y="5"
+					x="215" />
+				<text id="label_min" text-anchor="middle" font-family="serif" font-size="20" y="23" x="232">-</text>
+			</g>
+
+			<g id="special_button" onclick="executeSpecial()">
+				<rect id="format_special_button" stroke-width="1" stroke="none" fill="yellow" opacity="1" height="25"
+					width="35" y="5" x="265" />
+				<text id="label_special" text-anchor="middle" font-family="serif" fill="red" font-size="20" y="23"
+					x="282"> </text>
+			</g>
+
+			<g id="solve_button" onclick="solve()">
+				<rect id="format_solve_button" stroke-width="1" stroke="none" fill="green" opacity="1" height="25"
+					width="55" y="5" x="310" />
+				<text id="label_solve" text-anchor="middle" font-family="serif" font-size="20" y="23"
+					x="337">Solve</text>
+			</g>
+
+			<g id="reset_button" onclick="initialize()">
+				<rect id="format_reset_button" stroke-width="1" stroke="none" fill="red" opacity="1" height="25"
+					width="55" y="5" x="370" />
+				<text id="label_reset" text-anchor="middle" font-family="serif" font-size="20" y="23"
+					x="397">Reset</text>
+			</g>
+
+			<g id="area" />
+
+		</svg>
+	</div>
+</body>
+
+</html>
