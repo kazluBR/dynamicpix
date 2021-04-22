@@ -3,7 +3,7 @@ var $INIT_SIZE = 20;
 var $INIT_X = 10;
 var $INIT_Y = 40;
 var $LEVEL = '1';
-var $COLORS = ["red", "blue", "black"];
+var $COLORS = ["white", "red", "blue", "black"];
 var $DATA = '0,1,1,1,0,0,2,2,2,0,;1,1,1,1,1,2,2,2,2,2,;1,1,1,1,2,2,2,2,2,2,;1,1,1,1,2,2,2,2,0,2,;1,1,1,1,2,2,2,2,0,2,;0,1,1,1,2,2,2,0,2,2,;0,0,3,0,0,2,2,2,2,0,;0,0,3,3,0,3,3,0,0,0,;0,0,0,3,3,3,0,0,0,0,;0,0,0,0,3,0,0,0,0,0,'
 
 var draw_points = [];
@@ -50,7 +50,6 @@ function initialize() {
 	for (i = 0; i <= vertical_numbers.length; i++) {
 		if (i < vertical_numbers.length) {
 			createRectangle(pos_x, pos_y, 0, i);
-			createRectangleAux(pos_x, pos_y, 0, i);
 		}
 		if (i < vertical_numbers.length) {
 			for (j = 1; j <= vertical_numbers[0].length; j++) {
@@ -65,7 +64,6 @@ function initialize() {
 	for (i = 0; i <= horizontal_numbers.length; i++) {
 		if (i < horizontal_numbers.length) {
 			createRectangle(pos_x, pos_y, 1, i);
-			createRectangleAux(pos_x, pos_y, 1, i);
 		}
 		if (i < horizontal_numbers.length) {
 			for (j = 1; j <= horizontal_numbers[0].length; j++) {
@@ -105,7 +103,7 @@ function getNumbers() {
 				if (draw_points[i][j] == 0 || draw_points[i][j] != aux) {
 					if (draw_points[i][j] == 0)
 						counting = false;
-					horizontal_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux-1] };
+					horizontal_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux] };
 					count = 0;
 					numbers++;
 				}
@@ -115,11 +113,11 @@ function getNumbers() {
 		}
 		if (count > 0) {
 			count++;
-			horizontal_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux-1] };
+			horizontal_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux] };
 			numbers++;
 		}
 		while (numbers < horizontalNumbers) {
-			horizontal_numbers[i][numbers] = { number: " ", color: "white" };
+			horizontal_numbers[i][numbers] = { number: " ", color: $COLORS[0] };
 			numbers++;
 		}
 	}
@@ -134,7 +132,7 @@ function getNumbers() {
 				if (draw_points[j][i] == 0 || draw_points[j][i] != aux) {
 					if (draw_points[j][i] == 0)
 						counting = false;
-					vertical_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux-1] };
+					vertical_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux] };
 					count = 0;
 					numbers++;
 				}
@@ -144,11 +142,11 @@ function getNumbers() {
 		}
 		if (count > 0) {
 			count++;
-			vertical_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux-1] };
+			vertical_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux] };
 			numbers++;
 		}
 		while (numbers < verticalNumbers) {
-			vertical_numbers[i][numbers] = { number: " ", color: "white" };
+			vertical_numbers[i][numbers] = { number: " ", color: $COLORS[0] };
 			numbers++;
 		}
 	}
@@ -212,36 +210,17 @@ function createRectangle(pos_x, pos_y, orientation, i) {
 	rectangle.setAttribute("fill", "white");
 	rectangle.setAttribute("stroke-width", "0");
 	if (orientation == 0) {
-		rectangle.setAttribute("height", vertical_numbers[0].length * size);
+		rectangle.setAttribute("height", size / 2);
 		rectangle.setAttribute("width", size);
 		rectangle.setAttribute("x", pos_x + i * size);
-		rectangle.setAttribute("y", pos_y - vertical_numbers[0].length * size);
+		rectangle.setAttribute("y", pos_y + draw_points.length * size);
 	} else {
 		rectangle.setAttribute("height", size);
-		rectangle.setAttribute("width", horizontal_numbers[0].length * size);
-		rectangle.setAttribute("x", pos_x - horizontal_numbers[0].length * size);
+		rectangle.setAttribute("width", size / 2);
+		rectangle.setAttribute("x", pos_x + draw_points[0].length * size);
 		rectangle.setAttribute("y", pos_y + i * size);
 	}
 	document.getElementById("area").appendChild(rectangle);
-}
-
-function createRectangleAux(pos_x, pos_y, orientation, i) {
-	var rectangleAux = document.createElementNS($SVG_LIB, "rect");
-	rectangleAux.setAttribute("id", "rectangle_aux_" + orientation + "." + i);
-	rectangleAux.setAttribute("fill", "yellow");
-	rectangleAux.setAttribute("opacity", "0");
-	if (orientation == 0) {
-		rectangleAux.setAttribute("height", draw_points.length * size);
-		rectangleAux.setAttribute("width", size);
-		rectangleAux.setAttribute("x", pos_x + i * size);
-		rectangleAux.setAttribute("y", pos_y);
-	} else {
-		rectangleAux.setAttribute("height", size);
-		rectangleAux.setAttribute("width", draw_points[0].length * size);
-		rectangleAux.setAttribute("x", pos_x);
-		rectangleAux.setAttribute("y", pos_y + i * size);
-	}
-	document.getElementById("area").appendChild(rectangleAux);
 }
 
 function createLine(pos_x, pos_y, orientation, i) {
@@ -355,7 +334,7 @@ function autoFill() {
 				for (i = 0; i < draw_points[0].length; i++) {
 					if (draw_points[randColumn][i] > 0) {
 						square = document.getElementById("square_" + i + "." + randColumn);
-						square.setAttribute("fill", $COLORS[draw_points[randColumn][i]-1]);
+						square.setAttribute("fill", $COLORS[draw_points[randColumn][i]]);
 						square.setAttribute("opacity", "1");
 					}
 				}
@@ -371,7 +350,7 @@ function autoFill() {
 				for (i = 0; i < draw_points.length; i++) {
 					if (draw_points[i][randLine] > 0) {
 						square = document.getElementById("square_" + randLine + "." + i);
-						square.setAttribute("fill", $COLORS[draw_points[i][randLine]-1]);
+						square.setAttribute("fill", $COLORS[draw_points[i][randLine]]);
 						square.setAttribute("opacity", "1");
 					}
 				}
@@ -405,12 +384,6 @@ function highlightSquare(evt) {
 		horizontalLine.setAttribute("stroke", "blue");
 		if ((j % 5) != 0)
 			horizontalLine.setAttribute("stroke-width", "2");
-		var verticalRectangle = document.getElementById("rectangle_0." + i);
-		if (verticalRectangle.getAttribute("fill") != "green")
-			verticalRectangle.setAttribute("fill", "blue");
-		var horizontalRectangle = document.getElementById("rectangle_1." + j);
-		if (horizontalRectangle.getAttribute("fill") != "green")
-			horizontalRectangle.setAttribute("fill", "blue");
 		i = i + 1;
 		j = j + 1;
 		verticalLine = document.getElementById("line_0." + i);
@@ -439,12 +412,6 @@ function fadeSquare(evt) {
 		horizontalLine.setAttribute("stroke", "gray");
 		if ((j % 5) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
-		var verticalRectangle = document.getElementById("rectangle_0." + i);
-		if (verticalRectangle.getAttribute("fill") != "green")
-			verticalRectangle.setAttribute("fill", "white");
-		var horizontalRectangle = document.getElementById("rectangle_1." + j);
-		if (horizontalRectangle.getAttribute("fill") != "green")
-			horizontalRectangle.setAttribute("fill", "white");
 		i = i + 1;
 		j = j + 1;
 		verticalLine = document.getElementById("line_0." + i);
@@ -580,12 +547,12 @@ function markSquareNumber(evt) {
 		if (opacity == "1") {
 			evt.target.setAttribute("opacity", "0");
 			number.setAttribute("fill", evt.target.getAttribute("fill"));
-			number.setAttribute("font-weight", "bold");		
+			number.setAttribute("font-weight", "bold");
 		}
 		else {
 			evt.target.setAttribute("opacity", "1");
 			number.setAttribute("fill", "white");
-			number.setAttribute("font-weight", "normal");	
+			number.setAttribute("font-weight", "normal");
 		}
 	}
 }
@@ -622,7 +589,7 @@ function validate() {
 		for (j = 0; j < horizontal_numbers.length; j++) {
 			square = document.getElementById("square_" + i + "." + j);
 			color = square.getAttribute("fill");
-			if ((((color == "black") && (draw_points[j][i] == 0)) || ((color != "black") && (draw_points[j][i] == 1)))) {
+			if (color != $COLORS[draw_points[j][i]]) {
 				validated = false;
 				totalValidated = false;
 				if (rectangle.getAttribute("fill") == "green")
@@ -636,7 +603,7 @@ function validate() {
 				if (squareNumber != null) {
 					squareNumber.setAttribute("opacity", "0");
 					number = document.getElementById("number_0." + i + "." + j);
-					number.setAttribute("fill", "black");
+					number.setAttribute("fill", squareNumber.getAttribute("fill"));
 				}
 			}
 			rectangle.setAttribute("fill", "green");
@@ -648,7 +615,7 @@ function validate() {
 		for (j = 0; j < vertical_numbers.length; j++) {
 			square = document.getElementById("square_" + j + "." + i);
 			color = square.getAttribute("fill");
-			if (((color == "black") && (draw_points[i][j] == 0)) || ((color != "black") && (draw_points[i][j] == 1))) {
+			if (color != $COLORS[draw_points[i][j]]) {
 				validated = false;
 				totalValidated = false;
 				if (rectangle.getAttribute("fill") == "green")
@@ -662,7 +629,7 @@ function validate() {
 				if (squareNumber != null) {
 					squareNumber.setAttribute("opacity", "0");
 					number = document.getElementById("number_1." + i + "." + j);
-					number.setAttribute("fill", "black");
+					number.setAttribute("fill", squareNumber.getAttribute("fill"));
 				}
 			}
 			rectangle.setAttribute("fill", "green");
@@ -670,7 +637,6 @@ function validate() {
 	}
 	if (totalValidated) {
 		alert("Puzzle Solved!");
-		document.forms[0].submit();
 	}
 }
 
@@ -692,7 +658,6 @@ function changeAreaSize() {
 	for (i = 0; i <= vertical_numbers.length; i++) {
 		if (i < vertical_numbers.length) {
 			changeRectangleSize(pos_x, pos_y, 0, i);
-			changeRectangleAuxSize(pos_x, pos_y, 0, i);
 		}
 		if (i < vertical_numbers.length) {
 			for (j = 1; j <= vertical_numbers[0].length; j++) {
@@ -707,7 +672,6 @@ function changeAreaSize() {
 	for (i = 0; i <= horizontal_numbers.length; i++) {
 		if (i < horizontal_numbers.length) {
 			changeRectangleSize(pos_x, pos_y, 1, i);
-			changeRectangleAuxSize(pos_x, pos_y, 1, i);
 		}
 		if (i < horizontal_numbers.length) {
 			for (j = 1; j <= horizontal_numbers[0].length; j++) {
@@ -737,30 +701,15 @@ function changeSquareSize(pos_x, pos_y, i, j) {
 function changeRectangleSize(pos_x, pos_y, orientation, i) {
 	var rectangle = document.getElementById("rectangle_" + orientation + "." + i);
 	if (orientation == 0) {
-		rectangle.setAttribute("height", vertical_numbers[0].length * size);
+		rectangle.setAttribute("height", size / 2);
 		rectangle.setAttribute("width", size);
 		rectangle.setAttribute("x", pos_x + i * size);
-		rectangle.setAttribute("y", pos_y - vertical_numbers[0].length * size);
+		rectangle.setAttribute("y", pos_y + draw_points.length * size);
 	} else {
 		rectangle.setAttribute("height", size);
-		rectangle.setAttribute("width", horizontal_numbers[0].length * size);
-		rectangle.setAttribute("x", pos_x - horizontal_numbers[0].length * size);
+		rectangle.setAttribute("width", size / 2);
+		rectangle.setAttribute("x", pos_x + draw_points[0].length * size);
 		rectangle.setAttribute("y", pos_y + i * size);
-	}
-}
-
-function changeRectangleAuxSize(pos_x, pos_y, orientation, i) {
-	var rectangleAux = document.getElementById("rectangle_aux_" + orientation + "." + i);
-	if (orientation == 0) {
-		rectangleAux.setAttribute("height", draw_points.length * size);
-		rectangleAux.setAttribute("width", size);
-		rectangleAux.setAttribute("x", pos_x + i * size);
-		rectangleAux.setAttribute("y", pos_y);
-	} else {
-		rectangleAux.setAttribute("height", size);
-		rectangleAux.setAttribute("width", draw_points[0].length * size);
-		rectangleAux.setAttribute("x", pos_x);
-		rectangleAux.setAttribute("y", pos_y + i * size);
 	}
 }
 
