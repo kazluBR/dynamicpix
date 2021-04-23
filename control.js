@@ -483,8 +483,6 @@ function changeColorSquares(evt) {
 		var idSplited = id.split('.');
 		var i = parseInt(idSplited[0]);
 		var j = parseInt(idSplited[1]);
-		position = document.getElementById("position");
-		position.textContent = (i + 1) + ", " + (j + 1);
 		if (clicked == true) {
 			if ((i >= squareI) && (j == squareJ)) {
 				var count = squareI;
@@ -757,12 +755,7 @@ function solve() {
 	for (i = 0; i < draw_points.length; i++) {
 		for (j = 0; j < draw_points[0].length; j++) {
 			var square = document.getElementById("square_" + j + "." + i);
-			if (draw_points[i][j] == 1) {
-				square.setAttribute("fill", "black");
-			}
-			else {
-				square.setAttribute("fill", "white");
-			}
+			square.setAttribute("fill", $COLORS[draw_points[i][j]]);
 			square.setAttribute("opacity", "1");
 		}
 	}
