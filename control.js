@@ -1,7 +1,7 @@
 var $SVG_LIB = "http://www.w3.org/2000/svg";
 var $INIT_SIZE = 20;
 var $INIT_X = 10;
-var $INIT_Y = 40;
+var $INIT_Y = 60;
 var $LEVEL = '1';
 var $COLORS = ["white", "red", "blue", "black"];
 var $DATA = '0,1,1,1,0,0,2,2,2,0,;1,1,1,1,1,2,2,2,2,2,;1,1,1,1,2,2,2,2,2,2,;1,1,1,1,2,2,2,2,0,2,;1,1,1,1,2,2,2,2,0,2,;0,1,1,1,2,2,2,0,2,2,;0,0,3,0,0,2,2,2,2,0,;0,0,3,3,0,3,3,0,0,0,;0,0,0,3,3,3,0,0,0,0,;0,0,0,0,3,0,0,0,0,0,'
@@ -14,6 +14,7 @@ var squareI;
 var squareJ;
 var colorSquare;
 var opacitySquare;
+var colorSelected;
 
 var clicked = false;
 var totalValidated = false;
@@ -23,6 +24,10 @@ function clean() {
 	draw_points = [];
 	vertical_numbers = [];
 	horizontal_numbers = [];
+	var colors = document.getElementById("colors");
+	while (colors.firstChild) {
+		colors.removeChild(colors.firstChild);
+	}
 	var area = document.getElementById("area");
 	while (area.firstChild) {
 		area.removeChild(area.firstChild);
@@ -31,10 +36,14 @@ function clean() {
 
 function initialize() {
 	clean();
-	data = $DATA;
-	lines = data.split(";");
+	totalValidated = false;
+	size = $INIT_SIZE;
+	colorSelected = $COLORS[1];
+	for (i = 1; i < $COLORS.length; i++) {
+		createSquareColor(i);
+	}
+	lines = $DATA.split(";");
 	points = lines[0].split(",");
-	clean();
 	for (k = 0; k < lines.length; k++)
 		draw_points[k] = new Array(points.length - 1);
 	for (i = 0; i < lines.length; i++) {
@@ -43,8 +52,6 @@ function initialize() {
 			draw_points[i][j] = line_aux[j];
 	}
 	getNumbers();
-	totalValidated = false;
-	size = $INIT_SIZE;
 	var pos_x = $INIT_X + horizontal_numbers[0].length * size;
 	var pos_y = $INIT_Y + vertical_numbers[0].length * size;
 	for (i = 0; i <= vertical_numbers.length; i++) {
@@ -202,6 +209,26 @@ function getVerticalNumbers() {
 			bigger = numbers;
 	}
 	return bigger;
+}
+
+function createSquareColor(i) {
+	var squareColor = document.createElementNS($SVG_LIB, "rect");
+	squareColor.setAttribute("id", "squareColor_" + i);
+	if (i == 1) {
+		squareColor.setAttribute("opacity", "1");
+		squareColor.setAttribute("stroke-width", "3");
+	} else {
+		squareColor.setAttribute("opacity", "0.5");
+		squareColor.setAttribute("stroke-width", "1");
+	}
+	squareColor.setAttribute("stroke", "black");
+	squareColor.setAttribute("height", size*2);
+	squareColor.setAttribute("width", size*2);
+	squareColor.setAttribute("fill", $COLORS[i]);
+	squareColor.setAttribute("x", ((i-1)*size*2)+size/4);
+	squareColor.setAttribute("y", size/4);
+	squareColor.onclick = markSquareColor;
+	document.getElementById("colors").appendChild(squareColor);
 }
 
 function createRectangle(pos_x, pos_y, orientation, i) {
@@ -369,6 +396,23 @@ function contains(array, obj) {
 	return false;
 }
 
+function markSquareColor(evt) {
+	if (!totalValidated) {
+		var id = evt.target.getAttribute("id");
+		id = id.replace("squareColor_", "");
+		colorSelected = $COLORS[id];
+		evt.target.setAttribute("opacity", "1");
+		evt.target.setAttribute("stroke-width", "3");
+		for (i = 1; i < $COLORS.length; i++) {
+			squareColor = document.getElementById("squareColor_" + i);
+			if (i != id) {
+				squareColor.setAttribute("opacity", "0.5");
+				squareColor.setAttribute("stroke-width", "1");
+			}
+		}
+	}
+}
+
 function highlightSquare(evt) {
 	if (!totalValidated) {
 		var id = evt.target.getAttribute("id");
@@ -436,8 +480,8 @@ function initColorsChange(evt) {
 		switch (colorSquare) {
 			case "white":
 				if (evt.button == 0) {
-					evt.target.setAttribute("fill", "black");
-					colorSquare = "black";
+					evt.target.setAttribute("fill", colorSelected);
+					colorSquare = colorSelected;
 				} else {
 					evt.target.setAttribute("fill", "gray");
 					colorSquare = "gray";
@@ -445,30 +489,35 @@ function initColorsChange(evt) {
 				evt.target.setAttribute("opacity", "1");
 				opacitySquare = "1";
 				break;
-			case "black":
+			case "gray":
 				if (evt.button == 0) {
+					evt.target.setAttribute("fill", colorSelected);
+					colorSquare = colorSelected;
+					evt.target.setAttribute("opacity", "1");
+					opacitySquare = "1";
+				} else {
 					evt.target.setAttribute("fill", "white");
 					colorSquare = "white";
 					evt.target.setAttribute("opacity", "0");
 					opacitySquare = "0";
+				}
+				break;
+			default:
+				if (evt.button == 0) {
+					if (colorSquare != colorSelected) {
+						evt.target.setAttribute("fill", colorSelected);
+						colorSquare = colorSelected;
+					} else {
+						evt.target.setAttribute("fill", "white");
+						colorSquare = "white";
+						evt.target.setAttribute("opacity", "0");
+						opacitySquare = "0";
+					}
 				} else {
 					evt.target.setAttribute("fill", "gray");
 					colorSquare = "gray";
 					evt.target.setAttribute("opacity", "1");
 					opacitySquare = "1";
-				}
-				break;
-			case "gray":
-				if (evt.button == 0) {
-					evt.target.setAttribute("fill", "black");
-					colorSquare = "black";
-					evt.target.setAttribute("opacity", "1");
-					opacitySquare = "1";
-				} else {
-					evt.target.setAttribute("fill", "white");
-					colorSquare = "white";
-					evt.target.setAttribute("opacity", "0");
-					opacitySquare = "0";
 				}
 				break;
 		}
@@ -541,7 +590,6 @@ function markSquareNumber(evt) {
 		var i = parseInt(idSplited[1]);
 		var j = parseInt(idSplited[2]);
 		var number = document.getElementById("number_" + orientation + "." + i + "." + j);
-		console.log(evt.target);
 		if (opacity == "1") {
 			evt.target.setAttribute("opacity", "0");
 			number.setAttribute("fill", evt.target.getAttribute("fill"));

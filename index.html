@@ -46,6 +46,10 @@
 			opacity: 1.0;
 		}
 
+		#colors:hover {
+			cursor: pointer
+		}
+
 		#area:hover {
 			cursor: pointer
 		}
@@ -63,6 +67,8 @@
 	<div oncontextmenu="return false">
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm" onload="initialize()">
 
+			<g id="colors" />
+			<line x1="0" y1="50" x2="300" y2="50" stroke="black"/>
 			<g id="area" />
 
 		</svg>
