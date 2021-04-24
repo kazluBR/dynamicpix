@@ -548,6 +548,7 @@ function changeColorSquares(evt) {
 					var square = document.getElementById("square_" + count + "." + squareJ);
 					var mark = document.getElementById("mark_" + count + "." + squareJ);
 					if (markSelected) {
+						square.setAttribute("fill", "white");
 						square.setAttribute("opacity", "0");
 						mark.setAttribute("opacity", "1");
 					} else {
@@ -567,6 +568,7 @@ function changeColorSquares(evt) {
 					var square = document.getElementById("square_" + count + "." + squareJ);
 					var mark = document.getElementById("mark_" + count + "." + squareJ);
 					if (markSelected) {
+						square.setAttribute("fill", "white");
 						square.setAttribute("opacity", "0");
 						mark.setAttribute("opacity", "1");
 					} else {
@@ -586,6 +588,7 @@ function changeColorSquares(evt) {
 					var square = document.getElementById("square_" + squareI + "." + count);
 					var mark = document.getElementById("mark_" + squareI + "." + count);
 					if (markSelected) {
+						square.setAttribute("fill", "white");
 						square.setAttribute("opacity", "0");
 						mark.setAttribute("opacity", "1");
 					} else {
@@ -605,6 +608,7 @@ function changeColorSquares(evt) {
 					var square = document.getElementById("square_" + squareI + "." + count);
 					var mark = document.getElementById("mark_" + squareI + "." + count);
 					if (markSelected) {
+						square.setAttribute("fill", "white");
 						square.setAttribute("opacity", "0");
 						mark.setAttribute("opacity", "1");
 					} else {
