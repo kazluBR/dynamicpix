@@ -2,7 +2,7 @@ var $SVG_LIB = "http://www.w3.org/2000/svg";
 var $INIT_SIZE = 20;
 var $INIT_X = 10;
 var $INIT_Y = 60;
-var $LEVEL = '1';
+var $LEVEL = '3';
 var $COLORS = ["white", "red", "blue", "black"];
 var $DATA = '0,1,1,1,0,0,2,2,2,0,;1,1,1,1,1,2,2,2,2,2,;1,1,1,1,2,2,2,2,2,2,;1,1,1,1,2,2,2,2,0,2,;1,1,1,1,2,2,2,2,0,2,;0,1,1,1,2,2,2,0,2,2,;0,0,3,0,0,2,2,2,2,0,;0,0,3,3,0,3,3,0,0,0,;0,0,0,3,3,3,0,0,0,0,;0,0,0,0,3,0,0,0,0,0,'
 
@@ -13,8 +13,8 @@ var horizontal_numbers = [];
 var squareI;
 var squareJ;
 var colorSquare;
-var opacitySquare;
 var colorSelected;
+var markSelected;
 
 var clicked = false;
 var totalValidated = false;
@@ -84,6 +84,7 @@ function initialize() {
 	}
 	for (i = 0; i < vertical_numbers.length; i++) {
 		for (j = 0; j < horizontal_numbers.length; j++) {
+			createMark(pos_x, pos_y, i, j);
 			createSquare(pos_x, pos_y, i, j);
 		}
 	}
@@ -297,7 +298,7 @@ function createNumber(pos_x, pos_y, orientation, i, j) {
 	number.setAttribute("text-anchor", "middle");
 	number.setAttribute("font-family", "serif");
 	number.setAttribute("font-size", size * 0.9);
-	number.setAttribute("font-weight", "");
+	number.setAttribute("font-weight", "normal");
 	number.setAttribute("fill", "white");
 	if (orientation == 0) {
 		number.setAttribute("x", pos_x + i * size + 0.5 * size);
@@ -310,6 +311,20 @@ function createNumber(pos_x, pos_y, orientation, i, j) {
 	}
 	number.onclick = markNumber;
 	document.getElementById("area").appendChild(number);
+}
+
+function createMark(pos_x, pos_y, i, j) {
+	var mark = document.createElementNS($SVG_LIB, "text");
+	mark.setAttribute("id", "mark_" + i + "." + j);
+	mark.setAttribute("text-anchor", "middle");
+	mark.setAttribute("font-family", "serif");
+	mark.setAttribute("font-size", size);
+	mark.setAttribute("fill", "gray");
+	mark.setAttribute("x", pos_x + (i+0.5) * size);
+	mark.setAttribute("y", pos_y + (j+0.85) * size);
+	mark.setAttribute("opacity", "0");
+	mark.textContent = "X";
+	document.getElementById("area").appendChild(mark);
 }
 
 function createSquare(pos_x, pos_y, i, j) {
@@ -477,49 +492,43 @@ function initColorsChange(evt) {
 		squareI = parseInt(idSplited[0]);
 		squareJ = parseInt(idSplited[1]);
 		colorSquare = evt.target.getAttribute("fill");
-		switch (colorSquare) {
-			case "white":
+		var mark = document.getElementById("mark_" + squareI + "." + squareJ);
+		var markOpacity = mark.getAttribute("opacity");
+		markSelected = false;
+		if (colorSquare == "white") {
+			if (markOpacity == "0") {
 				if (evt.button == 0) {
 					evt.target.setAttribute("fill", colorSelected);
+					evt.target.setAttribute("opacity", "1");
 					colorSquare = colorSelected;
 				} else {
-					evt.target.setAttribute("fill", "gray");
-					colorSquare = "gray";
+					mark.setAttribute("opacity", "1");
+					markSelected = true;
 				}
-				evt.target.setAttribute("opacity", "1");
-				opacitySquare = "1";
-				break;
-			case "gray":
+			} else {
 				if (evt.button == 0) {
 					evt.target.setAttribute("fill", colorSelected);
-					colorSquare = colorSelected;
 					evt.target.setAttribute("opacity", "1");
-					opacitySquare = "1";
+					colorSquare = colorSelected;
+				} 
+				mark.setAttribute("opacity", "0");
+			}
+		} else {
+			if (evt.button == 0) {
+				if (colorSquare != colorSelected) {
+					evt.target.setAttribute("fill", colorSelected);
+					colorSquare = colorSelected;
 				} else {
 					evt.target.setAttribute("fill", "white");
-					colorSquare = "white";
 					evt.target.setAttribute("opacity", "0");
-					opacitySquare = "0";
+					colorSquare = "white";
 				}
-				break;
-			default:
-				if (evt.button == 0) {
-					if (colorSquare != colorSelected) {
-						evt.target.setAttribute("fill", colorSelected);
-						colorSquare = colorSelected;
-					} else {
-						evt.target.setAttribute("fill", "white");
-						colorSquare = "white";
-						evt.target.setAttribute("opacity", "0");
-						opacitySquare = "0";
-					}
-				} else {
-					evt.target.setAttribute("fill", "gray");
-					colorSquare = "gray";
-					evt.target.setAttribute("opacity", "1");
-					opacitySquare = "1";
-				}
-				break;
+			} else {
+				evt.target.setAttribute("fill", "white");
+				evt.target.setAttribute("opacity", "0");
+				mark.setAttribute("opacity", "1");
+				markSelected = true;
+			}
 		}
 		clicked = true;
 	}
@@ -537,8 +546,18 @@ function changeColorSquares(evt) {
 				var count = squareI;
 				while (count <= i) {
 					var square = document.getElementById("square_" + count + "." + squareJ);
-					square.setAttribute("fill", colorSquare);
-					square.setAttribute("opacity", opacitySquare);
+					var mark = document.getElementById("mark_" + count + "." + squareJ);
+					if (markSelected) {
+						square.setAttribute("opacity", "0");
+						mark.setAttribute("opacity", "1");
+					} else {
+						square.setAttribute("fill", colorSquare);
+						mark.setAttribute("opacity", "0");
+						if (colorSquare == "white")
+							square.setAttribute("opacity", "0");
+						else
+							square.setAttribute("opacity", "1");
+					}
 					count++;
 				}
 			}
@@ -546,8 +565,18 @@ function changeColorSquares(evt) {
 				var count = i;
 				while (count <= squareI) {
 					var square = document.getElementById("square_" + count + "." + squareJ);
-					square.setAttribute("fill", colorSquare);
-					square.setAttribute("opacity", opacitySquare);
+					var mark = document.getElementById("mark_" + count + "." + squareJ);
+					if (markSelected) {
+						square.setAttribute("opacity", "0");
+						mark.setAttribute("opacity", "1");
+					} else {
+						square.setAttribute("fill", colorSquare);
+						mark.setAttribute("opacity", "0");
+						if (colorSquare == "white")
+							square.setAttribute("opacity", "0");
+						else
+							square.setAttribute("opacity", "1");
+					}
 					count++;
 				}
 			}
@@ -555,8 +584,18 @@ function changeColorSquares(evt) {
 				var count = squareJ;
 				while (count <= j) {
 					var square = document.getElementById("square_" + squareI + "." + count);
-					square.setAttribute("fill", colorSquare);
-					square.setAttribute("opacity", opacitySquare);
+					var mark = document.getElementById("mark_" + squareI + "." + count);
+					if (markSelected) {
+						square.setAttribute("opacity", "0");
+						mark.setAttribute("opacity", "1");
+					} else {
+						square.setAttribute("fill", colorSquare);
+						mark.setAttribute("opacity", "0");
+						if (colorSquare == "white")
+							square.setAttribute("opacity", "0");
+						else
+							square.setAttribute("opacity", "1");
+					}
 					count++;
 				}
 			}
@@ -564,8 +603,18 @@ function changeColorSquares(evt) {
 				var count = j;
 				while (count <= squareJ) {
 					var square = document.getElementById("square_" + squareI + "." + count);
-					square.setAttribute("fill", colorSquare);
-					square.setAttribute("opacity", opacitySquare);
+					var mark = document.getElementById("mark_" + squareI + "." + count);
+					if (markSelected) {
+						square.setAttribute("opacity", "0");
+						mark.setAttribute("opacity", "1");
+					} else {
+						square.setAttribute("fill", colorSquare);
+						mark.setAttribute("opacity", "0");
+						if (colorSquare == "white")
+							square.setAttribute("opacity", "0");
+						else
+							square.setAttribute("opacity", "1");
+					}
 					count++;
 				}
 			}
@@ -731,9 +780,17 @@ function changeAreaSize() {
 	}
 	for (i = 0; i < vertical_numbers.length; i++) {
 		for (j = 0; j < horizontal_numbers.length; j++) {
+			changeMarkSize(pos_x, pos_y, i, j);
 			changeSquareSize(pos_x, pos_y, i, j);
 		}
 	}
+}
+
+function changeMarkSize(pos_x, pos_y, i, j) {
+	var mark = document.getElementById("mark_" + i + "." + j);
+	mark.setAttribute("font-size", size);
+	mark.setAttribute("x", pos_x + (i+0.5) * size);
+	mark.setAttribute("y", pos_y + (j+0.85) * size);
 }
 
 function changeSquareSize(pos_x, pos_y, i, j) {
