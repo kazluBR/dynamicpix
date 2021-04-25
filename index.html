@@ -46,6 +46,12 @@
 			opacity: 1.0;
 		}
 
+		.slct {
+			padding: 12px 16px;
+			font-size: 16px;
+			cursor: pointer;
+		}
+
 		#colors:hover {
 			cursor: pointer
 		}
@@ -61,6 +67,12 @@
 	<div>
 		<button class="btn" onclick="increaseAreaSize()"><i class="fa fa-plus"></i></button>
 		<button class="btn" onclick="decreaseAreaSize()"><i class="fa fa-minus"></i></button>
+		<select id="level" class="slct" onchange="setLevel()">
+			<option value="0">EASY</option>
+			<option value="1">NORMAL</option>
+			<option value="2">HARD</option>
+			<option value="3">EXPERT</option>
+		</select>
 		<button class="btn-solve" onclick="solve()"><i class="fa fa-check"></i> Solve</button>
 		<button class="btn-reset" onclick="initialize()"><i class="fa fa-recycle"></i> Reset</button>
 	</div>
@@ -68,7 +80,7 @@
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm" onload="initialize()">
 
 			<g id="colors" />
-			<line x1="0" y1="50" x2="300" y2="50" stroke="black"/>
+			<line x1="0" y1="50" x2="300" y2="50" stroke="black" />
 			<g id="area" />
 
 		</svg>
