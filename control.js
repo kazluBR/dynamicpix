@@ -92,6 +92,8 @@ function initialize() {
 		}
 		createLine(pos_x, pos_y, 1, i);
 	}
+	createCalculated(pos_x, pos_y, 0);
+	createCalculated(pos_x, pos_y, 1);
 	autoFill();
 	validate();
 }
@@ -131,6 +133,8 @@ function changeAreaSize() {
 		}
 		changeLineSize(pos_x, pos_y, 1, i);
 	}
+	changeCalculatedSize(pos_x, pos_y, 0);
+	changeCalculatedSize(pos_x, pos_y, 1);
 }
 
 function changeMarkSize(pos_x, pos_y, i, j) {
@@ -200,6 +204,16 @@ function changeLineSize(pos_x, pos_y, orientation, i) {
 		line.setAttribute("x2", pos_x + vertical_numbers.length * size);
 		line.setAttribute("y1", pos_y + i * size);
 		line.setAttribute("y2", pos_y + i * size);
+	}
+}
+
+function changeCalculatedSize(pos_x, pos_y, orientation) {
+	var calculated = document.getElementById("calculated_" + orientation);
+	calculated.setAttribute("font-size", size * 0.9);
+	if (orientation == 0) {
+		calculated.setAttribute("x", pos_x + draw_points[0].length * size + 0.5 * size);
+	} else {
+		calculated.setAttribute("y", pos_y + draw_points.length * size + 0.8 * size);
 	}
 }
 
@@ -470,6 +484,61 @@ function contains(array, obj) {
 	}
 	return false;
 }
+
+function refreshCalculatedValues(i, j) {
+	var square = document.getElementById("square_" + i + "." + j);
+	var colorSquare = square.getAttribute("fill");
+	var squareAux = null;
+	var calcHorizontal = 1;
+	var countRight = i + 1;
+	while (countRight <= draw_points[0].length - 1) {
+		squareAux = document.getElementById("square_" + countRight + "." + j);
+		if (squareAux.getAttribute("fill") == colorSquare) {
+			countRight++;
+			calcHorizontal++;
+		} else break;
+	}
+	var countLeft = i - 1;
+	while (countLeft >= 0) {
+		squareAux = document.getElementById("square_" + countLeft + "." + j);
+		if (squareAux.getAttribute("fill") == colorSquare) {
+			countLeft--;
+			calcHorizontal++;
+		} else break;
+	}
+	var calcVertical = 1;
+	var countDown = j + 1;
+	while (countDown <= draw_points.length - 1) {
+		squareAux = document.getElementById("square_" + i + "." + countDown);
+		if (squareAux.getAttribute("fill") == colorSquare) {
+			countDown++;
+			calcVertical++;
+		} else break;
+	}
+	var countUp = j - 1;
+	while (countUp >= 0) {
+		squareAux = document.getElementById("square_" + i + "." + countUp);
+		if (squareAux.getAttribute("fill") == colorSquare) {
+			countUp--;
+			calcVertical++;
+		} else break;
+	}
+	var calculatedHorizontal = document.getElementById("calculated_0");
+	var calculatedVertical = document.getElementById("calculated_1");
+	if (colorSquare != "#ffffff") {
+		calculatedHorizontal.setAttribute("fill", colorSquare);
+		calculatedVertical.setAttribute("fill", colorSquare);
+	} else {
+		calculatedHorizontal.setAttribute("fill", "#808080");
+		calculatedVertical.setAttribute("fill", "#808080");
+	}
+	calculatedHorizontal.textContent = calcHorizontal;
+	calculatedVertical.textContent = calcVertical;
+	var pos_y = vertical_numbers[0].length * size;
+	calculatedHorizontal.setAttribute("y", pos_y + size * (j + 1));
+	var pos_x = horizontal_numbers[0].length * size;
+	calculatedVertical.setAttribute("x", pos_x + size * (i + 0.5));
+}
 //#endregion
 
 //#region Create SVG Element Functions
@@ -601,6 +670,22 @@ function createLine(pos_x, pos_y, orientation, i) {
 	}
 	document.getElementById("area").appendChild(line);
 }
+
+function createCalculated(pos_x, pos_y, orientation) {
+	var calculated = document.createElementNS($SVG_LIB, "text");
+	calculated.setAttribute("id", "calculated_" + orientation);
+	calculated.setAttribute("text-anchor", "middle");
+	calculated.setAttribute("font-family", "serif");
+	calculated.setAttribute("font-size", size * 0.9);
+	calculated.setAttribute("font-weight", "bold");
+	calculated.setAttribute("fill", "#808080");
+	calculated.textContent = " ";
+	if (orientation == 0) 
+		calculated.setAttribute("x", pos_x + draw_points[0].length * size + 0.5 * size);
+	else
+		calculated.setAttribute("y", pos_y + draw_points.length * size + 0.8 * size);
+	document.getElementById("area").appendChild(calculated);
+}
 //#endregion
 
 //#region Event Functions
@@ -669,6 +754,14 @@ function fadeSquare(evt) {
 		horizontalLine.setAttribute("stroke", "#808080");
 		if ((j % 5) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
+		var calculatedHorizontal = document.getElementById("calculated_0");
+		if (calculatedHorizontal != null) {
+			calculatedHorizontal.textContent = "";
+		}
+		var calculatedVertical = document.getElementById("calculated_1");
+		if (calculatedVertical != null) {
+			calculatedVertical.textContent = "";
+		}
 	}
 }
 
@@ -811,6 +904,7 @@ function changeColorSquares(evt) {
 				}
 			}
 		}
+		refreshCalculatedValues(i, j);
 	}
 }
 
