@@ -2,17 +2,16 @@ const $SVG_LIB = "http://www.w3.org/2000/svg";
 
 var size = 20;
 var level = '0';
-var draw_points = [];
 var vertical_numbers = [];
 var horizontal_numbers = [];
+var totalValidated = false;
+var clicked = false;
 
 var squareI;
 var squareJ;
 var colorSquare;
 var colorSelected;
 var markSelected;
-var clicked = false;
-var totalValidated = false;
 
 //#region Main Functions
 function increaseAreaSize() {
@@ -33,10 +32,10 @@ function setLevel() {
 
 function solve() {
 	var square = null;
-	for (i = 0; i < draw_points.length; i++) {
-		for (j = 0; j < draw_points[0].length; j++) {
+	for (i = 0; i < $DATA.length; i++) {
+		for (j = 0; j < $DATA[0].length; j++) {
 			square = document.getElementById("square_" + j + "." + i);
-			square.setAttribute("fill", $COLORS[draw_points[i][j]]);
+			square.setAttribute("fill", $COLORS[$DATA[i][j]]);
 			square.setAttribute("opacity", "1");
 		}
 	}
@@ -49,15 +48,6 @@ function initialize() {
 	colorSelected = $COLORS[1];
 	for (i = 1; i < $COLORS.length; i++) {
 		createSquareColor(i);
-	}
-	lines = $DATA.split(";");
-	points = lines[0].split(",");
-	for (k = 0; k < lines.length; k++)
-		draw_points[k] = new Array(points.length - 1);
-	for (i = 0; i < lines.length; i++) {
-		line_aux = lines[i].split(",");
-		for (j = 0; j < line_aux.length - 1; j++)
-			draw_points[i][j] = line_aux[j];
 	}
 	fillNumbers();
 	var pos_x = horizontal_numbers[0].length * size;
@@ -158,11 +148,11 @@ function changeSignalSize(pos_x, pos_y, orientation, i) {
 		signal.setAttribute("height", size / 4);
 		signal.setAttribute("width", size);
 		signal.setAttribute("x", pos_x + i * size);
-		signal.setAttribute("y", pos_y + draw_points.length * size);
+		signal.setAttribute("y", pos_y + $DATA.length * size);
 	} else {
 		signal.setAttribute("height", size);
 		signal.setAttribute("width", size / 4);
-		signal.setAttribute("x", pos_x + draw_points[0].length * size);
+		signal.setAttribute("x", pos_x + $DATA[0].length * size);
 		signal.setAttribute("y", pos_y + i * size);
 	}
 }
@@ -211,14 +201,13 @@ function changeCalculatedSize(pos_x, pos_y, orientation) {
 	var calculated = document.getElementById("calculated_" + orientation);
 	calculated.setAttribute("font-size", size * 0.9);
 	if (orientation == 0) {
-		calculated.setAttribute("x", pos_x + draw_points[0].length * size + 0.5 * size);
+		calculated.setAttribute("x", pos_x + $DATA[0].length * size + 0.5 * size);
 	} else {
-		calculated.setAttribute("y", pos_y + draw_points.length * size + 0.8 * size);
+		calculated.setAttribute("y", pos_y + $DATA.length * size + 0.8 * size);
 	}
 }
 
 function clean() {
-	draw_points = [];
 	vertical_numbers = [];
 	horizontal_numbers = [];
 	var colors = document.getElementById("colors");
@@ -240,7 +229,7 @@ function validate() {
 		for (j = 0; j < horizontal_numbers.length; j++) {
 			square = document.getElementById("square_" + i + "." + j);
 			color = square.getAttribute("fill");
-			if (color != $COLORS[draw_points[j][i]]) {
+			if (color != $COLORS[$DATA[j][i]]) {
 				validated = false;
 				totalValidated = false;
 				if (signal.getAttribute("fill") == "#adff2f")
@@ -266,7 +255,7 @@ function validate() {
 		for (j = 0; j < vertical_numbers.length; j++) {
 			square = document.getElementById("square_" + j + "." + i);
 			color = square.getAttribute("fill");
-			if (color != $COLORS[draw_points[i][j]]) {
+			if (color != $COLORS[$DATA[i][j]]) {
 				validated = false;
 				totalValidated = false;
 				if (signal.getAttribute("fill") == "#adff2f")
@@ -288,8 +277,8 @@ function validate() {
 	}
 	if (totalValidated) {
 		var mark = null;
-		for (i = 0; i < draw_points.length; i++) {
-			for (j = 0; j < draw_points[0].length; j++) {
+		for (i = 0; i < $DATA.length; i++) {
+			for (j = 0; j < $DATA[0].length; j++) {
 				mark = document.getElementById("mark_" + j + "." + i);
 				mark.setAttribute("opacity", "0");
 			}
@@ -301,29 +290,29 @@ function validate() {
 function fillNumbers() {
 	var horizontalNumbers = getHorizontalNumbers();
 	var verticalNumbers = getVerticalNumbers();
-	for (k = 0; k < draw_points.length; k++)
+	for (k = 0; k < $DATA.length; k++)
 		horizontal_numbers[k] = new Array(horizontalNumbers);
-	for (k = 0; k < draw_points[0].length; k++)
+	for (k = 0; k < $DATA[0].length; k++)
 		vertical_numbers[k] = new Array(verticalNumbers);
 	var count, numbers, aux, counting;
-	for (i = 0; i < draw_points.length; i++) {
+	for (i = 0; i < $DATA.length; i++) {
 		count = 0;
 		numbers = 0;
 		aux = -1;
 		counting = false;
-		for (j = draw_points[0].length - 1; j >= 0; j--) {
+		for (j = $DATA[0].length - 1; j >= 0; j--) {
 			if (counting) {
 				count++;
-				if (draw_points[i][j] == 0 || draw_points[i][j] != aux) {
-					if (draw_points[i][j] == 0)
+				if ($DATA[i][j] == 0 || $DATA[i][j] != aux) {
+					if ($DATA[i][j] == 0)
 						counting = false;
 					horizontal_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux] };
 					count = 0;
 					numbers++;
 				}
-			} else if (draw_points[i][j] > 0 && draw_points[i][j] != aux)
+			} else if ($DATA[i][j] > 0 && $DATA[i][j] != aux)
 				counting = true;
-			aux = draw_points[i][j];
+			aux = $DATA[i][j];
 		}
 		if (counting) {
 			count++;
@@ -335,24 +324,24 @@ function fillNumbers() {
 			numbers++;
 		}
 	}
-	for (i = 0; i < draw_points[0].length; i++) {
+	for (i = 0; i < $DATA[0].length; i++) {
 		count = 0;
 		numbers = 0;
 		aux = -1;
 		counting = false;
-		for (j = draw_points.length - 1; j >= 0; j--) {
+		for (j = $DATA.length - 1; j >= 0; j--) {
 			if (counting) {
 				count++;
-				if (draw_points[j][i] == 0 || draw_points[j][i] != aux) {
-					if (draw_points[j][i] == 0)
+				if ($DATA[j][i] == 0 || $DATA[j][i] != aux) {
+					if ($DATA[j][i] == 0)
 						counting = false;
 					vertical_numbers[i][numbers] = { number: count.toString(), color: $COLORS[aux] };
 					count = 0;
 					numbers++;
 				}
-			} else if (draw_points[j][i] > 0 && draw_points[j][i] != aux)
+			} else if ($DATA[j][i] > 0 && $DATA[j][i] != aux)
 				counting = true;
-			aux = draw_points[j][i];
+			aux = $DATA[j][i];
 		}
 		if (counting) {
 			count++;
@@ -369,20 +358,20 @@ function fillNumbers() {
 function getHorizontalNumbers() {
 	var bigger = 0;
 	var numbers, aux, counting;
-	for (i = 0; i < draw_points.length; i++) {
+	for (i = 0; i < $DATA.length; i++) {
 		numbers = 0;
 		aux = -1;
 		counting = false;
-		for (j = draw_points[0].length - 1; j >= 0; j--) {
+		for (j = $DATA[0].length - 1; j >= 0; j--) {
 			if (counting) {
-				if (draw_points[i][j] == 0 || draw_points[i][j] != aux) {
-					if (draw_points[i][j] == 0)
+				if ($DATA[i][j] == 0 || $DATA[i][j] != aux) {
+					if ($DATA[i][j] == 0)
 						counting = false;
 					numbers++;
 				}
-			} else if (draw_points[i][j] > 0 && draw_points[i][j] != aux)
+			} else if ($DATA[i][j] > 0 && $DATA[i][j] != aux)
 				counting = true;
-			aux = draw_points[i][j];
+			aux = $DATA[i][j];
 		}
 		if (counting)
 			numbers++;
@@ -395,20 +384,20 @@ function getHorizontalNumbers() {
 function getVerticalNumbers() {
 	var bigger = 0;
 	var numbers, aux, counting;
-	for (i = 0; i < draw_points[0].length; i++) {
+	for (i = 0; i < $DATA[0].length; i++) {
 		numbers = 0;
 		aux = -1;
 		counting = false;
-		for (j = draw_points.length - 1; j >= 0; j--) {
+		for (j = $DATA.length - 1; j >= 0; j--) {
 			if (counting) {
-				if (draw_points[j][i] == 0 || draw_points[j][i] != aux) {
-					if (draw_points[j][i] == 0)
+				if ($DATA[j][i] == 0 || $DATA[j][i] != aux) {
+					if ($DATA[j][i] == 0)
 						counting = false;
 					numbers++;
 				}
-			} else if (draw_points[j][i] > 0 && draw_points[j][i] != aux)
+			} else if ($DATA[j][i] > 0 && $DATA[j][i] != aux)
 				counting = true;
-			aux = draw_points[j][i];
+			aux = $DATA[j][i];
 		}
 		if (counting)
 			numbers++;
@@ -419,7 +408,7 @@ function getVerticalNumbers() {
 }
 
 function autoFill() {
-	totalRanks = draw_points.length + draw_points[0].length;
+	totalRanks = $DATA.length + $DATA[0].length;
 	var numberRanksToFill;
 	switch (level) {
 		case "0":
@@ -437,36 +426,36 @@ function autoFill() {
 	}
 	var count = 0;
 	var square = null;
-	var chosenColumns = new Array(draw_points[0].length);
-	var chosenLines = new Array(draw_points[0].length);
+	var chosenColumns = new Array($DATA[0].length);
+	var chosenLines = new Array($DATA[0].length);
 	while (count < numberRanksToFill) {
 		if (Math.random() > 0.5) {
-			randColumn = Math.floor((Math.random() * draw_points.length));
+			randColumn = Math.floor((Math.random() * $DATA.length));
 			if (contains(chosenColumns, randColumn)) {
 				count--;
 			}
 			else {
 				chosenColumns.push(randColumn);
-				for (i = 0; i < draw_points[0].length; i++) {
-					if (draw_points[randColumn][i] > 0) {
+				for (i = 0; i < $DATA[0].length; i++) {
+					if ($DATA[randColumn][i] > 0) {
 						square = document.getElementById("square_" + i + "." + randColumn);
-						square.setAttribute("fill", $COLORS[draw_points[randColumn][i]]);
+						square.setAttribute("fill", $COLORS[$DATA[randColumn][i]]);
 						square.setAttribute("opacity", "1");
 					}
 				}
 			}
 		}
 		else {
-			randLine = Math.floor((Math.random() * draw_points[0].length));
+			randLine = Math.floor((Math.random() * $DATA[0].length));
 			if (contains(chosenLines, randLine)) {
 				count--;
 			}
 			else {
 				chosenLines.push(randLine);
-				for (i = 0; i < draw_points.length; i++) {
-					if (draw_points[i][randLine] > 0) {
+				for (i = 0; i < $DATA.length; i++) {
+					if ($DATA[i][randLine] > 0) {
 						square = document.getElementById("square_" + randLine + "." + i);
-						square.setAttribute("fill", $COLORS[draw_points[i][randLine]]);
+						square.setAttribute("fill", $COLORS[$DATA[i][randLine]]);
 						square.setAttribute("opacity", "1");
 					}
 				}
@@ -491,7 +480,7 @@ function refreshCalculatedValues(i, j) {
 	var squareAux = null;
 	var calcHorizontal = 1;
 	var countRight = i + 1;
-	while (countRight <= draw_points[0].length - 1) {
+	while (countRight <= $DATA[0].length - 1) {
 		squareAux = document.getElementById("square_" + countRight + "." + j);
 		if (squareAux.getAttribute("fill") == colorSquare) {
 			countRight++;
@@ -508,7 +497,7 @@ function refreshCalculatedValues(i, j) {
 	}
 	var calcVertical = 1;
 	var countDown = j + 1;
-	while (countDown <= draw_points.length - 1) {
+	while (countDown <= $DATA.length - 1) {
 		squareAux = document.getElementById("square_" + i + "." + countDown);
 		if (squareAux.getAttribute("fill") == colorSquare) {
 			countDown++;
@@ -599,11 +588,11 @@ function createSignal(pos_x, pos_y, orientation, i) {
 		signal.setAttribute("height", size / 4);
 		signal.setAttribute("width", size);
 		signal.setAttribute("x", pos_x + i * size);
-		signal.setAttribute("y", pos_y + draw_points.length * size);
+		signal.setAttribute("y", pos_y + $DATA.length * size);
 	} else {
 		signal.setAttribute("height", size);
 		signal.setAttribute("width", size / 4);
-		signal.setAttribute("x", pos_x + draw_points[0].length * size);
+		signal.setAttribute("x", pos_x + $DATA[0].length * size);
 		signal.setAttribute("y", pos_y + i * size);
 	}
 	document.getElementById("area").appendChild(signal);
@@ -681,9 +670,9 @@ function createCalculated(pos_x, pos_y, orientation) {
 	calculated.setAttribute("fill", "#808080");
 	calculated.textContent = " ";
 	if (orientation == 0) 
-		calculated.setAttribute("x", pos_x + draw_points[0].length * size + 0.5 * size);
+		calculated.setAttribute("x", pos_x + $DATA[0].length * size + 0.5 * size);
 	else
-		calculated.setAttribute("y", pos_y + draw_points.length * size + 0.8 * size);
+		calculated.setAttribute("y", pos_y + $DATA.length * size + 0.8 * size);
 	document.getElementById("area").appendChild(calculated);
 }
 //#endregion
@@ -822,7 +811,7 @@ function changeColorSquares(evt) {
 		var idSplited = id.split('.');
 		var i = parseInt(idSplited[0]);
 		var j = parseInt(idSplited[1]);
-		if (clicked == true) {
+		if (clicked) {
 			if ((i >= squareI) && (j == squareJ)) {
 				var count = squareI;
 				while (count <= i) {
