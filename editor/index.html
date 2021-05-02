@@ -9,11 +9,14 @@
 
 <body>
 	<div>
-		<input id="color" type="color" value="#000000" list="presetColors" onchange="onColorChange()" />
+		<input id="colorInput" class="ipt" type="color" value="#000000" list="presetColors"
+			onchange="onColorChange()" />
 		<datalist id="presetColors">
 			<option value="#000000"></option>
 		</datalist>
+		<button class="btn" onclick="saveJson()"><i class="fa fa-save"></i> Save</button>
 	</div>
+	<hr/>
 	<div oncontextmenu="return false">
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm" onload="initialize()">
 

@@ -12,6 +12,37 @@ var squareJ;
 var colorSquare;
 
 //#region Main Functions
+function onColorChange() {
+    currentColor = document.getElementById("colorInput").value;
+    if (!presetColors.includes(currentColor)) {
+        var colorList = document.getElementById("presetColors");
+        var newColor = document.createElement("option");
+        newColor.value = currentColor;
+        colorList.appendChild(newColor);
+        presetColors.push(currentColor);
+    }
+}
+
+function saveJson() {
+    var data = { colors: ["#ffffff"], points: [] };
+    for (i = 0; i < height; i++) {
+        data.points[i] = [];
+        for (j = 0; j < width; j++) {
+            var square = document.getElementById("square_" + j + "." + i);
+            var color = square.getAttribute("fill");
+            if (!data.colors.includes(color)) {
+                data.colors.push(color);
+            }
+            data.points[i].push(data.colors.findIndex(x => x == color));
+        }
+    }
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.download = 'puzzle.json';
+    a.href = window.URL.createObjectURL(blob);
+    a.click();
+}
+
 function initialize() {
     for (i = 0; i <= width; i++) {
         createLine(0, i);
@@ -23,17 +54,6 @@ function initialize() {
         for (j = 0; j < height; j++) {
             createSquare(i, j);
         }
-    }
-}
-
-function onColorChange() {
-    currentColor = document.getElementById("color").value;
-    if (!presetColors.includes(currentColor)) {
-        var colorList = document.getElementById("presetColors");
-        var newColor = document.createElement("option");
-        newColor.value = currentColor;
-        colorList.appendChild(newColor);
-        presetColors.push(currentColor);
     }
 }
 //#endregion

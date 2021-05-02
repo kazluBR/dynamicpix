@@ -1,3 +1,23 @@
+.ipt {
+    height: 42px;
+    width: 70px;
+	vertical-align: middle;
+}
+
+.btn {
+	background-color: blue;
+	border: none;
+	color: white;
+	padding: 12px 16px;
+	font-size: 16px;
+	cursor: pointer;
+	opacity: 0.5;
+}
+
+.btn:hover {
+	opacity: 1.0;
+}
+
 #area:hover {
 	cursor: pointer
 }

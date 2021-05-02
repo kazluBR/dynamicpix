@@ -218,7 +218,7 @@ function fillNumbers() {
 			numbers++;
 		}
 		while (numbers < horizontalNumbers) {
-			horizontal_numbers[i][numbers] = { number: " ", color: data.colors[0] };
+			horizontal_numbers[i][numbers] = { number: " ", color: "#ffffff" };
 			numbers++;
 		}
 	}
@@ -247,7 +247,7 @@ function fillNumbers() {
 			numbers++;
 		}
 		while (numbers < verticalNumbers) {
-			vertical_numbers[i][numbers] = { number: " ", color: data.colors[0] };
+			vertical_numbers[i][numbers] = { number: " ", color: "#ffffff" };
 			numbers++;
 		}
 	}
