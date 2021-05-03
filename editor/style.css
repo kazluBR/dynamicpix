@@ -1,7 +1,8 @@
 .ipt {
-    height: 42px;
-    width: 70px;
+	height: 42px;
+	width: 70px;
 	vertical-align: middle;
+	text-align: center;
 }
 
 .btn {
@@ -15,6 +16,20 @@
 }
 
 .btn:hover {
+	opacity: 1.0;
+}
+
+.btn-save {
+	background-color: green;
+	border: none;
+	color: white;
+	padding: 12px 16px;
+	font-size: 16px;
+	cursor: pointer;
+	opacity: 0.5;
+}
+
+.btn-save:hover {
 	opacity: 1.0;
 }
 
