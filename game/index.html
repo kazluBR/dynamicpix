@@ -1,0 +1,41 @@
+<html>
+
+<head>
+	<title>Dynamic Pix - Game</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../style.css">
+	<script src="control.js"></script>
+</head>
+
+<body>
+	<div>
+		<input type="file" id="selectedFile" />
+	</div>
+	<br />
+	<div>
+		<select id="level" class="slct" onchange="setLevel()">
+			<option value="0">EASY</option>
+			<option value="1">NORMAL</option>
+			<option value="2">HARD</option>
+			<option value="3">EXPERT</option>
+		</select>
+		<button class="btn" onclick="loadJson()"><i class="fa fa-play-circle"></i> Load</button>
+		<a href="../index.html">Back to Menu</a>
+	</div>
+	<br />
+	<div id="menu">
+		<button class="btn" onclick="increaseAreaSize()"><i class="fa fa-plus"></i></button>
+		<button class="btn" onclick="decreaseAreaSize()"><i class="fa fa-minus"></i></button>
+		<button class="btn-green" onclick="solve()"><i class="fa fa-check"></i> Solve</button>
+		<button class="btn-red" onclick="initialize()"><i class="fa fa-undo"></i> Reset</button>
+	</div>
+	<hr />
+	<div oncontextmenu="return false">
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm">
+			<g id="colors" />
+			<g id="area" transform="translate(0, 60)" />
+		</svg>
+	</div>
+</body>
+
+</html>
