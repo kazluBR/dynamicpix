@@ -3,13 +3,14 @@
 <head>
 	<title>Dynamic Pix - Game</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="../style.css">
 	<script src="control.js"></script>
 </head>
 
 <body>
 	<div>
 		<input type="file" id="selectedFile" />
+		<a href="../index.html">Back to Menu</a>
 	</div>
 	<br />
 	<div>
@@ -25,8 +26,8 @@
 	<div id="menu">
 		<button class="btn" onclick="increaseAreaSize()"><i class="fa fa-plus"></i></button>
 		<button class="btn" onclick="decreaseAreaSize()"><i class="fa fa-minus"></i></button>
-		<button class="btn-solve" onclick="solve()"><i class="fa fa-check"></i> Solve</button>
-		<button class="btn-reset" onclick="initialize()"><i class="fa fa-undo"></i> Reset</button>
+		<button class="btn-green" onclick="solve()"><i class="fa fa-check"></i> Solve</button>
+		<button class="btn-red" onclick="initialize()"><i class="fa fa-undo"></i> Reset</button>
 	</div>
 	<hr />
 	<div oncontextmenu="return false">
