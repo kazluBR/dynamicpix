@@ -1,6 +1,12 @@
 # DynamicPix
-A nonogram puzzle dynamically assembled. You only need to fill 2 fields in the index.html:
-- $COLORS (line 8): Hexadecimal color list of a maximum of 8 elements. The first color must necessarily be white (#ffffff).
-- $DATA (line 9): Matrix of numbers from 0 to 7 that represent the position of the colors in the nonogram. The number 0 will always be assigned a white color.
+A nonogram puzzle dynamically assembled. You can draw pictures and play them!
 
-![alt text](https://github.com/kazluBR/DynamicPix/blob/master/sample.png)
+## Editor
+Here you can create a drawing by choosing its width and height. You can use different colors. When finished, you can save the json file.
+
+![alt text](https://github.com/kazluBR/DynamicPix/blob/master/docs/editor.png)
+
+## Game
+Here you choose the json file created from the drawing and the nonogram will be generated ready to play. You can also load the ready samples that are in the samples folder.
+
+![alt text](https://github.com/kazluBR/DynamicPix/blob/master/docs/game.png)
