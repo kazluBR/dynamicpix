@@ -2,7 +2,7 @@ const $SVG_LIB = "http://www.w3.org/2000/svg";
 
 var data = {};
 var size = 20;
-var level = '0';
+var fillPuzzle = '0';
 var vertical_numbers = [];
 var horizontal_numbers = [];
 var totalValidated = false;
@@ -15,8 +15,8 @@ var colorSelected;
 var markSelected;
 
 //#region Main Functions
-function setLevel() {
-	level = document.getElementById("level").value;
+function setFillPuzzle() {
+	fillPuzzle = document.getElementById("fillPuzzle").value;
 }
 
 function loadJson() {
@@ -308,17 +308,17 @@ function getVerticalNumbers() {
 function autoFill() {
 	totalRanks = data.points.length + data.points[0].length;
 	var numberRanksToFill;
-	switch (level) {
-		case "0":
+	switch (fillPuzzle) {
+		case "1":
 			numberRanksToFill = parseInt(totalRanks * 0.5, 10);
 			break;
-		case "1":
+		case "2":
 			numberRanksToFill = parseInt(totalRanks * 0.25, 10);
 			break;
-		case "2":
+		case "3":
 			numberRanksToFill = parseInt(totalRanks * 0.125, 10);
 			break;
-		case "3":
+		default:
 			numberRanksToFill = 0;
 			break;
 	}

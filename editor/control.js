@@ -52,7 +52,7 @@ function decreaseAreaSize() {
     changeAreaSize();
 }
 
-function saveJson() {
+function exportJson() {
     var data = { colors: ["#ffffff"], points: [] };
     for (i = 0; i < height; i++) {
         data.points[i] = [];
