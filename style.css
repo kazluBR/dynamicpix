@@ -18,6 +18,12 @@ a {
     text-decoration: none;
 }
 
+.slct {
+    padding: 12px 16px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
 .ipt {
     height: 42px;
     width: 70px;
@@ -67,16 +73,6 @@ a {
     opacity: 1.0;
 }
 
-.slct {
-    padding: 12px 16px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-#colors:hover {
-    cursor: pointer
-}
-
-#area:hover {
+#colors, #area, #squares:hover {
     cursor: pointer
 }
