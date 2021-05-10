@@ -1,32 +1,40 @@
 const $SVG_LIB = "http://www.w3.org/2000/svg";
 
 var size = 20;
+var width = 5;
+var height = 5;
+var maxDimension = 50;
 var currentColor = "#000000";
 var presetColors = [currentColor];
 var clicked = false;
 
-var width;
-var height;
 var squareI;
 var squareJ;
 var colorSquare;
 
 //#region Main Functions
 function initialize() {
-    clean();
-    width = parseInt(document.getElementById("widthInput").value);
-    height = parseInt(document.getElementById("heigthInput").value);
     for (i = 0; i <= width; i++) {
         createLine(0, i);
     }
     for (i = 0; i <= height; i++) {
         createLine(1, i);
     }
-    for (i = 0; i < width; i++) {
-        for (j = 0; j < height; j++) {
+    for (i = 0; i < maxDimension; i++) {
+        for (j = 0; j < maxDimension; j++) {
             createSquare(i, j);
         }
     }
+}
+
+function setWidthPuzzle() {
+    width = parseInt(document.getElementById("widthInput").value);
+    refresh();
+}
+
+function setHeigthPuzzle() {
+    height = parseInt(document.getElementById("heigthInput").value);
+    refresh();
 }
 
 function onColorChange() {
@@ -74,10 +82,28 @@ function exportJson() {
 //#endregion
 
 //#region Auxiliar Functions
-function clean() {
+function refresh() {
     var area = document.getElementById("area");
     while (area.firstChild) {
         area.removeChild(area.firstChild);
+    }
+    for (i = 0; i <= width; i++) {
+        createLine(0, i);
+    }
+    for (i = 0; i <= height; i++) {
+        createLine(1, i);
+    }
+    for (i = 0; i < maxDimension; i++) {
+        for (j = 0; j < maxDimension; j++) {
+            var square = document.getElementById("square_" + j + "." + i);
+            var color = square.getAttribute("fill");
+            if (color != "#ffffff") {
+                if (i >= height || j >= width)
+                    square.setAttribute("opacity", "0");
+                else
+                    square.setAttribute("opacity", "1");
+            }
+        }
     }
 }
 
@@ -88,8 +114,8 @@ function changeAreaSize() {
     for (i = 0; i <= height; i++) {
         changeLineSize(1, i);
     }
-    for (i = 0; i < width; i++) {
-        for (j = 0; j < height; j++) {
+    for (i = 0; i < maxDimension; i++) {
+        for (j = 0; j < maxDimension; j++) {
             changeSquareSize(i, j);
         }
     }
@@ -157,7 +183,7 @@ function createSquare(i, j) {
     square.onmousedown = initColorsChange;
     square.onmousemove = changeColorSquares;
     square.onmouseup = endColorsChange;
-    document.getElementById("area").appendChild(square);
+    document.getElementById("squares").appendChild(square);
 }
 //#endregion
 
@@ -168,24 +194,26 @@ function highlightSquare(evt) {
     var idSplited = id.split('.');
     var i = parseInt(idSplited[0]);
     var j = parseInt(idSplited[1]);
-    var verticalLine = document.getElementById("line_0." + i);
-    verticalLine.setAttribute("stroke", "#ff00ff");
-    if ((i % 5) != 0)
-        verticalLine.setAttribute("stroke-width", "2");
-    var horizontalLine = document.getElementById("line_1." + j);
-    horizontalLine.setAttribute("stroke", "#ff00ff");
-    if ((j % 5) != 0)
-        horizontalLine.setAttribute("stroke-width", "2");
-    i = i + 1;
-    j = j + 1;
-    verticalLine = document.getElementById("line_0." + i);
-    verticalLine.setAttribute("stroke", "#ff00ff");
-    if ((i % 5) != 0)
-        verticalLine.setAttribute("stroke-width", "2");
-    horizontalLine = document.getElementById("line_1." + j);
-    horizontalLine.setAttribute("stroke", "#ff00ff");
-    if ((j % 5) != 0)
-        horizontalLine.setAttribute("stroke-width", "2");
+    if (i < width && j < height) {
+        var verticalLine = document.getElementById("line_0." + i);
+        verticalLine.setAttribute("stroke", "#ff00ff");
+        if ((i % 5) != 0)
+            verticalLine.setAttribute("stroke-width", "2");
+        i = i + 1;
+        verticalLine = document.getElementById("line_0." + i);
+        verticalLine.setAttribute("stroke", "#ff00ff");
+        if ((i % 5) != 0)
+            verticalLine.setAttribute("stroke-width", "2");
+        var horizontalLine = document.getElementById("line_1." + j);
+        horizontalLine.setAttribute("stroke", "#ff00ff");
+        if ((j % 5) != 0)
+            horizontalLine.setAttribute("stroke-width", "2");
+        j = j + 1;
+        horizontalLine = document.getElementById("line_1." + j);
+        horizontalLine.setAttribute("stroke", "#ff00ff");
+        if ((j % 5) != 0)
+            horizontalLine.setAttribute("stroke-width", "2");
+    }
 }
 
 function fadeSquare(evt) {
@@ -194,24 +222,26 @@ function fadeSquare(evt) {
     var idSplited = id.split('.');
     var i = parseInt(idSplited[0]);
     var j = parseInt(idSplited[1]);
-    var verticalLine = document.getElementById("line_0." + i);
-    verticalLine.setAttribute("stroke", "#808080");
-    if ((i % 5) != 0)
-        verticalLine.setAttribute("stroke-width", "1");
-    var horizontalLine = document.getElementById("line_1." + j);
-    horizontalLine.setAttribute("stroke", "#808080");
-    if ((j % 5) != 0)
-        horizontalLine.setAttribute("stroke-width", "1");
-    i = i + 1;
-    j = j + 1;
-    verticalLine = document.getElementById("line_0." + i);
-    verticalLine.setAttribute("stroke", "#808080");
-    if ((i % 5) != 0)
-        verticalLine.setAttribute("stroke-width", "1");
-    horizontalLine = document.getElementById("line_1." + j);
-    horizontalLine.setAttribute("stroke", "#808080");
-    if ((j % 5) != 0)
-        horizontalLine.setAttribute("stroke-width", "1");
+    if (i < width && j < height) {
+        var verticalLine = document.getElementById("line_0." + i);
+        verticalLine.setAttribute("stroke", "#808080");
+        if ((i % 5) != 0)
+            verticalLine.setAttribute("stroke-width", "1");
+        i = i + 1;
+        verticalLine = document.getElementById("line_0." + i);
+        verticalLine.setAttribute("stroke", "#808080");
+        if ((i % 5) != 0)
+            verticalLine.setAttribute("stroke-width", "1");
+        var horizontalLine = document.getElementById("line_1." + j);
+        horizontalLine.setAttribute("stroke", "#808080");
+        if ((j % 5) != 0)
+            horizontalLine.setAttribute("stroke-width", "1");
+        j = j + 1;
+        horizontalLine = document.getElementById("line_1." + j);
+        horizontalLine.setAttribute("stroke", "#808080");
+        if ((j % 5) != 0)
+            horizontalLine.setAttribute("stroke-width", "1");
+    }
 }
 
 function initColorsChange(evt) {
@@ -220,22 +250,24 @@ function initColorsChange(evt) {
     var idSplited = id.split('.');
     squareI = parseInt(idSplited[0]);
     squareJ = parseInt(idSplited[1]);
-    colorSquare = evt.target.getAttribute("fill");
-    if (colorSquare == "#ffffff") {
-        evt.target.setAttribute("fill", currentColor);
-        evt.target.setAttribute("opacity", "1");
-        colorSquare = currentColor;
-    } else {
-        if (colorSquare == currentColor) {
-            evt.target.setAttribute("fill", "#ffffff");
-            evt.target.setAttribute("opacity", "0");
-            colorSquare = "#ffffff";
-        } else {
+    if (squareI < width && squareJ < height) {
+        colorSquare = evt.target.getAttribute("fill");
+        if (colorSquare == "#ffffff") {
             evt.target.setAttribute("fill", currentColor);
+            evt.target.setAttribute("opacity", "1");
             colorSquare = currentColor;
+        } else {
+            if (colorSquare == currentColor) {
+                evt.target.setAttribute("fill", "#ffffff");
+                evt.target.setAttribute("opacity", "0");
+                colorSquare = "#ffffff";
+            } else {
+                evt.target.setAttribute("fill", currentColor);
+                colorSquare = currentColor;
+            }
         }
+        clicked = true;
     }
-    clicked = true;
 }
 
 function changeColorSquares(evt) {
@@ -248,12 +280,14 @@ function changeColorSquares(evt) {
         if ((i >= squareI) && (j == squareJ)) {
             var count = squareI;
             while (count <= i) {
-                var square = document.getElementById("square_" + count + "." + squareJ);
-                square.setAttribute("fill", colorSquare);
-                if (colorSquare == "#ffffff")
-                    square.setAttribute("opacity", "0");
-                else
-                    square.setAttribute("opacity", "1");
+                if (count < width) {
+                    var square = document.getElementById("square_" + count + "." + squareJ);
+                    square.setAttribute("fill", colorSquare);
+                    if (colorSquare == "#ffffff")
+                        square.setAttribute("opacity", "0");
+                    else
+                        square.setAttribute("opacity", "1");
+                }
                 count++;
             }
         }
@@ -272,12 +306,14 @@ function changeColorSquares(evt) {
         else if ((i == squareI) && (j >= squareJ)) {
             var count = squareJ;
             while (count <= j) {
-                var square = document.getElementById("square_" + squareI + "." + count);
-                square.setAttribute("fill", colorSquare);
-                if (colorSquare == "#ffffff")
-                    square.setAttribute("opacity", "0");
-                else
-                    square.setAttribute("opacity", "1");
+                if (count < height) {
+                    var square = document.getElementById("square_" + squareI + "." + count);
+                    square.setAttribute("fill", colorSquare);
+                    if (colorSquare == "#ffffff")
+                        square.setAttribute("opacity", "0");
+                    else
+                        square.setAttribute("opacity", "1");
+                }
                 count++;
             }
         }

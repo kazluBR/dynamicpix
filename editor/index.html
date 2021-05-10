@@ -5,13 +5,39 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../style.css">
 	<script src="control.js"></script>
+	<script>
+		window.onload = initialize;
+	</script>
 </head>
 
 <body>
 	<div>
-		<input id="widthInput" class="ipt" type="number" placeholder="Width" />
-		<input id="heigthInput" class="ipt" type="number" placeholder="Height" />
-		<button class="btn" onclick="initialize()"><i class="fa fa-play-circle"></i> Load</button>
+		<select id="widthInput" class="slct" onchange="setWidthPuzzle()">
+			<option value="" disabled selected>Width</option>
+			<option value="5" selected>5</option>
+			<option value="10">10</option>
+			<option value="15">15</option>
+			<option value="20">20</option>
+			<option value="25">25</option>
+			<option value="30">30</option>
+			<option value="35">35</option>
+			<option value="40">40</option>
+			<option value="45">45</option>
+			<option value="50">50</option>
+		</select>
+		<select id="heigthInput" class="slct" onchange="setHeigthPuzzle()">
+			<option value="" disabled selected>Heigth</option>
+			<option value="5" selected>5</option>
+			<option value="10">10</option>
+			<option value="15">15</option>
+			<option value="20">20</option>
+			<option value="25">25</option>
+			<option value="30">30</option>
+			<option value="35">35</option>
+			<option value="40">40</option>
+			<option value="45">45</option>
+			<option value="50">50</option>
+		</select>
 		<a href="../index.html">Back to Menu</a>
 	</div>
 	<br />
@@ -29,6 +55,7 @@
 	<div oncontextmenu="return false">
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm">
 			<g id="area" transform="translate(10, 10)" />
+			<g id="squares" transform="translate(10, 10)" />
 		</svg>
 	</div>
 </body>
