@@ -1,9 +1,14 @@
 const $SVG_LIB = "http://www.w3.org/2000/svg";
+const $MIN_DIMENSION = 5;
+const $MAX_DIMENSION = 50;
+const $BACKGROUND_COLOR = "#ffffff";
+const $LINE_COLOR = "#808080";
+const $RULE_COLOR = "#ff00ff";
 
 var size = 20;
 var width = 5;
 var height = 5;
-var maxDimension = 50;
+
 var currentColor = "#000000";
 var presetColors = [currentColor];
 var clicked = false;
@@ -20,21 +25,15 @@ function initialize() {
     for (i = 0; i <= height; i++) {
         createLine(1, i);
     }
-    for (i = 0; i < maxDimension; i++) {
-        for (j = 0; j < maxDimension; j++) {
+    for (i = 0; i < $MAX_DIMENSION; i++) {
+        for (j = 0; j < $MAX_DIMENSION; j++) {
             createSquare(i, j);
         }
     }
-}
-
-function setWidthPuzzle() {
-    width = parseInt(document.getElementById("widthInput").value);
-    refresh();
-}
-
-function setHeigthPuzzle() {
-    height = parseInt(document.getElementById("heigthInput").value);
-    refresh();
+    createMinusRect(0);
+    createPlusRect(0);
+    createMinusRect(1);
+    createPlusRect(1);
 }
 
 function onColorChange() {
@@ -61,7 +60,7 @@ function decreaseAreaSize() {
 }
 
 function exportJson() {
-    var data = { colors: ["#ffffff"], points: [], horizontalNumbers: [], verticalNumbers: [] };
+    var data = { colors: [$BACKGROUND_COLOR], points: [], horizontalNumbers: [], verticalNumbers: [] };
     for (i = 0; i < height; i++) {
         data.points[i] = [];
         for (j = 0; j < width; j++) {
@@ -84,31 +83,6 @@ function exportJson() {
 //#endregion
 
 //#region Auxiliar Functions
-function refresh() {
-    var area = document.getElementById("area");
-    while (area.firstChild) {
-        area.removeChild(area.firstChild);
-    }
-    for (i = 0; i <= width; i++) {
-        createLine(0, i);
-    }
-    for (i = 0; i <= height; i++) {
-        createLine(1, i);
-    }
-    for (i = 0; i < maxDimension; i++) {
-        for (j = 0; j < maxDimension; j++) {
-            var square = document.getElementById("square_" + j + "." + i);
-            var color = square.getAttribute("fill");
-            if (color != "#ffffff") {
-                if (i >= height || j >= width)
-                    square.setAttribute("opacity", "0");
-                else
-                    square.setAttribute("opacity", "1");
-            }
-        }
-    }
-}
-
 function changeAreaSize() {
     for (i = 0; i <= width; i++) {
         changeLineSize(0, i);
@@ -116,11 +90,15 @@ function changeAreaSize() {
     for (i = 0; i <= height; i++) {
         changeLineSize(1, i);
     }
-    for (i = 0; i < maxDimension; i++) {
-        for (j = 0; j < maxDimension; j++) {
+    for (i = 0; i < $MAX_DIMENSION; i++) {
+        for (j = 0; j < $MAX_DIMENSION; j++) {
             changeSquareSize(i, j);
         }
     }
+    changeMinusRectSize(0);
+    changePlusRectSize(0);
+    changeMinusRectSize(1);
+    changePlusRectSize(1);
 }
 
 function changeLineSize(orientation, i) {
@@ -146,41 +124,79 @@ function changeSquareSize(i, j) {
     square.setAttribute("y", j * size);
 }
 
+function changeMinusRectSize(orientation) {
+    var minusRect = document.getElementById("minus_rect_" + orientation);
+    var minusText = document.getElementById("minus_text_" + orientation);
+    minusText.setAttribute("font-size", size / 2);
+    if (orientation == 0) {
+        minusRect.setAttribute("height", size / 2);
+        minusRect.setAttribute("width", size * width);
+        minusRect.setAttribute("y", (height * size) + size / 2);
+        minusText.setAttribute("x", (width * size) / 2);
+        minusText.setAttribute("y", (height * size) + size);
+    } else {
+        minusRect.setAttribute("height", size * height);
+        minusRect.setAttribute("width", size / 2);
+        minusRect.setAttribute("x", (width * size) + size / 2);
+        minusText.setAttribute("x", (width * size) + size / 2);
+        minusText.setAttribute("y", (height * size) / 2);
+    }
+}
+
+function changePlusRectSize(orientation) {
+    var plusRect = document.getElementById("plus_rect_" + orientation);
+    var plusText = document.getElementById("plus_text_" + orientation);
+    plusText.setAttribute("font-size", size / 2);
+    if (orientation == 0) {
+        plusRect.setAttribute("height", size / 2);
+        plusRect.setAttribute("width", size * width);
+        plusRect.setAttribute("y", (height * size) + size);
+        plusText.setAttribute("x", (width * size) / 2);
+        plusText.setAttribute("y", (height * size) + size + (size / 2));
+    } else {
+        plusRect.setAttribute("height", size * height);
+        plusRect.setAttribute("width", size / 2);
+        plusRect.setAttribute("x", (width * size) + size);
+        plusText.setAttribute("x", (width * size) + size);
+        plusText.setAttribute("y", (height * size) / 2);
+    }
+}
+
 function getHorizontalNumbers(data) {
-	var maxHorizontalNumbers = getMaxHorizontalNumbers(data.points);
+    var maxHorizontalNumbers = getMaxHorizontalNumbers(data.points);
     var horizontalNumbers = [];
-	for (k = 0; k < data.points.length; k++)
-		horizontalNumbers[k] = new Array(maxHorizontalNumbers);
-	var count, numbers, aux, counting;
-	for (i = 0; i < data.points.length; i++) {
-		count = 0;
+    for (k = 0; k < data.points.length; k++)
+        horizontalNumbers[k] = new Array(maxHorizontalNumbers);
+    var count, numbers, aux, counting;
+    for (i = 0; i < data.points.length; i++) {
+        count = 0;
         numbers = 0;
-		aux = -1;
-		counting = false;
-		for (j = data.points[0].length - 1; j >= 0; j--) {
-			if (counting) {
-				count++;
-				if (data.points[i][j] == 0 || data.points[i][j] != aux) {
-					if (data.points[i][j] == 0)
-						counting = false;
+        aux = -1;
+        counting = false;
+        for (j = data.points[0].length - 1; j >= 0; j--) {
+            if (counting) {
+                count++;
+                if (data.points[i][j] == 0 || data.points[i][j] != aux) {
+                    if (data.points[i][j] == 0)
+                        counting = false;
                     horizontalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
-					count = 0;
-					numbers++;
-				}
-			} else if (data.points[i][j] > 0 && data.points[i][j] != aux)
-				counting = true;
-			aux = data.points[i][j];
-		}
-		if (counting) {
-			count++;
-			horizontalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
-			numbers++;
-		}
-		while (numbers < maxHorizontalNumbers) {
-			horizontalNumbers[i][numbers] = { number: " ", color: "#ffffff" };
-			numbers++;
-		}
-	}
+                    count = 0;
+                    numbers++;
+                }
+            } else if (data.points[i][j] > 0 && data.points[i][j] != aux)
+                counting = true;
+            aux = data.points[i][j];
+        }
+        if (counting) {
+            count++;
+            horizontalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
+            numbers++;
+        }
+        while (numbers < maxHorizontalNumbers) {
+            horizontalNumbers[i][numbers] = { number: " ", color: $BACKGROUND_COLOR };
+            numbers++;
+        }
+    }
     return horizontalNumbers;
 }
 
@@ -190,88 +206,121 @@ function getVerticalNumbers(data) {
     for (k = 0; k < data.points[0].length; k++)
         verticalNumbers[k] = new Array(maxVerticalNumbers);
     var count, numbers, aux, counting;
-	for (i = 0; i < data.points[0].length; i++) {
-		count = 0;
+    for (i = 0; i < data.points[0].length; i++) {
+        count = 0;
         numbers = 0;
-		aux = -1;
-		counting = false;
-		for (j = data.points.length - 1; j >= 0; j--) {
-			if (counting) {
-				count++;
-				if (data.points[j][i] == 0 || data.points[j][i] != aux) {
-					if (data.points[j][i] == 0)
-						counting = false;
+        aux = -1;
+        counting = false;
+        for (j = data.points.length - 1; j >= 0; j--) {
+            if (counting) {
+                count++;
+                if (data.points[j][i] == 0 || data.points[j][i] != aux) {
+                    if (data.points[j][i] == 0)
+                        counting = false;
                     verticalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
-					count = 0;
-					numbers++;
-				}
-			} else if (data.points[j][i] > 0 && data.points[j][i] != aux)
-				counting = true;
-			aux = data.points[j][i];
-		}
-		if (counting) {
-			count++;
-			verticalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
-			numbers++;
-		}
-		while (numbers < maxVerticalNumbers) {
-			verticalNumbers[i][numbers] = { number: " ", color: "#ffffff" };
-			numbers++;
-		}
-	}
+                    count = 0;
+                    numbers++;
+                }
+            } else if (data.points[j][i] > 0 && data.points[j][i] != aux)
+                counting = true;
+            aux = data.points[j][i];
+        }
+        if (counting) {
+            count++;
+            verticalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
+            numbers++;
+        }
+        while (numbers < maxVerticalNumbers) {
+            verticalNumbers[i][numbers] = { number: " ", color: $BACKGROUND_COLOR };
+            numbers++;
+        }
+    }
     return verticalNumbers;
 }
 
 function getMaxHorizontalNumbers(points) {
-	var bigger = 0;
-	var numbers, aux, counting;
-	for (i = 0; i < points.length; i++) {
-		numbers = 0;
-		aux = -1;
-		counting = false;
-		for (j = points[0].length - 1; j >= 0; j--) {
-			if (counting) {
-				if (points[i][j] == 0 || points[i][j] != aux) {
-					if (points[i][j] == 0)
-						counting = false;
-					numbers++;
-				}
-			} else if (points[i][j] > 0 && points[i][j] != aux)
-				counting = true;
-			aux = points[i][j];
-		}
-		if (counting)
-			numbers++;
-		if (numbers > bigger)
-			bigger = numbers;
-	}
-	return bigger;
+    var bigger = 0;
+    var numbers, aux, counting;
+    for (i = 0; i < points.length; i++) {
+        numbers = 0;
+        aux = -1;
+        counting = false;
+        for (j = points[0].length - 1; j >= 0; j--) {
+            if (counting) {
+                if (points[i][j] == 0 || points[i][j] != aux) {
+                    if (points[i][j] == 0)
+                        counting = false;
+                    numbers++;
+                }
+            } else if (points[i][j] > 0 && points[i][j] != aux)
+                counting = true;
+            aux = points[i][j];
+        }
+        if (counting)
+            numbers++;
+        if (numbers > bigger)
+            bigger = numbers;
+    }
+    return bigger;
 }
 
 function getMaxVerticalNumbers(points) {
-	var bigger = 0;
-	var numbers, aux, counting;
-	for (i = 0; i < points[0].length; i++) {
-		numbers = 0;
-		aux = -1;
-		counting = false;
-		for (j = points.length - 1; j >= 0; j--) {
-			if (counting) {
-				if (points[j][i] == 0 || points[j][i] != aux) {
-					if (points[j][i] == 0)
-						counting = false;
-					numbers++;
-				}
-			} else if (points[j][i] > 0 && points[j][i] != aux)
-				counting = true;
-			aux = points[j][i];
-		}
-		if (counting)
-			numbers++;
-		if (numbers > bigger)
-			bigger = numbers;
-	}
-	return bigger;
+    var bigger = 0;
+    var numbers, aux, counting;
+    for (i = 0; i < points[0].length; i++) {
+        numbers = 0;
+        aux = -1;
+        counting = false;
+        for (j = points.length - 1; j >= 0; j--) {
+            if (counting) {
+                if (points[j][i] == 0 || points[j][i] != aux) {
+                    if (points[j][i] == 0)
+                        counting = false;
+                    numbers++;
+                }
+            } else if (points[j][i] > 0 && points[j][i] != aux)
+                counting = true;
+            aux = points[j][i];
+        }
+        if (counting)
+            numbers++;
+        if (numbers > bigger)
+            bigger = numbers;
+    }
+    return bigger;
+}
+
+function refresh() {
+    var area = document.getElementById("area");
+    while (area.firstChild) {
+        area.removeChild(area.firstChild);
+    }
+    for (i = 0; i <= width; i++) {
+        createLine(0, i);
+    }
+    for (i = 0; i <= height; i++) {
+        createLine(1, i);
+    }
+    var minusplus = document.getElementById("minusplus");
+    while (minusplus.firstChild) {
+        minusplus.removeChild(minusplus.firstChild);
+    }
+    createMinusRect(0);
+    createPlusRect(0);
+    createMinusRect(1);
+    createPlusRect(1);
+    for (i = 0; i < $MAX_DIMENSION; i++) {
+        for (j = 0; j < $MAX_DIMENSION; j++) {
+            var square = document.getElementById("square_" + j + "." + i);
+            var color = square.getAttribute("fill");
+            if (color != $BACKGROUND_COLOR) {
+                if (i >= height || j >= width)
+                    square.setAttribute("opacity", "0");
+                else
+                    square.setAttribute("opacity", "1");
+            }
+        }
+    }
 }
 //#endregion
 
@@ -279,7 +328,7 @@ function getMaxVerticalNumbers(points) {
 function createLine(orientation, i) {
     var line = document.createElementNS($SVG_LIB, "line");
     line.setAttribute("id", "line_" + orientation + "." + i);
-    line.setAttribute("stroke", "#808080");
+    line.setAttribute("stroke", $LINE_COLOR);
     if ((i % 5) == 0)
         line.setAttribute("stroke-width", "2");
     else
@@ -305,8 +354,8 @@ function createSquare(i, j) {
     square.setAttribute("width", size * 0.95);
     square.setAttribute("x", i * size);
     square.setAttribute("y", j * size);
-    square.setAttribute("stroke", "#808080");
-    square.setAttribute("fill", "#ffffff");
+    square.setAttribute("stroke", $LINE_COLOR);
+    square.setAttribute("fill", $BACKGROUND_COLOR);
     square.setAttribute("opacity", "0");
     square.onmouseover = highlightSquare;
     square.onmouseout = fadeSquare;
@@ -314,6 +363,72 @@ function createSquare(i, j) {
     square.onmousemove = changeColorSquares;
     square.onmouseup = endColorsChange;
     document.getElementById("squares").appendChild(square);
+}
+
+function createMinusRect(orientation) {
+    var minusRect = document.createElementNS($SVG_LIB, "rect");
+    minusRect.setAttribute("id", "minus_rect_" + orientation);
+    minusRect.setAttribute("fill", "red");
+    minusRect.setAttribute("opacity", "0.5");
+    var minusText = document.createElementNS($SVG_LIB, "text");
+    minusText.setAttribute("id", "minus_text_" + orientation);
+    minusText.setAttribute("font-size", size / 2);
+    minusText.setAttribute("fill", "white");
+    if (orientation == 0) {
+        minusRect.setAttribute("height", size / 2);
+        minusRect.setAttribute("width", size * width);
+        minusRect.setAttribute("x", 0);
+        minusRect.setAttribute("y", (height * size) + size / 2);
+        minusText.setAttribute("x", (width * size) / 2);
+        minusText.setAttribute("y", (height * size) + size);
+        minusText.textContent = "\u2B9D"; // ↑
+    } else {
+        minusRect.setAttribute("height", size * height);
+        minusRect.setAttribute("width", size / 2);
+        minusRect.setAttribute("x", (width * size) + size / 2);
+        minusRect.setAttribute("y", 0);
+        minusText.setAttribute("x", (width * size) + size / 2);
+        minusText.setAttribute("y", (height * size) / 2);
+        minusText.textContent = "\u2B9C"; // ←
+    }
+    minusRect.onmouseover = highlightMinusRect;
+    minusRect.onmouseout = fadeMinusRect;
+    minusRect.onclick = decreaseSize;
+    document.getElementById("minusplus").appendChild(minusRect);
+    document.getElementById("minusplus").appendChild(minusText);
+}
+
+function createPlusRect(orientation) {
+    var plusRect = document.createElementNS($SVG_LIB, "rect");
+    plusRect.setAttribute("id", "plus_rect_" + orientation);
+    plusRect.setAttribute("fill", "blue");
+    plusRect.setAttribute("opacity", "0.5");
+    var plusText = document.createElementNS($SVG_LIB, "text");
+    plusText.setAttribute("id", "plus_text_" + orientation);
+    plusText.setAttribute("font-size", size / 2);
+    plusText.setAttribute("fill", "white");
+    if (orientation == 0) {
+        plusRect.setAttribute("height", size / 2);
+        plusRect.setAttribute("width", size * width);
+        plusRect.setAttribute("x", 0);
+        plusRect.setAttribute("y", (height * size) + size);
+        plusText.setAttribute("x", (width * size) / 2);
+        plusText.setAttribute("y", (height * size) + size + (size / 2));
+        plusText.textContent = "\u2B9F"; // ↓
+    } else {
+        plusRect.setAttribute("height", size * height);
+        plusRect.setAttribute("width", size / 2);
+        plusRect.setAttribute("x", (width * size) + size);
+        plusRect.setAttribute("y", 0);
+        plusText.setAttribute("x", (width * size) + size);
+        plusText.setAttribute("y", (height * size) / 2);
+        plusText.textContent = "\u2B9E"; // →
+    }
+    plusRect.onmouseover = highlightPlusRect;
+    plusRect.onmouseout = fadePlusRect;
+    plusRect.onclick = increaseSize;
+    document.getElementById("minusplus").appendChild(plusRect);
+    document.getElementById("minusplus").appendChild(plusText);
 }
 //#endregion
 
@@ -326,21 +441,21 @@ function highlightSquare(evt) {
     var j = parseInt(idSplited[1]);
     if (i < width && j < height) {
         var verticalLine = document.getElementById("line_0." + i);
-        verticalLine.setAttribute("stroke", "#ff00ff");
+        verticalLine.setAttribute("stroke", $RULE_COLOR);
         if ((i % 5) != 0)
             verticalLine.setAttribute("stroke-width", "2");
         i = i + 1;
         verticalLine = document.getElementById("line_0." + i);
-        verticalLine.setAttribute("stroke", "#ff00ff");
+        verticalLine.setAttribute("stroke", $RULE_COLOR);
         if ((i % 5) != 0)
             verticalLine.setAttribute("stroke-width", "2");
         var horizontalLine = document.getElementById("line_1." + j);
-        horizontalLine.setAttribute("stroke", "#ff00ff");
+        horizontalLine.setAttribute("stroke", $RULE_COLOR);
         if ((j % 5) != 0)
             horizontalLine.setAttribute("stroke-width", "2");
         j = j + 1;
         horizontalLine = document.getElementById("line_1." + j);
-        horizontalLine.setAttribute("stroke", "#ff00ff");
+        horizontalLine.setAttribute("stroke", $RULE_COLOR);
         if ((j % 5) != 0)
             horizontalLine.setAttribute("stroke-width", "2");
     }
@@ -354,21 +469,21 @@ function fadeSquare(evt) {
     var j = parseInt(idSplited[1]);
     if (i < width && j < height) {
         var verticalLine = document.getElementById("line_0." + i);
-        verticalLine.setAttribute("stroke", "#808080");
+        verticalLine.setAttribute("stroke", $LINE_COLOR);
         if ((i % 5) != 0)
             verticalLine.setAttribute("stroke-width", "1");
         i = i + 1;
         verticalLine = document.getElementById("line_0." + i);
-        verticalLine.setAttribute("stroke", "#808080");
+        verticalLine.setAttribute("stroke", $LINE_COLOR);
         if ((i % 5) != 0)
             verticalLine.setAttribute("stroke-width", "1");
         var horizontalLine = document.getElementById("line_1." + j);
-        horizontalLine.setAttribute("stroke", "#808080");
+        horizontalLine.setAttribute("stroke", $LINE_COLOR);
         if ((j % 5) != 0)
             horizontalLine.setAttribute("stroke-width", "1");
         j = j + 1;
         horizontalLine = document.getElementById("line_1." + j);
-        horizontalLine.setAttribute("stroke", "#808080");
+        horizontalLine.setAttribute("stroke", $LINE_COLOR);
         if ((j % 5) != 0)
             horizontalLine.setAttribute("stroke-width", "1");
     }
@@ -382,15 +497,15 @@ function initColorsChange(evt) {
     squareJ = parseInt(idSplited[1]);
     if (squareI < width && squareJ < height) {
         colorSquare = evt.target.getAttribute("fill");
-        if (colorSquare == "#ffffff") {
+        if (colorSquare == $BACKGROUND_COLOR) {
             evt.target.setAttribute("fill", currentColor);
             evt.target.setAttribute("opacity", "1");
             colorSquare = currentColor;
         } else {
             if (colorSquare == currentColor) {
-                evt.target.setAttribute("fill", "#ffffff");
+                evt.target.setAttribute("fill", $BACKGROUND_COLOR);
                 evt.target.setAttribute("opacity", "0");
-                colorSquare = "#ffffff";
+                colorSquare = $BACKGROUND_COLOR;
             } else {
                 evt.target.setAttribute("fill", currentColor);
                 colorSquare = currentColor;
@@ -413,7 +528,7 @@ function changeColorSquares(evt) {
                 if (count < width) {
                     var square = document.getElementById("square_" + count + "." + squareJ);
                     square.setAttribute("fill", colorSquare);
-                    if (colorSquare == "#ffffff")
+                    if (colorSquare == $BACKGROUND_COLOR)
                         square.setAttribute("opacity", "0");
                     else
                         square.setAttribute("opacity", "1");
@@ -426,7 +541,7 @@ function changeColorSquares(evt) {
             while (count <= squareI) {
                 var square = document.getElementById("square_" + count + "." + squareJ);
                 square.setAttribute("fill", colorSquare);
-                if (colorSquare == "#ffffff")
+                if (colorSquare == $BACKGROUND_COLOR)
                     square.setAttribute("opacity", "0");
                 else
                     square.setAttribute("opacity", "1");
@@ -439,7 +554,7 @@ function changeColorSquares(evt) {
                 if (count < height) {
                     var square = document.getElementById("square_" + squareI + "." + count);
                     square.setAttribute("fill", colorSquare);
-                    if (colorSquare == "#ffffff")
+                    if (colorSquare == $BACKGROUND_COLOR)
                         square.setAttribute("opacity", "0");
                     else
                         square.setAttribute("opacity", "1");
@@ -452,7 +567,7 @@ function changeColorSquares(evt) {
             while (count <= squareJ) {
                 var square = document.getElementById("square_" + squareI + "." + count);
                 square.setAttribute("fill", colorSquare);
-                if (colorSquare == "#ffffff")
+                if (colorSquare == $BACKGROUND_COLOR)
                     square.setAttribute("opacity", "0");
                 else
                     square.setAttribute("opacity", "1");
@@ -464,5 +579,47 @@ function changeColorSquares(evt) {
 
 function endColorsChange(evt) {
     clicked = false;
+}
+
+function highlightMinusRect(evt) {
+    evt.target.setAttribute("opacity", "1");
+}
+
+function fadeMinusRect(evt) {
+    evt.target.setAttribute("opacity", "0.5");
+}
+
+function decreaseSize(evt) {
+    var id = evt.target.getAttribute("id");
+    var orientation = id.replace("minus_rect_", "");
+    if (orientation == 0) {
+        if (height > $MIN_DIMENSION)
+            height -= 5;
+    } else {
+        if (width > $MIN_DIMENSION)
+            width -= 5;
+    }
+    refresh();
+}
+
+function highlightPlusRect(evt) {
+    evt.target.setAttribute("opacity", "1");
+}
+
+function fadePlusRect(evt) {
+    evt.target.setAttribute("opacity", "0.5");
+}
+
+function increaseSize(evt) {
+    var id = evt.target.getAttribute("id");
+    var orientation = id.replace("plus_rect_", "");
+    if (orientation == 0) {
+        if (height < $MAX_DIMENSION)
+            height += 5;
+    } else {
+        if (width < $MAX_DIMENSION)
+            width += 5;
+    }
+    refresh();
 }
 //#endregion

@@ -1,4 +1,9 @@
 const $SVG_LIB = "http://www.w3.org/2000/svg";
+const $LINE_COLOR = "#808080";
+const $MARK_COLOR = "#808080";
+const $CALCULATED_EMPTY_COLOR = "#808080";
+const $RULE_COLOR = "#ff00ff";
+const $VALIDATED_COLOR = "#adff2f";
 
 var data = {};
 var size = 20;
@@ -126,7 +131,7 @@ function validate() {
 			if (color != data.colors[data.points[j][i]]) {
 				validated = false;
 				totalValidated = false;
-				if (signal.getAttribute("fill") == "#adff2f")
+				if (signal.getAttribute("fill") == $VALIDATED_COLOR)
 					signal.setAttribute("fill", data.colors[0]);
 				break;
 			}
@@ -140,7 +145,7 @@ function validate() {
 					number.setAttribute("fill", squareNumber.getAttribute("fill"));
 				}
 			}
-			signal.setAttribute("fill", "#adff2f");
+			signal.setAttribute("fill", $VALIDATED_COLOR);
 		}
 	}
 	for (i = 0; i < data.horizontalNumbers.length; i++) {
@@ -152,7 +157,7 @@ function validate() {
 			if (color != data.colors[data.points[i][j]]) {
 				validated = false;
 				totalValidated = false;
-				if (signal.getAttribute("fill") == "#adff2f")
+				if (signal.getAttribute("fill") == $VALIDATED_COLOR)
 					signal.setAttribute("fill", data.colors[0]);
 				break;
 			}
@@ -166,7 +171,7 @@ function validate() {
 					number.setAttribute("fill", squareNumber.getAttribute("fill"));
 				}
 			}
-			signal.setAttribute("fill", "#adff2f");
+			signal.setAttribute("fill", $VALIDATED_COLOR);
 		}
 	}
 	if (totalValidated) {
@@ -409,8 +414,8 @@ function refreshCalculatedValues(i, j) {
 		calculatedHorizontal.setAttribute("fill", colorSquare);
 		calculatedVertical.setAttribute("fill", colorSquare);
 	} else {
-		calculatedHorizontal.setAttribute("fill", "#808080");
-		calculatedVertical.setAttribute("fill", "#808080");
+		calculatedHorizontal.setAttribute("fill", $CALCULATED_EMPTY_COLOR);
+		calculatedVertical.setAttribute("fill", $CALCULATED_EMPTY_COLOR);
 	}
 	calculatedHorizontal.textContent = calcHorizontal;
 	calculatedVertical.textContent = calcVertical;
@@ -445,7 +450,7 @@ function createMark(pos_x, pos_y, i, j) {
 	mark.setAttribute("text-anchor", "middle");
 	mark.setAttribute("font-family", "serif");
 	mark.setAttribute("font-size", size);
-	mark.setAttribute("fill", "#808080");
+	mark.setAttribute("fill", $MARK_COLOR);
 	mark.setAttribute("x", pos_x + (i + 0.5) * size);
 	mark.setAttribute("y", pos_y + (j + 0.85) * size);
 	mark.setAttribute("opacity", "0");
@@ -532,7 +537,7 @@ function createNumber(pos_x, pos_y, orientation, i, j) {
 function createLine(pos_x, pos_y, orientation, i) {
 	var line = document.createElementNS($SVG_LIB, "line");
 	line.setAttribute("id", "line_" + orientation + "." + i);
-	line.setAttribute("stroke", "#808080");
+	line.setAttribute("stroke", $LINE_COLOR);
 	if ((i % 5) == 0)
 		line.setAttribute("stroke-width", "2");
 	else
@@ -558,7 +563,7 @@ function createCalculated(pos_x, pos_y, orientation) {
 	calculated.setAttribute("font-family", "serif");
 	calculated.setAttribute("font-size", size * 0.9);
 	calculated.setAttribute("font-weight", "bold");
-	calculated.setAttribute("fill", "#808080");
+	calculated.setAttribute("fill", $CALCULATED_EMPTY_COLOR);
 	calculated.textContent = " ";
 	if (orientation == 0)
 		calculated.setAttribute("x", pos_x + data.points[0].length * size + 0.5 * size);
@@ -589,21 +594,21 @@ function highlightSquare(evt) {
 		var i = parseInt(idSplited[0]);
 		var j = parseInt(idSplited[1]);
 		var verticalLine = document.getElementById("line_0." + i);
-		verticalLine.setAttribute("stroke", "#ff00ff");
+		verticalLine.setAttribute("stroke", $RULE_COLOR);
 		if ((i % 5) != 0)
 			verticalLine.setAttribute("stroke-width", "2");
 		var horizontalLine = document.getElementById("line_1." + j);
-		horizontalLine.setAttribute("stroke", "#ff00ff");
+		horizontalLine.setAttribute("stroke", $RULE_COLOR);
 		if ((j % 5) != 0)
 			horizontalLine.setAttribute("stroke-width", "2");
 		i = i + 1;
 		j = j + 1;
 		verticalLine = document.getElementById("line_0." + i);
-		verticalLine.setAttribute("stroke", "#ff00ff");
+		verticalLine.setAttribute("stroke", $RULE_COLOR);
 		if ((i % 5) != 0)
 			verticalLine.setAttribute("stroke-width", "2");
 		horizontalLine = document.getElementById("line_1." + j);
-		horizontalLine.setAttribute("stroke", "#ff00ff");
+		horizontalLine.setAttribute("stroke", $RULE_COLOR);
 		if ((j % 5) != 0)
 			horizontalLine.setAttribute("stroke-width", "2");
 	}
@@ -617,21 +622,21 @@ function fadeSquare(evt) {
 		var i = parseInt(idSplited[0]);
 		var j = parseInt(idSplited[1]);
 		var verticalLine = document.getElementById("line_0." + i);
-		verticalLine.setAttribute("stroke", "#808080");
+		verticalLine.setAttribute("stroke", $LINE_COLOR);
 		if ((i % 5) != 0)
 			verticalLine.setAttribute("stroke-width", "1");
 		var horizontalLine = document.getElementById("line_1." + j);
-		horizontalLine.setAttribute("stroke", "#808080");
+		horizontalLine.setAttribute("stroke", $LINE_COLOR);
 		if ((j % 5) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
 		i = i + 1;
 		j = j + 1;
 		verticalLine = document.getElementById("line_0." + i);
-		verticalLine.setAttribute("stroke", "#808080");
+		verticalLine.setAttribute("stroke", $LINE_COLOR);
 		if ((i % 5) != 0)
 			verticalLine.setAttribute("stroke-width", "1");
 		horizontalLine = document.getElementById("line_1." + j);
-		horizontalLine.setAttribute("stroke", "#808080");
+		horizontalLine.setAttribute("stroke", $LINE_COLOR);
 		if ((j % 5) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
 		var calculatedHorizontal = document.getElementById("calculated_0");
@@ -692,6 +697,7 @@ function initColorsChange(evt) {
 			}
 		}
 		clicked = true;
+		refreshCalculatedValues(squareI, squareJ);
 	}
 }
 
