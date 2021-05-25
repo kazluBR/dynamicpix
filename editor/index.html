@@ -12,6 +12,16 @@
 
 <body>
 	<div>
+		<select id="multipleInput" class="slct" onchange="setMultiplePuzzle()">
+			<option value="" disabled selected>Multiple</option>
+			<option value="5" selected>5</option>
+			<option value="4">4</option>
+			<option value="3">3</option>
+		</select>
+		<a href="../index.html">Back to Menu</a>
+	</div>
+	<br/>
+	<div>
 		<button class="btn" onclick="increaseAreaSize()"><i class="fa fa-plus"></i></button>
 		<button class="btn" onclick="decreaseAreaSize()"><i class="fa fa-minus"></i></button>
 		<input id="colorInput" class="ipt" type="color" value="#000000" list="presetColors"
@@ -20,14 +30,14 @@
 			<option value="#000000"></option>
 		</datalist>
 		<button class="btn-green" onclick="exportJson()"><i class="fa fa-file-o"></i> Export to JSON</button>
-		<a href="../index.html">Back to Menu</a>
+		
 	</div>
 	<hr />
 	<div oncontextmenu="return false">
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm">
 			<g id="area" transform="translate(10, 10)" />
 			<g id="squares" transform="translate(10, 10)" />
-			<g id="minusplus" transform="translate(10, 10)" />
+			<g id="arrows" transform="translate(10, 10)" />
 		</svg>
 	</div>
 </body>

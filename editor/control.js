@@ -1,13 +1,18 @@
 const $SVG_LIB = "http://www.w3.org/2000/svg";
-const $MIN_DIMENSION = 5;
-const $MAX_DIMENSION = 50;
+const $MIN_DIMENSION = 3;
+const $MAX_WIDTH_DIMENSION = 125;
+const $MAX_HEIGTH_DIMENSION = 50;
+const $MIN_SIZE = 10;
+const $MAX_SIZE = 30;
 const $BACKGROUND_COLOR = "#ffffff";
 const $LINE_COLOR = "#808080";
 const $RULE_COLOR = "#ff00ff";
+const $ARROW_COLOR = "#ff00ff";
 
 var size = 20;
 var width = 5;
 var height = 5;
+var multiple = 5;
 
 var currentColor = "#000000";
 var presetColors = [currentColor];
@@ -25,15 +30,22 @@ function initialize() {
     for (i = 0; i <= height; i++) {
         createLine(1, i);
     }
-    for (i = 0; i < $MAX_DIMENSION; i++) {
-        for (j = 0; j < $MAX_DIMENSION; j++) {
+    for (i = 0; i < $MAX_WIDTH_DIMENSION; i++) {
+        for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
             createSquare(i, j);
         }
     }
-    createMinusRect(0);
-    createPlusRect(0);
-    createMinusRect(1);
-    createPlusRect(1);
+    createDecreaseArrow(0);
+    createIncreaseArrow(0);
+    createDecreaseArrow(1);
+    createIncreaseArrow(1);
+}
+
+function setMultiplePuzzle() {
+    multiple = parseInt(document.getElementById("multipleInput").value);
+    width = multiple;
+    height = multiple;
+    refresh();
 }
 
 function onColorChange() {
@@ -48,13 +60,13 @@ function onColorChange() {
 }
 
 function increaseAreaSize() {
-    if (size < 30)
+    if (size < $MAX_SIZE)
         size += 1;
     changeAreaSize();
 }
 
 function decreaseAreaSize() {
-    if (size > 10)
+    if (size > $MIN_SIZE)
         size -= 1;
     changeAreaSize();
 }
@@ -90,15 +102,15 @@ function changeAreaSize() {
     for (i = 0; i <= height; i++) {
         changeLineSize(1, i);
     }
-    for (i = 0; i < $MAX_DIMENSION; i++) {
-        for (j = 0; j < $MAX_DIMENSION; j++) {
+    for (i = 0; i < $MAX_WIDTH_DIMENSION; i++) {
+        for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
             changeSquareSize(i, j);
         }
     }
-    changeMinusRectSize(0);
-    changePlusRectSize(0);
-    changeMinusRectSize(1);
-    changePlusRectSize(1);
+    changeDecreaseArrowSize(0);
+    changeIncreaseArrowSize(0);
+    changeDecreaseArrowSize(1);
+    changeIncreaseArrowSize(1);
 }
 
 function changeLineSize(orientation, i) {
@@ -124,41 +136,27 @@ function changeSquareSize(i, j) {
     square.setAttribute("y", j * size);
 }
 
-function changeMinusRectSize(orientation) {
-    var minusRect = document.getElementById("minus_rect_" + orientation);
-    var minusText = document.getElementById("minus_text_" + orientation);
-    minusText.setAttribute("font-size", size / 2);
+function changeDecreaseArrowSize(orientation) {
+    var decreaseArrow = document.getElementById("decrease_arrow_" + orientation);
+    decreaseArrow.setAttribute("font-size", size);
     if (orientation == 0) {
-        minusRect.setAttribute("height", size / 2);
-        minusRect.setAttribute("width", size * width);
-        minusRect.setAttribute("y", (height * size) + size / 2);
-        minusText.setAttribute("x", (width * size) / 2);
-        minusText.setAttribute("y", (height * size) + size);
+        decreaseArrow.setAttribute("x", (width * size) / 2);
+        decreaseArrow.setAttribute("y", (height * size) + 2 * size);
     } else {
-        minusRect.setAttribute("height", size * height);
-        minusRect.setAttribute("width", size / 2);
-        minusRect.setAttribute("x", (width * size) + size / 2);
-        minusText.setAttribute("x", (width * size) + size / 2);
-        minusText.setAttribute("y", (height * size) / 2);
+        decreaseArrow.setAttribute("x", (width * size) + size);
+        decreaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
     }
 }
 
-function changePlusRectSize(orientation) {
-    var plusRect = document.getElementById("plus_rect_" + orientation);
-    var plusText = document.getElementById("plus_text_" + orientation);
-    plusText.setAttribute("font-size", size / 2);
+function changeIncreaseArrowSize(orientation) {
+    var increaseArrow = document.getElementById("increase_arrow_" + orientation);
+    increaseArrow.setAttribute("font-size", size);
     if (orientation == 0) {
-        plusRect.setAttribute("height", size / 2);
-        plusRect.setAttribute("width", size * width);
-        plusRect.setAttribute("y", (height * size) + size);
-        plusText.setAttribute("x", (width * size) / 2);
-        plusText.setAttribute("y", (height * size) + size + (size / 2));
+        increaseArrow.setAttribute("x", (width * size) / 2);
+        increaseArrow.setAttribute("y", (height * size) + 3 * size - (size / 4));
     } else {
-        plusRect.setAttribute("height", size * height);
-        plusRect.setAttribute("width", size / 2);
-        plusRect.setAttribute("x", (width * size) + size);
-        plusText.setAttribute("x", (width * size) + size);
-        plusText.setAttribute("y", (height * size) / 2);
+        increaseArrow.setAttribute("x", (width * size) + 2 * size);
+        increaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
     }
 }
 
@@ -301,20 +299,20 @@ function refresh() {
     for (i = 0; i <= height; i++) {
         createLine(1, i);
     }
-    var minusplus = document.getElementById("minusplus");
-    while (minusplus.firstChild) {
-        minusplus.removeChild(minusplus.firstChild);
+    var arrows = document.getElementById("arrows");
+    while (arrows.firstChild) {
+        arrows.removeChild(arrows.firstChild);
     }
-    createMinusRect(0);
-    createPlusRect(0);
-    createMinusRect(1);
-    createPlusRect(1);
-    for (i = 0; i < $MAX_DIMENSION; i++) {
-        for (j = 0; j < $MAX_DIMENSION; j++) {
-            var square = document.getElementById("square_" + j + "." + i);
+    createDecreaseArrow(0);
+    createIncreaseArrow(0);
+    createDecreaseArrow(1);
+    createIncreaseArrow(1);
+    for (i = 0; i < $MAX_WIDTH_DIMENSION; i++) {
+        for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
+            var square = document.getElementById("square_" + i + "." + j);
             var color = square.getAttribute("fill");
             if (color != $BACKGROUND_COLOR) {
-                if (i >= height || j >= width)
+                if (i >= width || j >= height)
                     square.setAttribute("opacity", "0");
                 else
                     square.setAttribute("opacity", "1");
@@ -329,7 +327,7 @@ function createLine(orientation, i) {
     var line = document.createElementNS($SVG_LIB, "line");
     line.setAttribute("id", "line_" + orientation + "." + i);
     line.setAttribute("stroke", $LINE_COLOR);
-    if ((i % 5) == 0)
+    if ((i % multiple) == 0)
         line.setAttribute("stroke-width", "2");
     else
         line.setAttribute("stroke-width", "1");
@@ -365,70 +363,48 @@ function createSquare(i, j) {
     document.getElementById("squares").appendChild(square);
 }
 
-function createMinusRect(orientation) {
-    var minusRect = document.createElementNS($SVG_LIB, "rect");
-    minusRect.setAttribute("id", "minus_rect_" + orientation);
-    minusRect.setAttribute("fill", "red");
-    minusRect.setAttribute("opacity", "0.5");
-    var minusText = document.createElementNS($SVG_LIB, "text");
-    minusText.setAttribute("id", "minus_text_" + orientation);
-    minusText.setAttribute("font-size", size / 2);
-    minusText.setAttribute("fill", "white");
+function createDecreaseArrow(orientation) {
+    var decreaseArrow = document.createElementNS($SVG_LIB, "text");
+    decreaseArrow.setAttribute("id", "decrease_arrow_" + orientation);
+    decreaseArrow.setAttribute("font-size", size);
+    decreaseArrow.setAttribute("text-anchor","middle");
+    decreaseArrow.setAttribute("fill", $ARROW_COLOR);
+    decreaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
-        minusRect.setAttribute("height", size / 2);
-        minusRect.setAttribute("width", size * width);
-        minusRect.setAttribute("x", 0);
-        minusRect.setAttribute("y", (height * size) + size / 2);
-        minusText.setAttribute("x", (width * size) / 2);
-        minusText.setAttribute("y", (height * size) + size);
-        minusText.textContent = "\u2B9D"; // ↑
+        decreaseArrow.setAttribute("x", (width * size) / 2);
+        decreaseArrow.setAttribute("y", (height * size) + 2 * size);
+        decreaseArrow.textContent = "\u2B9D"; // ↑
     } else {
-        minusRect.setAttribute("height", size * height);
-        minusRect.setAttribute("width", size / 2);
-        minusRect.setAttribute("x", (width * size) + size / 2);
-        minusRect.setAttribute("y", 0);
-        minusText.setAttribute("x", (width * size) + size / 2);
-        minusText.setAttribute("y", (height * size) / 2);
-        minusText.textContent = "\u2B9C"; // ←
+        decreaseArrow.setAttribute("x", (width * size) + size);
+        decreaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
+        decreaseArrow.textContent = "\u2B9C"; // ←
     }
-    minusRect.onmouseover = highlightMinusRect;
-    minusRect.onmouseout = fadeMinusRect;
-    minusRect.onclick = decreaseSize;
-    document.getElementById("minusplus").appendChild(minusRect);
-    document.getElementById("minusplus").appendChild(minusText);
+    decreaseArrow.onmouseover = highlightDecreaseArrow;
+    decreaseArrow.onmouseout = fadeDecreaseArrow;
+    decreaseArrow.onclick = decreaseSize;
+    document.getElementById("arrows").appendChild(decreaseArrow);
 }
 
-function createPlusRect(orientation) {
-    var plusRect = document.createElementNS($SVG_LIB, "rect");
-    plusRect.setAttribute("id", "plus_rect_" + orientation);
-    plusRect.setAttribute("fill", "blue");
-    plusRect.setAttribute("opacity", "0.5");
-    var plusText = document.createElementNS($SVG_LIB, "text");
-    plusText.setAttribute("id", "plus_text_" + orientation);
-    plusText.setAttribute("font-size", size / 2);
-    plusText.setAttribute("fill", "white");
+function createIncreaseArrow(orientation) {
+    var increaseArrow = document.createElementNS($SVG_LIB, "text");
+    increaseArrow.setAttribute("id", "increase_arrow_" + orientation);
+    increaseArrow.setAttribute("font-size", size);
+    increaseArrow.setAttribute("text-anchor","middle");
+    increaseArrow.setAttribute("fill", $ARROW_COLOR);
+    increaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
-        plusRect.setAttribute("height", size / 2);
-        plusRect.setAttribute("width", size * width);
-        plusRect.setAttribute("x", 0);
-        plusRect.setAttribute("y", (height * size) + size);
-        plusText.setAttribute("x", (width * size) / 2);
-        plusText.setAttribute("y", (height * size) + size + (size / 2));
-        plusText.textContent = "\u2B9F"; // ↓
+        increaseArrow.setAttribute("x", (width * size) / 2);
+        increaseArrow.setAttribute("y", (height * size) + 3 * size - (size / 4));
+        increaseArrow.textContent = "\u2B9F"; // ↓
     } else {
-        plusRect.setAttribute("height", size * height);
-        plusRect.setAttribute("width", size / 2);
-        plusRect.setAttribute("x", (width * size) + size);
-        plusRect.setAttribute("y", 0);
-        plusText.setAttribute("x", (width * size) + size);
-        plusText.setAttribute("y", (height * size) / 2);
-        plusText.textContent = "\u2B9E"; // →
+        increaseArrow.setAttribute("x", (width * size) + 2 * size);
+        increaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
+        increaseArrow.textContent = "\u2B9E"; // →
     }
-    plusRect.onmouseover = highlightPlusRect;
-    plusRect.onmouseout = fadePlusRect;
-    plusRect.onclick = increaseSize;
-    document.getElementById("minusplus").appendChild(plusRect);
-    document.getElementById("minusplus").appendChild(plusText);
+    increaseArrow.onmouseover = highlightIncreaseArrow;
+    increaseArrow.onmouseout = fadeIncreaseArrow;
+    increaseArrow.onclick = increaseSize;
+    document.getElementById("arrows").appendChild(increaseArrow);
 }
 //#endregion
 
@@ -442,21 +418,21 @@ function highlightSquare(evt) {
     if (i < width && j < height) {
         var verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((i % 5) != 0)
+        if ((i % multiple) != 0)
             verticalLine.setAttribute("stroke-width", "2");
         i = i + 1;
         verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((i % 5) != 0)
+        if ((i % multiple) != 0)
             verticalLine.setAttribute("stroke-width", "2");
         var horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((j % 5) != 0)
+        if ((j % multiple) != 0)
             horizontalLine.setAttribute("stroke-width", "2");
         j = j + 1;
         horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((j % 5) != 0)
+        if ((j % multiple) != 0)
             horizontalLine.setAttribute("stroke-width", "2");
     }
 }
@@ -470,21 +446,21 @@ function fadeSquare(evt) {
     if (i < width && j < height) {
         var verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((i % 5) != 0)
+        if ((i % multiple) != 0)
             verticalLine.setAttribute("stroke-width", "1");
         i = i + 1;
         verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((i % 5) != 0)
+        if ((i % multiple) != 0)
             verticalLine.setAttribute("stroke-width", "1");
         var horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((j % 5) != 0)
+        if ((j % multiple) != 0)
             horizontalLine.setAttribute("stroke-width", "1");
         j = j + 1;
         horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((j % 5) != 0)
+        if ((j % multiple) != 0)
             horizontalLine.setAttribute("stroke-width", "1");
     }
 }
@@ -581,44 +557,48 @@ function endColorsChange(evt) {
     clicked = false;
 }
 
-function highlightMinusRect(evt) {
+function highlightDecreaseArrow(evt) {
     evt.target.setAttribute("opacity", "1");
 }
 
-function fadeMinusRect(evt) {
+function fadeDecreaseArrow(evt) {
     evt.target.setAttribute("opacity", "0.5");
 }
 
 function decreaseSize(evt) {
     var id = evt.target.getAttribute("id");
-    var orientation = id.replace("minus_rect_", "");
+    var orientation = id.replace("decrease_arrow_", "");
     if (orientation == 0) {
-        if (height > $MIN_DIMENSION)
-            height -= 5;
+        height -= multiple;
+        if (height < $MIN_DIMENSION)
+            height += multiple;
     } else {
-        if (width > $MIN_DIMENSION)
-            width -= 5;
+        width -= multiple;
+        if (width < $MIN_DIMENSION)
+            width += multiple;
     }
     refresh();
 }
 
-function highlightPlusRect(evt) {
+function highlightIncreaseArrow(evt) {
     evt.target.setAttribute("opacity", "1");
 }
 
-function fadePlusRect(evt) {
+function fadeIncreaseArrow(evt) {
     evt.target.setAttribute("opacity", "0.5");
 }
 
 function increaseSize(evt) {
     var id = evt.target.getAttribute("id");
-    var orientation = id.replace("plus_rect_", "");
+    var orientation = id.replace("increase_arrow_", "");
     if (orientation == 0) {
-        if (height < $MAX_DIMENSION)
-            height += 5;
+        height += multiple;
+        if (height > $MAX_HEIGTH_DIMENSION)
+            height -= multiple;
     } else {
-        if (width < $MAX_DIMENSION)
-            width += 5;
+        width += multiple;
+        if (width > $MAX_WIDTH_DIMENSION)
+            width -= multiple;
     }
     refresh();
 }
