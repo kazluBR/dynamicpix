@@ -72,7 +72,7 @@ function decreaseAreaSize() {
 }
 
 function exportJson() {
-    var data = { colors: [$BACKGROUND_COLOR], points: [], horizontalNumbers: [], verticalNumbers: [] };
+    var data = { colors: [$BACKGROUND_COLOR], multiple: multiple, points: [], horizontalNumbers: [], verticalNumbers: [] };
     for (i = 0; i < height; i++) {
         data.points[i] = [];
         for (j = 0; j < width; j++) {
@@ -367,7 +367,7 @@ function createDecreaseArrow(orientation) {
     var decreaseArrow = document.createElementNS($SVG_LIB, "text");
     decreaseArrow.setAttribute("id", "decrease_arrow_" + orientation);
     decreaseArrow.setAttribute("font-size", size);
-    decreaseArrow.setAttribute("text-anchor","middle");
+    decreaseArrow.setAttribute("text-anchor", "middle");
     decreaseArrow.setAttribute("fill", $ARROW_COLOR);
     decreaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
@@ -389,7 +389,7 @@ function createIncreaseArrow(orientation) {
     var increaseArrow = document.createElementNS($SVG_LIB, "text");
     increaseArrow.setAttribute("id", "increase_arrow_" + orientation);
     increaseArrow.setAttribute("font-size", size);
-    increaseArrow.setAttribute("text-anchor","middle");
+    increaseArrow.setAttribute("text-anchor", "middle");
     increaseArrow.setAttribute("fill", $ARROW_COLOR);
     increaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
