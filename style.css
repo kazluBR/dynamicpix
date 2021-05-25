@@ -73,6 +73,6 @@ a {
     opacity: 1.0;
 }
 
-#colors, #area, #squares:hover {
+#colors, #area, #squares, #arrows:hover {
     cursor: pointer
 }
