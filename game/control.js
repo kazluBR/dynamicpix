@@ -25,6 +25,7 @@ function setFillPuzzle() {
 function loadJson() {
 	var files = document.getElementById('selectedFile').files;
 	if (files.length <= 0) {
+		alert("Select a valid JSON file");
 		return false;
 	}
 	var fr = new FileReader();
@@ -104,6 +105,28 @@ function solve() {
 		}
 	}
 	validate();
+}
+
+function switchSquareColor() {
+	var colors = document.getElementById("colors").children;
+	var selected;
+	for (i = 0; i < colors.length; i++) {
+		if (colors[i].getAttribute("stroke-width") == 3) {
+			if (i == colors.length - 1)
+				selected = 0;
+			else
+				selected = i + 1; 
+			break;
+		}
+	}
+	colorSelected = data.colors[selected+1];
+	colors[selected].setAttribute("stroke-width", "3");
+	var squareColor;
+	for (i = 1; i < data.colors.length; i++) {
+		squareColor = document.getElementById("squareColor_" + i);
+		if (i != selected+1)
+			squareColor.setAttribute("stroke-width", "1");
+	}
 }
 //#endregion
 
@@ -579,6 +602,7 @@ function markSquareColor(evt) {
 	id = id.replace("squareColor_", "");
 	colorSelected = data.colors[id];
 	evt.target.setAttribute("stroke-width", "3");
+	var squareColor;
 	for (i = 1; i < data.colors.length; i++) {
 		squareColor = document.getElementById("squareColor_" + i);
 		if (i != id)
@@ -651,7 +675,7 @@ function fadeSquare(evt) {
 }
 
 function initColorsChange(evt) {
-	if (!totalValidated) {
+	if (!totalValidated && evt.button != 1) {
 		var id = evt.target.getAttribute("id");
 		id = id.replace("square_", "");
 		var idSplited = id.split('.');

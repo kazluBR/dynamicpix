@@ -37,6 +37,15 @@
 			<g id="area" transform="translate(0, 60)" />
 		</svg>
 	</div>
+
+	<script>
+		document.body.onmousedown = function (e) {
+			if (e.which === 2) {
+				switchSquareColor();
+				return false;
+			}
+		}
+	</script>
 </body>
 
 </html>

@@ -141,7 +141,7 @@ function changeDecreaseArrowSize(orientation) {
     decreaseArrow.setAttribute("font-size", size);
     if (orientation == 0) {
         decreaseArrow.setAttribute("x", (width * size) / 2);
-        decreaseArrow.setAttribute("y", (height * size) + 2 * size);
+        decreaseArrow.setAttribute("y", (height * size) + size + size / 2);
     } else {
         decreaseArrow.setAttribute("x", (width * size) + size);
         decreaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
@@ -153,7 +153,7 @@ function changeIncreaseArrowSize(orientation) {
     increaseArrow.setAttribute("font-size", size);
     if (orientation == 0) {
         increaseArrow.setAttribute("x", (width * size) / 2);
-        increaseArrow.setAttribute("y", (height * size) + 3 * size - (size / 4));
+        increaseArrow.setAttribute("y", (height * size) + 2 * size + size / 2);
     } else {
         increaseArrow.setAttribute("x", (width * size) + 2 * size);
         increaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
@@ -372,7 +372,7 @@ function createDecreaseArrow(orientation) {
     decreaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
         decreaseArrow.setAttribute("x", (width * size) / 2);
-        decreaseArrow.setAttribute("y", (height * size) + 2 * size);
+        decreaseArrow.setAttribute("y", (height * size) + size + size / 2);
         decreaseArrow.textContent = "\u2B9D"; // ↑
     } else {
         decreaseArrow.setAttribute("x", (width * size) + size);
@@ -394,7 +394,7 @@ function createIncreaseArrow(orientation) {
     increaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
         increaseArrow.setAttribute("x", (width * size) / 2);
-        increaseArrow.setAttribute("y", (height * size) + 3 * size - (size / 4));
+        increaseArrow.setAttribute("y", (height * size) + 2 * size + size / 2);
         increaseArrow.textContent = "\u2B9F"; // ↓
     } else {
         increaseArrow.setAttribute("x", (width * size) + 2 * size);
