@@ -45,18 +45,18 @@ function initialize() {
 	for (i = 1; i < data.colors.length; i++) {
 		createSquareColor(i);
 	}
-	var pos_x = data.horizontalNumbers[0].length * size;
-	var pos_y = data.verticalNumbers[0].length * size;
-	for (i = 0; i < data.verticalNumbers.length; i++) {
-		for (j = 0; j < data.horizontalNumbers.length; j++) {
+	var pos_x = data.settings.horizontalNumbersLength * size;
+	var pos_y = data.settings.verticalNumbersLength * size;
+	for (i = 0; i < data.settings.width; i++) {
+		for (j = 0; j < data.settings.height; j++) {
 			createMark(pos_x, pos_y, i, j);
 			createSquare(pos_x, pos_y, i, j);
 		}
 	}
-	for (i = 0; i <= data.verticalNumbers.length; i++) {
-		if (i < data.verticalNumbers.length) {
+	for (i = 0; i <= data.settings.width; i++) {
+		if (i < data.settings.width) {
 			createSignal(pos_x, pos_y, 0, i);
-			for (j = 1; j <= data.verticalNumbers[0].length; j++) {
+			for (j = 1; j <= data.settings.verticalNumbersLength; j++) {
 				if (data.verticalNumbers[i][j - 1] != " ") {
 					createSquareNumber(pos_x, pos_y, 0, i, j);
 					createNumber(pos_x, pos_y, 0, i, j);
@@ -65,10 +65,10 @@ function initialize() {
 		}
 		createLine(pos_x, pos_y, 0, i);
 	}
-	for (i = 0; i <= data.horizontalNumbers.length; i++) {
-		if (i < data.horizontalNumbers.length) {
+	for (i = 0; i <= data.settings.height; i++) {
+		if (i < data.settings.height) {
 			createSignal(pos_x, pos_y, 1, i);
-			for (j = 1; j <= data.horizontalNumbers[0].length; j++) {
+			for (j = 1; j <= data.settings.horizontalNumbersLength; j++) {
 				if (data.horizontalNumbers[i][j - 1] != " ") {
 					createSquareNumber(pos_x, pos_y, 1, i, j);
 					createNumber(pos_x, pos_y, 1, i, j);
@@ -145,10 +145,10 @@ function clean() {
 function validate() {
 	var validated, square, color, signal, squareNumber, number;
 	totalValidated = true;
-	for (i = 0; i < data.verticalNumbers.length; i++) {
+	for (i = 0; i < data.settings.width; i++) {
 		validated = true;
 		signal = document.getElementById("signal_0." + i);
-		for (j = 0; j < data.horizontalNumbers.length; j++) {
+		for (j = 0; j < data.settings.height; j++) {
 			square = document.getElementById("square_" + i + "." + j);
 			color = square.getAttribute("fill");
 			if (color != data.colors[data.points[j][i]]) {
@@ -160,7 +160,7 @@ function validate() {
 			}
 		}
 		if (validated) {
-			for (j = 0; j < data.verticalNumbers.length - 1; j++) {
+			for (j = 0; j < data.settings.width - 1; j++) {
 				squareNumber = document.getElementById("squareNumber_0." + i + "." + j);
 				if (squareNumber != null) {
 					squareNumber.setAttribute("opacity", "0");
@@ -171,10 +171,10 @@ function validate() {
 			signal.setAttribute("fill", $VALIDATED_COLOR);
 		}
 	}
-	for (i = 0; i < data.horizontalNumbers.length; i++) {
+	for (i = 0; i < data.settings.height; i++) {
 		validated = true;
 		signal = document.getElementById("signal_1." + i);
-		for (j = 0; j < data.verticalNumbers.length; j++) {
+		for (j = 0; j < data.settings.width; j++) {
 			square = document.getElementById("square_" + j + "." + i);
 			color = square.getAttribute("fill");
 			if (color != data.colors[data.points[i][j]]) {
@@ -186,7 +186,7 @@ function validate() {
 			}
 		}
 		if (validated) {
-			for (j = 0; j < data.horizontalNumbers.length - 1; j++) {
+			for (j = 0; j < data.settings.height - 1; j++) {
 				squareNumber = document.getElementById("squareNumber_1." + i + "." + j);
 				if (squareNumber != null) {
 					squareNumber.setAttribute("opacity", "0");
@@ -277,18 +277,18 @@ function contains(array, obj) {
 }
 
 function changeAreaSize() {
-	var pos_x = data.horizontalNumbers[0].length * size;
-	var pos_y = data.verticalNumbers[0].length * size;
-	for (i = 0; i < data.verticalNumbers.length; i++) {
-		for (j = 0; j < data.horizontalNumbers.length; j++) {
+	var pos_x = data.settings.horizontalNumbersLength * size;
+	var pos_y = data.settings.verticalNumbersLength * size;
+	for (i = 0; i < data.settings.width; i++) {
+		for (j = 0; j < data.settings.height; j++) {
 			changeMarkSize(pos_x, pos_y, i, j);
 			changeSquareSize(pos_x, pos_y, i, j);
 		}
 	}
-	for (i = 0; i <= data.verticalNumbers.length; i++) {
-		if (i < data.verticalNumbers.length) {
+	for (i = 0; i <= data.settings.width; i++) {
+		if (i < data.settings.width) {
 			changeSignalSize(pos_x, pos_y, 0, i);
-			for (j = 1; j <= data.verticalNumbers[0].length; j++) {
+			for (j = 1; j <= data.settings.verticalNumbersLength; j++) {
 				if (data.verticalNumbers[i][j - 1] != " ") {
 					changeSquareNumberSize(pos_x, pos_y, 0, i, j);
 					changeNumberSize(pos_x, pos_y, 0, i, j);
@@ -297,10 +297,10 @@ function changeAreaSize() {
 		}
 		changeLineSize(pos_x, pos_y, 0, i);
 	}
-	for (i = 0; i <= data.horizontalNumbers.length; i++) {
-		if (i < data.horizontalNumbers.length) {
+	for (i = 0; i <= data.settings.height; i++) {
+		if (i < data.settings.height) {
 			changeSignalSize(pos_x, pos_y, 1, i);
-			for (j = 1; j <= data.horizontalNumbers[0].length; j++) {
+			for (j = 1; j <= data.settings.horizontalNumbersLength; j++) {
 				if (data.horizontalNumbers[i][j - 1] != " ") {
 					changeSquareNumberSize(pos_x, pos_y, 1, i, j);
 					changeNumberSize(pos_x, pos_y, 1, i, j);
@@ -373,11 +373,11 @@ function changeLineSize(pos_x, pos_y, orientation, i) {
 	if (orientation == 0) {
 		line.setAttribute("x1", pos_x + i * size);
 		line.setAttribute("x2", pos_x + i * size);
-		line.setAttribute("y1", pos_y - data.verticalNumbers[0].length * size);
-		line.setAttribute("y2", pos_y + data.horizontalNumbers.length * size);
+		line.setAttribute("y1", pos_y - data.settings.verticalNumbersLength * size);
+		line.setAttribute("y2", pos_y + data.settings.height * size);
 	} else {
-		line.setAttribute("x1", pos_x - data.horizontalNumbers[0].length * size);
-		line.setAttribute("x2", pos_x + data.verticalNumbers.length * size);
+		line.setAttribute("x1", pos_x - data.settings.horizontalNumbersLength * size);
+		line.setAttribute("x2", pos_x + data.settings.width * size);
 		line.setAttribute("y1", pos_y + i * size);
 		line.setAttribute("y2", pos_y + i * size);
 	}
@@ -442,9 +442,9 @@ function refreshCalculatedValues(i, j) {
 	}
 	calculatedHorizontal.textContent = calcHorizontal;
 	calculatedVertical.textContent = calcVertical;
-	var pos_y = data.verticalNumbers[0].length * size;
+	var pos_y = data.settings.verticalNumbersLength * size;
 	calculatedHorizontal.setAttribute("y", pos_y + size * (j + 1));
-	var pos_x = data.horizontalNumbers[0].length * size;
+	var pos_x = data.settings.horizontalNumbersLength * size;
 	calculatedVertical.setAttribute("x", pos_x + size * (i + 0.5));
 }
 //#endregion
@@ -561,18 +561,18 @@ function createLine(pos_x, pos_y, orientation, i) {
 	var line = document.createElementNS($SVG_LIB, "line");
 	line.setAttribute("id", "line_" + orientation + "." + i);
 	line.setAttribute("stroke", $LINE_COLOR);
-	if ((i % data.multiple) == 0)
+	if ((i % data.settings.multiple) == 0)
 		line.setAttribute("stroke-width", "2");
 	else
 		line.setAttribute("stroke-width", "1");
 	if (orientation == 0) {
 		line.setAttribute("x1", pos_x + i * size);
 		line.setAttribute("x2", pos_x + i * size);
-		line.setAttribute("y1", pos_y - data.verticalNumbers[0].length * size);
-		line.setAttribute("y2", pos_y + data.horizontalNumbers.length * size);
+		line.setAttribute("y1", pos_y - data.settings.verticalNumbersLength * size);
+		line.setAttribute("y2", pos_y + data.settings.height * size);
 	} else {
-		line.setAttribute("x1", pos_x - data.horizontalNumbers[0].length * size);
-		line.setAttribute("x2", pos_x + data.verticalNumbers.length * size);
+		line.setAttribute("x1", pos_x - data.settings.horizontalNumbersLength * size);
+		line.setAttribute("x2", pos_x + data.settings.width * size);
 		line.setAttribute("y1", pos_y + i * size);
 		line.setAttribute("y2", pos_y + i * size);
 	}
@@ -619,21 +619,21 @@ function highlightSquare(evt) {
 		var j = parseInt(idSplited[1]);
 		var verticalLine = document.getElementById("line_0." + i);
 		verticalLine.setAttribute("stroke", $RULE_COLOR);
-		if ((i % data.multiple) != 0)
+		if ((i % data.settings.multiple) != 0)
 			verticalLine.setAttribute("stroke-width", "2");
 		var horizontalLine = document.getElementById("line_1." + j);
 		horizontalLine.setAttribute("stroke", $RULE_COLOR);
-		if ((j % data.multiple) != 0)
+		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "2");
 		i = i + 1;
 		j = j + 1;
 		verticalLine = document.getElementById("line_0." + i);
 		verticalLine.setAttribute("stroke", $RULE_COLOR);
-		if ((i % data.multiple) != 0)
+		if ((i % data.settings.multiple) != 0)
 			verticalLine.setAttribute("stroke-width", "2");
 		horizontalLine = document.getElementById("line_1." + j);
 		horizontalLine.setAttribute("stroke", $RULE_COLOR);
-		if ((j % data.multiple) != 0)
+		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "2");
 	}
 }
@@ -647,21 +647,21 @@ function fadeSquare(evt) {
 		var j = parseInt(idSplited[1]);
 		var verticalLine = document.getElementById("line_0." + i);
 		verticalLine.setAttribute("stroke", $LINE_COLOR);
-		if ((i % data.multiple) != 0)
+		if ((i % data.settings.multiple) != 0)
 			verticalLine.setAttribute("stroke-width", "1");
 		var horizontalLine = document.getElementById("line_1." + j);
 		horizontalLine.setAttribute("stroke", $LINE_COLOR);
-		if ((j % data.multiple) != 0)
+		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
 		i = i + 1;
 		j = j + 1;
 		verticalLine = document.getElementById("line_0." + i);
 		verticalLine.setAttribute("stroke", $LINE_COLOR);
-		if ((i % data.multiple) != 0)
+		if ((i % data.settings.multiple) != 0)
 			verticalLine.setAttribute("stroke-width", "1");
 		horizontalLine = document.getElementById("line_1." + j);
 		horizontalLine.setAttribute("stroke", $LINE_COLOR);
-		if ((j % data.multiple) != 0)
+		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
 		var calculatedHorizontal = document.getElementById("calculated_0");
 		if (calculatedHorizontal != null) {

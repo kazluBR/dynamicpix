@@ -72,7 +72,17 @@ function decreaseAreaSize() {
 }
 
 function exportJson() {
-    var data = { colors: [$BACKGROUND_COLOR], multiple: multiple, points: [], horizontalNumbers: [], verticalNumbers: [] };
+    var data = { 
+        colors: [$BACKGROUND_COLOR], 
+        settings: {
+            width: width,
+            height: height,
+            multiple: multiple
+        },
+        points: [], 
+        horizontalNumbers: [], 
+        verticalNumbers: [] 
+    };
     for (i = 0; i < height; i++) {
         data.points[i] = [];
         for (j = 0; j < width; j++) {
@@ -85,7 +95,9 @@ function exportJson() {
         }
     }
     data.horizontalNumbers = getHorizontalNumbers(data);
+    data.settings.horizontalNumbersLength = data.horizontalNumbers[0].length;
     data.verticalNumbers = getVerticalNumbers(data);
+    data.settings.verticalNumbersLength = data.verticalNumbers[0].length;
     var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     var a = document.createElement("a");
     a.download = 'puzzle.json';

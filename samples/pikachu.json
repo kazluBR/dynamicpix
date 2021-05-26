@@ -5,7 +5,13 @@
     "#ecf507",
     "#fd0005"
   ],
-  "multiple": 4,
+  "settings": {
+	"width": 28,
+	"height": 24,
+	"multiple": 4,
+	"horizontalNumbersLength": 13,
+	"verticalNumbersLength": 9
+  },
   "points": [
     [
       1,
