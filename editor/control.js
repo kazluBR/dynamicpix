@@ -95,9 +95,9 @@ function exportJson() {
         }
     }
     data.horizontalNumbers = getHorizontalNumbers(data);
-    data.settings.horizontalNumbersLength = data.horizontalNumbers[0].length;
     data.verticalNumbers = getVerticalNumbers(data);
-    data.settings.verticalNumbersLength = data.verticalNumbers[0].length;
+    data.settings.horizontalNumbersLength = getMaxNumbers(data.horizontalNumbers);
+    data.settings.verticalNumbersLength = getMaxNumbers(data.verticalNumbers);
     var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     var a = document.createElement("a");
     a.download = 'puzzle.json';
@@ -173,14 +173,12 @@ function changeIncreaseArrowSize(orientation) {
 }
 
 function getHorizontalNumbers(data) {
-    var maxHorizontalNumbers = getMaxHorizontalNumbers(data.points);
     var horizontalNumbers = [];
     for (k = 0; k < data.points.length; k++)
-        horizontalNumbers[k] = new Array(maxHorizontalNumbers);
-    var count, numbers, aux, counting;
+        horizontalNumbers[k] = [];
+    var count, aux, counting;
     for (i = 0; i < data.points.length; i++) {
         count = 0;
-        numbers = 0;
         aux = -1;
         counting = false;
         for (j = data.points[0].length - 1; j >= 0; j--) {
@@ -189,9 +187,8 @@ function getHorizontalNumbers(data) {
                 if (data.points[i][j] == 0 || data.points[i][j] != aux) {
                     if (data.points[i][j] == 0)
                         counting = false;
-                    horizontalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
+                    horizontalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
                     count = 0;
-                    numbers++;
                 }
             } else if (data.points[i][j] > 0 && data.points[i][j] != aux)
                 counting = true;
@@ -199,26 +196,19 @@ function getHorizontalNumbers(data) {
         }
         if (counting) {
             count++;
-            horizontalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
-            numbers++;
-        }
-        while (numbers < maxHorizontalNumbers) {
-            horizontalNumbers[i][numbers] = { number: " ", color: $BACKGROUND_COLOR };
-            numbers++;
+            horizontalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
         }
     }
     return horizontalNumbers;
 }
 
 function getVerticalNumbers(data) {
-    var maxVerticalNumbers = getMaxVerticalNumbers(data.points);
     var verticalNumbers = [];
     for (k = 0; k < data.points[0].length; k++)
-        verticalNumbers[k] = new Array(maxVerticalNumbers);
-    var count, numbers, aux, counting;
+        verticalNumbers[k] = [];
+    var count, aux, counting;
     for (i = 0; i < data.points[0].length; i++) {
         count = 0;
-        numbers = 0;
         aux = -1;
         counting = false;
         for (j = data.points.length - 1; j >= 0; j--) {
@@ -227,9 +217,8 @@ function getVerticalNumbers(data) {
                 if (data.points[j][i] == 0 || data.points[j][i] != aux) {
                     if (data.points[j][i] == 0)
                         counting = false;
-                    verticalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
+                    verticalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
                     count = 0;
-                    numbers++;
                 }
             } else if (data.points[j][i] > 0 && data.points[j][i] != aux)
                 counting = true;
@@ -237,65 +226,19 @@ function getVerticalNumbers(data) {
         }
         if (counting) {
             count++;
-            verticalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
-            numbers++;
-        }
-        while (numbers < maxVerticalNumbers) {
-            verticalNumbers[i][numbers] = { number: " ", color: $BACKGROUND_COLOR };
-            numbers++;
+            verticalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
         }
     }
     return verticalNumbers;
 }
 
-function getMaxHorizontalNumbers(points) {
+function getMaxNumbers(numbers) {
     var bigger = 0;
-    var numbers, aux, counting;
-    for (i = 0; i < points.length; i++) {
-        numbers = 0;
-        aux = -1;
-        counting = false;
-        for (j = points[0].length - 1; j >= 0; j--) {
-            if (counting) {
-                if (points[i][j] == 0 || points[i][j] != aux) {
-                    if (points[i][j] == 0)
-                        counting = false;
-                    numbers++;
-                }
-            } else if (points[i][j] > 0 && points[i][j] != aux)
-                counting = true;
-            aux = points[i][j];
-        }
-        if (counting)
-            numbers++;
-        if (numbers > bigger)
-            bigger = numbers;
-    }
-    return bigger;
-}
-
-function getMaxVerticalNumbers(points) {
-    var bigger = 0;
-    var numbers, aux, counting;
-    for (i = 0; i < points[0].length; i++) {
-        numbers = 0;
-        aux = -1;
-        counting = false;
-        for (j = points.length - 1; j >= 0; j--) {
-            if (counting) {
-                if (points[j][i] == 0 || points[j][i] != aux) {
-                    if (points[j][i] == 0)
-                        counting = false;
-                    numbers++;
-                }
-            } else if (points[j][i] > 0 && points[j][i] != aux)
-                counting = true;
-            aux = points[j][i];
-        }
-        if (counting)
-            numbers++;
-        if (numbers > bigger)
-            bigger = numbers;
+    var aux = 0;
+    for (i = 0; i < numbers.length; i++) {
+        aux = numbers[i].length;
+        if (aux > bigger)
+            bigger = aux;
     }
     return bigger;
 }
