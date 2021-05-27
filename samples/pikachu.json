@@ -5,7 +5,13 @@
     "#ecf507",
     "#fd0005"
   ],
-  "multiple": 4,
+  "settings": {
+	"width": 28,
+	"height": 24,
+	"multiple": 4,
+	"horizontalNumbersLength": 13,
+	"verticalNumbersLength": 9
+  },
   "points": [
     [
       1,
@@ -737,50 +743,6 @@
       {
         "number": "2",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -791,50 +753,6 @@
       {
         "number": "4",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -861,34 +779,6 @@
       {
         "number": "3",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -915,34 +805,6 @@
       {
         "number": "3",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -969,34 +831,6 @@
       {
         "number": "2",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1027,30 +861,6 @@
       {
         "number": "2",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1081,30 +891,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1119,46 +905,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1173,46 +919,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1243,30 +949,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1281,46 +963,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1335,46 +977,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1405,30 +1007,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1467,22 +1045,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1513,30 +1075,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1575,22 +1113,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1621,30 +1143,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1737,22 +1235,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1799,14 +1281,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1837,30 +1311,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1883,38 +1333,6 @@
       {
         "number": "2",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1929,100 +1347,12 @@
       {
         "number": "3",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
       {
         "number": "6",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ]
   ],
@@ -2031,114 +1361,18 @@
       {
         "number": "4",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
       {
         "number": "6",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
       {
         "number": "7",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2157,26 +1391,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2203,18 +1417,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2245,14 +1447,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2283,14 +1477,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2321,14 +1507,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2363,10 +1541,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2389,22 +1563,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2427,22 +1585,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2465,22 +1607,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2503,22 +1629,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2617,22 +1727,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2655,22 +1749,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2693,22 +1771,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2731,22 +1793,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2781,10 +1827,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2815,14 +1857,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2853,14 +1887,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2891,14 +1917,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2925,18 +1943,6 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -2955,140 +1961,24 @@
       {
         "number": "1",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
       {
         "number": "7",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
       {
         "number": "6",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
       {
         "number": "4",
         "color": "#010006"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ]
   ]

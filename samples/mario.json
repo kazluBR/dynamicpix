@@ -5,7 +5,13 @@
     "#6b6d00",
     "#ea9f23"
   ],
-  "multiple": 4,
+  "settings": {
+	"width": 12,
+	"height": 16,
+	"multiple": 4,
+	"horizontalNumbersLength": 9,
+	"verticalNumbersLength": 8
+  },
   "points": [
     [
       0,
@@ -237,76 +243,12 @@
       {
         "number": "5",
         "color": "#b53220"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
       {
         "number": "9",
         "color": "#b53220"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -325,26 +267,6 @@
       {
         "number": "3",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -371,18 +293,6 @@
       {
         "number": "1",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -409,18 +319,6 @@
       {
         "number": "1",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -435,68 +333,12 @@
       {
         "number": "2",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
       {
         "number": "6",
         "color": "#ea9f23"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -519,22 +361,6 @@
       {
         "number": "2",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -557,22 +383,6 @@
       {
         "number": "3",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -587,30 +397,6 @@
       {
         "number": "4",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -663,30 +449,6 @@
       {
         "number": "3",
         "color": "#ea9f23"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -701,30 +463,6 @@
       {
         "number": "2",
         "color": "#ea9f23"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -735,34 +473,6 @@
       {
         "number": "3",
         "color": "#b53220"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -773,34 +483,6 @@
       {
         "number": "3",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -811,34 +493,6 @@
       {
         "number": "4",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ]
   ],
@@ -855,26 +509,6 @@
       {
         "number": "1",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -893,22 +527,6 @@
       {
         "number": "3",
         "color": "#6b6d00"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -969,14 +587,6 @@
       {
         "number": "2",
         "color": "#b53220"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1029,22 +639,6 @@
       {
         "number": "2",
         "color": "#b53220"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1063,22 +657,6 @@
       {
         "number": "2",
         "color": "#b53220"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1143,10 +721,6 @@
       {
         "number": "1",
         "color": "#b53220"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1177,10 +751,6 @@
       {
         "number": "1",
         "color": "#b53220"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1207,14 +777,6 @@
       {
         "number": "1",
         "color": "#b53220"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ],
     [
@@ -1233,22 +795,6 @@
       {
         "number": "1",
         "color": "#ea9f23"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
-      },
-      {
-        "number": " ",
-        "color": "#ffffff"
       }
     ]
   ]

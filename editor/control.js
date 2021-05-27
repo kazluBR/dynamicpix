@@ -72,7 +72,17 @@ function decreaseAreaSize() {
 }
 
 function exportJson() {
-    var data = { colors: [$BACKGROUND_COLOR], multiple: multiple, points: [], horizontalNumbers: [], verticalNumbers: [] };
+    var data = { 
+        colors: [$BACKGROUND_COLOR], 
+        settings: {
+            width: width,
+            height: height,
+            multiple: multiple
+        },
+        points: [], 
+        horizontalNumbers: [], 
+        verticalNumbers: [] 
+    };
     for (i = 0; i < height; i++) {
         data.points[i] = [];
         for (j = 0; j < width; j++) {
@@ -86,6 +96,8 @@ function exportJson() {
     }
     data.horizontalNumbers = getHorizontalNumbers(data);
     data.verticalNumbers = getVerticalNumbers(data);
+    data.settings.horizontalNumbersLength = getMaxNumbers(data.horizontalNumbers);
+    data.settings.verticalNumbersLength = getMaxNumbers(data.verticalNumbers);
     var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     var a = document.createElement("a");
     a.download = 'puzzle.json';
@@ -141,7 +153,7 @@ function changeDecreaseArrowSize(orientation) {
     decreaseArrow.setAttribute("font-size", size);
     if (orientation == 0) {
         decreaseArrow.setAttribute("x", (width * size) / 2);
-        decreaseArrow.setAttribute("y", (height * size) + 2 * size);
+        decreaseArrow.setAttribute("y", (height * size) + size + size / 2);
     } else {
         decreaseArrow.setAttribute("x", (width * size) + size);
         decreaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
@@ -153,7 +165,7 @@ function changeIncreaseArrowSize(orientation) {
     increaseArrow.setAttribute("font-size", size);
     if (orientation == 0) {
         increaseArrow.setAttribute("x", (width * size) / 2);
-        increaseArrow.setAttribute("y", (height * size) + 3 * size - (size / 4));
+        increaseArrow.setAttribute("y", (height * size) + 2 * size + size / 2);
     } else {
         increaseArrow.setAttribute("x", (width * size) + 2 * size);
         increaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
@@ -161,14 +173,12 @@ function changeIncreaseArrowSize(orientation) {
 }
 
 function getHorizontalNumbers(data) {
-    var maxHorizontalNumbers = getMaxHorizontalNumbers(data.points);
     var horizontalNumbers = [];
     for (k = 0; k < data.points.length; k++)
-        horizontalNumbers[k] = new Array(maxHorizontalNumbers);
-    var count, numbers, aux, counting;
+        horizontalNumbers[k] = [];
+    var count, aux, counting;
     for (i = 0; i < data.points.length; i++) {
         count = 0;
-        numbers = 0;
         aux = -1;
         counting = false;
         for (j = data.points[0].length - 1; j >= 0; j--) {
@@ -177,9 +187,8 @@ function getHorizontalNumbers(data) {
                 if (data.points[i][j] == 0 || data.points[i][j] != aux) {
                     if (data.points[i][j] == 0)
                         counting = false;
-                    horizontalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
+                    horizontalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
                     count = 0;
-                    numbers++;
                 }
             } else if (data.points[i][j] > 0 && data.points[i][j] != aux)
                 counting = true;
@@ -187,26 +196,19 @@ function getHorizontalNumbers(data) {
         }
         if (counting) {
             count++;
-            horizontalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
-            numbers++;
-        }
-        while (numbers < maxHorizontalNumbers) {
-            horizontalNumbers[i][numbers] = { number: " ", color: $BACKGROUND_COLOR };
-            numbers++;
+            horizontalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
         }
     }
     return horizontalNumbers;
 }
 
 function getVerticalNumbers(data) {
-    var maxVerticalNumbers = getMaxVerticalNumbers(data.points);
     var verticalNumbers = [];
     for (k = 0; k < data.points[0].length; k++)
-        verticalNumbers[k] = new Array(maxVerticalNumbers);
-    var count, numbers, aux, counting;
+        verticalNumbers[k] = [];
+    var count, aux, counting;
     for (i = 0; i < data.points[0].length; i++) {
         count = 0;
-        numbers = 0;
         aux = -1;
         counting = false;
         for (j = data.points.length - 1; j >= 0; j--) {
@@ -215,9 +217,8 @@ function getVerticalNumbers(data) {
                 if (data.points[j][i] == 0 || data.points[j][i] != aux) {
                     if (data.points[j][i] == 0)
                         counting = false;
-                    verticalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
+                    verticalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
                     count = 0;
-                    numbers++;
                 }
             } else if (data.points[j][i] > 0 && data.points[j][i] != aux)
                 counting = true;
@@ -225,65 +226,19 @@ function getVerticalNumbers(data) {
         }
         if (counting) {
             count++;
-            verticalNumbers[i][numbers] = { number: count.toString(), color: data.colors[aux] };
-            numbers++;
-        }
-        while (numbers < maxVerticalNumbers) {
-            verticalNumbers[i][numbers] = { number: " ", color: $BACKGROUND_COLOR };
-            numbers++;
+            verticalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
         }
     }
     return verticalNumbers;
 }
 
-function getMaxHorizontalNumbers(points) {
+function getMaxNumbers(numbers) {
     var bigger = 0;
-    var numbers, aux, counting;
-    for (i = 0; i < points.length; i++) {
-        numbers = 0;
-        aux = -1;
-        counting = false;
-        for (j = points[0].length - 1; j >= 0; j--) {
-            if (counting) {
-                if (points[i][j] == 0 || points[i][j] != aux) {
-                    if (points[i][j] == 0)
-                        counting = false;
-                    numbers++;
-                }
-            } else if (points[i][j] > 0 && points[i][j] != aux)
-                counting = true;
-            aux = points[i][j];
-        }
-        if (counting)
-            numbers++;
-        if (numbers > bigger)
-            bigger = numbers;
-    }
-    return bigger;
-}
-
-function getMaxVerticalNumbers(points) {
-    var bigger = 0;
-    var numbers, aux, counting;
-    for (i = 0; i < points[0].length; i++) {
-        numbers = 0;
-        aux = -1;
-        counting = false;
-        for (j = points.length - 1; j >= 0; j--) {
-            if (counting) {
-                if (points[j][i] == 0 || points[j][i] != aux) {
-                    if (points[j][i] == 0)
-                        counting = false;
-                    numbers++;
-                }
-            } else if (points[j][i] > 0 && points[j][i] != aux)
-                counting = true;
-            aux = points[j][i];
-        }
-        if (counting)
-            numbers++;
-        if (numbers > bigger)
-            bigger = numbers;
+    var aux = 0;
+    for (i = 0; i < numbers.length; i++) {
+        aux = numbers[i].length;
+        if (aux > bigger)
+            bigger = aux;
     }
     return bigger;
 }
@@ -372,7 +327,7 @@ function createDecreaseArrow(orientation) {
     decreaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
         decreaseArrow.setAttribute("x", (width * size) / 2);
-        decreaseArrow.setAttribute("y", (height * size) + 2 * size);
+        decreaseArrow.setAttribute("y", (height * size) + size + size / 2);
         decreaseArrow.textContent = "\u2B9D"; // ↑
     } else {
         decreaseArrow.setAttribute("x", (width * size) + size);
@@ -394,7 +349,7 @@ function createIncreaseArrow(orientation) {
     increaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
         increaseArrow.setAttribute("x", (width * size) / 2);
-        increaseArrow.setAttribute("y", (height * size) + 3 * size - (size / 4));
+        increaseArrow.setAttribute("y", (height * size) + 2 * size + size / 2);
         increaseArrow.textContent = "\u2B9F"; // ↓
     } else {
         increaseArrow.setAttribute("x", (width * size) + 2 * size);

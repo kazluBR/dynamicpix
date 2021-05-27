@@ -25,6 +25,7 @@ function setFillPuzzle() {
 function loadJson() {
 	var files = document.getElementById('selectedFile').files;
 	if (files.length <= 0) {
+		alert("Select a valid JSON file");
 		return false;
 	}
 	var fr = new FileReader();
@@ -44,34 +45,30 @@ function initialize() {
 	for (i = 1; i < data.colors.length; i++) {
 		createSquareColor(i);
 	}
-	var pos_x = data.horizontalNumbers[0].length * size;
-	var pos_y = data.verticalNumbers[0].length * size;
-	for (i = 0; i < data.verticalNumbers.length; i++) {
-		for (j = 0; j < data.horizontalNumbers.length; j++) {
+	var pos_x = data.settings.horizontalNumbersLength * size;
+	var pos_y = data.settings.verticalNumbersLength * size;
+	for (i = 0; i < data.settings.width; i++) {
+		for (j = 0; j < data.settings.height; j++) {
 			createMark(pos_x, pos_y, i, j);
 			createSquare(pos_x, pos_y, i, j);
 		}
 	}
-	for (i = 0; i <= data.verticalNumbers.length; i++) {
-		if (i < data.verticalNumbers.length) {
+	for (i = 0; i <= data.settings.width; i++) {
+		if (i < data.settings.width) {
 			createSignal(pos_x, pos_y, 0, i);
-			for (j = 1; j <= data.verticalNumbers[0].length; j++) {
-				if (data.verticalNumbers[i][j - 1] != " ") {
-					createSquareNumber(pos_x, pos_y, 0, i, j);
-					createNumber(pos_x, pos_y, 0, i, j);
-				}
+			for (j = 1; j <= data.verticalNumbers[i].length; j++) {
+				createSquareNumber(pos_x, pos_y, 0, i, j);
+				createNumber(pos_x, pos_y, 0, i, j);
 			}
 		}
 		createLine(pos_x, pos_y, 0, i);
 	}
-	for (i = 0; i <= data.horizontalNumbers.length; i++) {
-		if (i < data.horizontalNumbers.length) {
+	for (i = 0; i <= data.settings.height; i++) {
+		if (i < data.settings.height) {
 			createSignal(pos_x, pos_y, 1, i);
-			for (j = 1; j <= data.horizontalNumbers[0].length; j++) {
-				if (data.horizontalNumbers[i][j - 1] != " ") {
-					createSquareNumber(pos_x, pos_y, 1, i, j);
-					createNumber(pos_x, pos_y, 1, i, j);
-				}
+			for (j = 1; j <= data.horizontalNumbers[i].length; j++) {
+				createSquareNumber(pos_x, pos_y, 1, i, j);
+				createNumber(pos_x, pos_y, 1, i, j);
 			}
 		}
 		createLine(pos_x, pos_y, 1, i);
@@ -96,14 +93,36 @@ function decreaseAreaSize() {
 
 function solve() {
 	var square = null;
-	for (i = 0; i < data.points.length; i++) {
-		for (j = 0; j < data.points[0].length; j++) {
+	for (i = 0; i < data.settings.height; i++) {
+		for (j = 0; j < data.settings.width; j++) {
 			square = document.getElementById("square_" + j + "." + i);
 			square.setAttribute("fill", data.colors[data.points[i][j]]);
 			square.setAttribute("opacity", "1");
 		}
 	}
 	validate();
+}
+
+function switchSquareColor() {
+	var colors = document.getElementById("colors").children;
+	var selected;
+	for (i = 0; i < colors.length; i++) {
+		if (colors[i].getAttribute("stroke-width") == 3) {
+			if (i == colors.length - 1)
+				selected = 0;
+			else
+				selected = i + 1;
+			break;
+		}
+	}
+	colorSelected = data.colors[selected + 1];
+	colors[selected].setAttribute("stroke-width", "3");
+	var squareColor;
+	for (i = 1; i < data.colors.length; i++) {
+		squareColor = document.getElementById("squareColor_" + i);
+		if (i != selected + 1)
+			squareColor.setAttribute("stroke-width", "1");
+	}
 }
 //#endregion
 
@@ -122,10 +141,10 @@ function clean() {
 function validate() {
 	var validated, square, color, signal, squareNumber, number;
 	totalValidated = true;
-	for (i = 0; i < data.verticalNumbers.length; i++) {
+	for (i = 0; i < data.settings.width; i++) {
 		validated = true;
 		signal = document.getElementById("signal_0." + i);
-		for (j = 0; j < data.horizontalNumbers.length; j++) {
+		for (j = 0; j < data.settings.height; j++) {
 			square = document.getElementById("square_" + i + "." + j);
 			color = square.getAttribute("fill");
 			if (color != data.colors[data.points[j][i]]) {
@@ -137,7 +156,7 @@ function validate() {
 			}
 		}
 		if (validated) {
-			for (j = 0; j < data.verticalNumbers.length - 1; j++) {
+			for (j = 0; j < data.settings.width - 1; j++) {
 				squareNumber = document.getElementById("squareNumber_0." + i + "." + j);
 				if (squareNumber != null) {
 					squareNumber.setAttribute("opacity", "0");
@@ -148,10 +167,10 @@ function validate() {
 			signal.setAttribute("fill", $VALIDATED_COLOR);
 		}
 	}
-	for (i = 0; i < data.horizontalNumbers.length; i++) {
+	for (i = 0; i < data.settings.height; i++) {
 		validated = true;
 		signal = document.getElementById("signal_1." + i);
-		for (j = 0; j < data.verticalNumbers.length; j++) {
+		for (j = 0; j < data.settings.width; j++) {
 			square = document.getElementById("square_" + j + "." + i);
 			color = square.getAttribute("fill");
 			if (color != data.colors[data.points[i][j]]) {
@@ -163,7 +182,7 @@ function validate() {
 			}
 		}
 		if (validated) {
-			for (j = 0; j < data.horizontalNumbers.length - 1; j++) {
+			for (j = 0; j < data.settings.height - 1; j++) {
 				squareNumber = document.getElementById("squareNumber_1." + i + "." + j);
 				if (squareNumber != null) {
 					squareNumber.setAttribute("opacity", "0");
@@ -176,8 +195,8 @@ function validate() {
 	}
 	if (totalValidated) {
 		var mark = null;
-		for (i = 0; i < data.points.length; i++) {
-			for (j = 0; j < data.points[0].length; j++) {
+		for (i = 0; i < data.settings.height; i++) {
+			for (j = 0; j < data.settings.width; j++) {
 				mark = document.getElementById("mark_" + j + "." + i);
 				mark.setAttribute("opacity", "0");
 			}
@@ -187,7 +206,7 @@ function validate() {
 }
 
 function autoFill() {
-	totalRanks = data.points.length + data.points[0].length;
+	totalRanks = data.settings.height + data.settings.width;
 	var numberRanksToFill;
 	switch (fillPuzzle) {
 		case "1":
@@ -205,17 +224,17 @@ function autoFill() {
 	}
 	var count = 0;
 	var square = null;
-	var chosenColumns = new Array(data.points[0].length);
-	var chosenLines = new Array(data.points[0].length);
+	var chosenColumns = new Array(data.settings.width);
+	var chosenLines = new Array(data.settings.width);
 	while (count < numberRanksToFill) {
 		if (Math.random() > 0.5) {
-			randColumn = Math.floor((Math.random() * data.points.length));
+			randColumn = Math.floor((Math.random() * data.settings.height));
 			if (contains(chosenColumns, randColumn)) {
 				count--;
 			}
 			else {
 				chosenColumns.push(randColumn);
-				for (i = 0; i < data.points[0].length; i++) {
+				for (i = 0; i < data.settings.width; i++) {
 					if (data.points[randColumn][i] > 0) {
 						square = document.getElementById("square_" + i + "." + randColumn);
 						square.setAttribute("fill", data.colors[data.points[randColumn][i]]);
@@ -225,13 +244,13 @@ function autoFill() {
 			}
 		}
 		else {
-			randLine = Math.floor((Math.random() * data.points[0].length));
+			randLine = Math.floor((Math.random() * data.settings.width));
 			if (contains(chosenLines, randLine)) {
 				count--;
 			}
 			else {
 				chosenLines.push(randLine);
-				for (i = 0; i < data.points.length; i++) {
+				for (i = 0; i < data.settings.height; i++) {
 					if (data.points[i][randLine] > 0) {
 						square = document.getElementById("square_" + randLine + "." + i);
 						square.setAttribute("fill", data.colors[data.points[i][randLine]]);
@@ -254,34 +273,30 @@ function contains(array, obj) {
 }
 
 function changeAreaSize() {
-	var pos_x = data.horizontalNumbers[0].length * size;
-	var pos_y = data.verticalNumbers[0].length * size;
-	for (i = 0; i < data.verticalNumbers.length; i++) {
-		for (j = 0; j < data.horizontalNumbers.length; j++) {
+	var pos_x = data.settings.horizontalNumbersLength * size;
+	var pos_y = data.settings.verticalNumbersLength * size;
+	for (i = 0; i < data.settings.width; i++) {
+		for (j = 0; j < data.settings.height; j++) {
 			changeMarkSize(pos_x, pos_y, i, j);
 			changeSquareSize(pos_x, pos_y, i, j);
 		}
 	}
-	for (i = 0; i <= data.verticalNumbers.length; i++) {
-		if (i < data.verticalNumbers.length) {
+	for (i = 0; i <= data.settings.width; i++) {
+		if (i < data.settings.width) {
 			changeSignalSize(pos_x, pos_y, 0, i);
-			for (j = 1; j <= data.verticalNumbers[0].length; j++) {
-				if (data.verticalNumbers[i][j - 1] != " ") {
-					changeSquareNumberSize(pos_x, pos_y, 0, i, j);
-					changeNumberSize(pos_x, pos_y, 0, i, j);
-				}
+			for (j = 1; j <= data.verticalNumbers[i].length; j++) {
+				changeSquareNumberSize(pos_x, pos_y, 0, i, j);
+				changeNumberSize(pos_x, pos_y, 0, i, j);
 			}
 		}
 		changeLineSize(pos_x, pos_y, 0, i);
 	}
-	for (i = 0; i <= data.horizontalNumbers.length; i++) {
-		if (i < data.horizontalNumbers.length) {
+	for (i = 0; i <= data.settings.height; i++) {
+		if (i < data.settings.height) {
 			changeSignalSize(pos_x, pos_y, 1, i);
-			for (j = 1; j <= data.horizontalNumbers[0].length; j++) {
-				if (data.horizontalNumbers[i][j - 1] != " ") {
-					changeSquareNumberSize(pos_x, pos_y, 1, i, j);
-					changeNumberSize(pos_x, pos_y, 1, i, j);
-				}
+			for (j = 1; j <= data.horizontalNumbers[i].length; j++) {
+				changeSquareNumberSize(pos_x, pos_y, 1, i, j);
+				changeNumberSize(pos_x, pos_y, 1, i, j);
 			}
 		}
 		changeLineSize(pos_x, pos_y, 1, i);
@@ -311,11 +326,11 @@ function changeSignalSize(pos_x, pos_y, orientation, i) {
 		signal.setAttribute("height", size / 4);
 		signal.setAttribute("width", size);
 		signal.setAttribute("x", pos_x + i * size);
-		signal.setAttribute("y", pos_y + data.points.length * size);
+		signal.setAttribute("y", pos_y + data.settings.height * size);
 	} else {
 		signal.setAttribute("height", size);
 		signal.setAttribute("width", size / 4);
-		signal.setAttribute("x", pos_x + data.points[0].length * size);
+		signal.setAttribute("x", pos_x + data.settings.width * size);
 		signal.setAttribute("y", pos_y + i * size);
 	}
 }
@@ -350,11 +365,11 @@ function changeLineSize(pos_x, pos_y, orientation, i) {
 	if (orientation == 0) {
 		line.setAttribute("x1", pos_x + i * size);
 		line.setAttribute("x2", pos_x + i * size);
-		line.setAttribute("y1", pos_y - data.verticalNumbers[0].length * size);
-		line.setAttribute("y2", pos_y + data.horizontalNumbers.length * size);
+		line.setAttribute("y1", pos_y - data.settings.verticalNumbersLength * size);
+		line.setAttribute("y2", pos_y + data.settings.height * size);
 	} else {
-		line.setAttribute("x1", pos_x - data.horizontalNumbers[0].length * size);
-		line.setAttribute("x2", pos_x + data.verticalNumbers.length * size);
+		line.setAttribute("x1", pos_x - data.settings.horizontalNumbersLength * size);
+		line.setAttribute("x2", pos_x + data.settings.width * size);
 		line.setAttribute("y1", pos_y + i * size);
 		line.setAttribute("y2", pos_y + i * size);
 	}
@@ -364,9 +379,9 @@ function changeCalculatedSize(pos_x, pos_y, orientation) {
 	var calculated = document.getElementById("calculated_" + orientation);
 	calculated.setAttribute("font-size", size * 0.9);
 	if (orientation == 0) {
-		calculated.setAttribute("x", pos_x + data.points[0].length * size + 0.5 * size);
+		calculated.setAttribute("x", pos_x + data.settings.width * size + 0.5 * size);
 	} else {
-		calculated.setAttribute("y", pos_y + data.points.length * size + 0.8 * size);
+		calculated.setAttribute("y", pos_y + data.settings.height * size + 0.8 * size);
 	}
 }
 
@@ -376,7 +391,7 @@ function refreshCalculatedValues(i, j) {
 	var squareAux = null;
 	var calcHorizontal = 1;
 	var countRight = i + 1;
-	while (countRight <= data.points[0].length - 1) {
+	while (countRight <= data.settings.width - 1) {
 		squareAux = document.getElementById("square_" + countRight + "." + j);
 		if (squareAux.getAttribute("fill") == colorSquare) {
 			countRight++;
@@ -393,7 +408,7 @@ function refreshCalculatedValues(i, j) {
 	}
 	var calcVertical = 1;
 	var countDown = j + 1;
-	while (countDown <= data.points.length - 1) {
+	while (countDown <= data.settings.height - 1) {
 		squareAux = document.getElementById("square_" + i + "." + countDown);
 		if (squareAux.getAttribute("fill") == colorSquare) {
 			countDown++;
@@ -419,9 +434,9 @@ function refreshCalculatedValues(i, j) {
 	}
 	calculatedHorizontal.textContent = calcHorizontal;
 	calculatedVertical.textContent = calcVertical;
-	var pos_y = data.verticalNumbers[0].length * size;
+	var pos_y = data.settings.verticalNumbersLength * size;
 	calculatedHorizontal.setAttribute("y", pos_y + size * (j + 1));
-	var pos_x = data.horizontalNumbers[0].length * size;
+	var pos_x = data.settings.horizontalNumbersLength * size;
 	calculatedVertical.setAttribute("x", pos_x + size * (i + 0.5));
 }
 //#endregion
@@ -484,11 +499,11 @@ function createSignal(pos_x, pos_y, orientation, i) {
 		signal.setAttribute("height", size / 4);
 		signal.setAttribute("width", size);
 		signal.setAttribute("x", pos_x + i * size);
-		signal.setAttribute("y", pos_y + data.points.length * size);
+		signal.setAttribute("y", pos_y + data.settings.height * size);
 	} else {
 		signal.setAttribute("height", size);
 		signal.setAttribute("width", size / 4);
-		signal.setAttribute("x", pos_x + data.points[0].length * size);
+		signal.setAttribute("x", pos_x + data.settings.width * size);
 		signal.setAttribute("y", pos_y + i * size);
 	}
 	document.getElementById("area").appendChild(signal);
@@ -538,18 +553,18 @@ function createLine(pos_x, pos_y, orientation, i) {
 	var line = document.createElementNS($SVG_LIB, "line");
 	line.setAttribute("id", "line_" + orientation + "." + i);
 	line.setAttribute("stroke", $LINE_COLOR);
-	if ((i % data.multiple) == 0)
+	if ((i % data.settings.multiple) == 0)
 		line.setAttribute("stroke-width", "2");
 	else
 		line.setAttribute("stroke-width", "1");
 	if (orientation == 0) {
 		line.setAttribute("x1", pos_x + i * size);
 		line.setAttribute("x2", pos_x + i * size);
-		line.setAttribute("y1", pos_y - data.verticalNumbers[0].length * size);
-		line.setAttribute("y2", pos_y + data.horizontalNumbers.length * size);
+		line.setAttribute("y1", pos_y - data.settings.verticalNumbersLength * size);
+		line.setAttribute("y2", pos_y + data.settings.height * size);
 	} else {
-		line.setAttribute("x1", pos_x - data.horizontalNumbers[0].length * size);
-		line.setAttribute("x2", pos_x + data.verticalNumbers.length * size);
+		line.setAttribute("x1", pos_x - data.settings.horizontalNumbersLength * size);
+		line.setAttribute("x2", pos_x + data.settings.width * size);
 		line.setAttribute("y1", pos_y + i * size);
 		line.setAttribute("y2", pos_y + i * size);
 	}
@@ -566,9 +581,9 @@ function createCalculated(pos_x, pos_y, orientation) {
 	calculated.setAttribute("fill", $CALCULATED_EMPTY_COLOR);
 	calculated.textContent = " ";
 	if (orientation == 0)
-		calculated.setAttribute("x", pos_x + data.points[0].length * size + 0.5 * size);
+		calculated.setAttribute("x", pos_x + data.settings.width * size + 0.5 * size);
 	else
-		calculated.setAttribute("y", pos_y + data.points.length * size + 0.8 * size);
+		calculated.setAttribute("y", pos_y + data.settings.height * size + 0.8 * size);
 	document.getElementById("area").appendChild(calculated);
 }
 //#endregion
@@ -579,6 +594,7 @@ function markSquareColor(evt) {
 	id = id.replace("squareColor_", "");
 	colorSelected = data.colors[id];
 	evt.target.setAttribute("stroke-width", "3");
+	var squareColor;
 	for (i = 1; i < data.colors.length; i++) {
 		squareColor = document.getElementById("squareColor_" + i);
 		if (i != id)
@@ -595,21 +611,21 @@ function highlightSquare(evt) {
 		var j = parseInt(idSplited[1]);
 		var verticalLine = document.getElementById("line_0." + i);
 		verticalLine.setAttribute("stroke", $RULE_COLOR);
-		if ((i % data.multiple) != 0)
+		if ((i % data.settings.multiple) != 0)
 			verticalLine.setAttribute("stroke-width", "2");
 		var horizontalLine = document.getElementById("line_1." + j);
 		horizontalLine.setAttribute("stroke", $RULE_COLOR);
-		if ((j % data.multiple) != 0)
+		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "2");
 		i = i + 1;
 		j = j + 1;
 		verticalLine = document.getElementById("line_0." + i);
 		verticalLine.setAttribute("stroke", $RULE_COLOR);
-		if ((i % data.multiple) != 0)
+		if ((i % data.settings.multiple) != 0)
 			verticalLine.setAttribute("stroke-width", "2");
 		horizontalLine = document.getElementById("line_1." + j);
 		horizontalLine.setAttribute("stroke", $RULE_COLOR);
-		if ((j % data.multiple) != 0)
+		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "2");
 	}
 }
@@ -623,21 +639,21 @@ function fadeSquare(evt) {
 		var j = parseInt(idSplited[1]);
 		var verticalLine = document.getElementById("line_0." + i);
 		verticalLine.setAttribute("stroke", $LINE_COLOR);
-		if ((i % data.multiple) != 0)
+		if ((i % data.settings.multiple) != 0)
 			verticalLine.setAttribute("stroke-width", "1");
 		var horizontalLine = document.getElementById("line_1." + j);
 		horizontalLine.setAttribute("stroke", $LINE_COLOR);
-		if ((j % data.multiple) != 0)
+		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
 		i = i + 1;
 		j = j + 1;
 		verticalLine = document.getElementById("line_0." + i);
 		verticalLine.setAttribute("stroke", $LINE_COLOR);
-		if ((i % data.multiple) != 0)
+		if ((i % data.settings.multiple) != 0)
 			verticalLine.setAttribute("stroke-width", "1");
 		horizontalLine = document.getElementById("line_1." + j);
 		horizontalLine.setAttribute("stroke", $LINE_COLOR);
-		if ((j % data.multiple) != 0)
+		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
 		var calculatedHorizontal = document.getElementById("calculated_0");
 		if (calculatedHorizontal != null) {
@@ -651,7 +667,7 @@ function fadeSquare(evt) {
 }
 
 function initColorsChange(evt) {
-	if (!totalValidated) {
+	if (!totalValidated && evt.button != 1) {
 		var id = evt.target.getAttribute("id");
 		id = id.replace("square_", "");
 		var idSplited = id.split('.');
