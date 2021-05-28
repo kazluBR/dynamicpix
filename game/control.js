@@ -158,11 +158,9 @@ function validate() {
 		if (validated) {
 			for (j = 0; j < data.settings.width - 1; j++) {
 				squareNumber = document.getElementById("squareNumber_0." + i + "." + j);
-				if (squareNumber != null) {
-					squareNumber.setAttribute("opacity", "0");
-					number = document.getElementById("number_0." + i + "." + j);
-					number.setAttribute("fill", squareNumber.getAttribute("fill"));
-				}
+				squareNumber.setAttribute("opacity", "0");
+				number = document.getElementById("number_0." + i + "." + j);
+				number.setAttribute("fill", squareNumber.getAttribute("fill"));
 			}
 			signal.setAttribute("fill", $VALIDATED_COLOR);
 		}
@@ -184,11 +182,9 @@ function validate() {
 		if (validated) {
 			for (j = 0; j < data.settings.height - 1; j++) {
 				squareNumber = document.getElementById("squareNumber_1." + i + "." + j);
-				if (squareNumber != null) {
-					squareNumber.setAttribute("opacity", "0");
-					number = document.getElementById("number_1." + i + "." + j);
-					number.setAttribute("fill", squareNumber.getAttribute("fill"));
-				}
+				squareNumber.setAttribute("opacity", "0");
+				number = document.getElementById("number_1." + i + "." + j);
+				number.setAttribute("fill", squareNumber.getAttribute("fill"));
 			}
 			signal.setAttribute("fill", $VALIDATED_COLOR);
 		}
@@ -201,6 +197,10 @@ function validate() {
 				mark.setAttribute("opacity", "0");
 			}
 		}
+		var calculatedHorizontal = document.getElementById("calculated_0");
+		calculatedHorizontal.textContent = "";
+		var calculatedVertical = document.getElementById("calculated_1");
+		calculatedVertical.textContent = "";
 		alert("Puzzle Solved!");
 	}
 }
@@ -656,13 +656,9 @@ function fadeSquare(evt) {
 		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
 		var calculatedHorizontal = document.getElementById("calculated_0");
-		if (calculatedHorizontal != null) {
-			calculatedHorizontal.textContent = "";
-		}
+		calculatedHorizontal.textContent = "";
 		var calculatedVertical = document.getElementById("calculated_1");
-		if (calculatedVertical != null) {
-			calculatedVertical.textContent = "";
-		}
+		calculatedVertical.textContent = "";
 	}
 }
 
