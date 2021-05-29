@@ -5,12 +5,12 @@ const $CALCULATED_EMPTY_COLOR = "#808080";
 const $RULE_COLOR = "#ff00ff";
 const $VALIDATED_COLOR = "#adff2f";
 
-var data = {};
 var size = 20;
 var fillPuzzle = '0';
 var totalValidated = false;
 var clicked = false;
 
+var data;
 var squareI;
 var squareJ;
 var colorSquare;
@@ -124,6 +124,13 @@ function switchSquareColor() {
 			squareColor.setAttribute("stroke-width", "1");
 	}
 }
+
+function endColorsChange() {
+	if (!totalValidated && data != null) {
+		clicked = false;
+		validate();
+	}
+}
 //#endregion
 
 //#region Auxiliar Functions
@@ -156,7 +163,7 @@ function validate() {
 			}
 		}
 		if (validated) {
-			for (j = 0; j < data.settings.width - 1; j++) {
+			for (j = 0; j < data.settings.verticalNumbersLength; j++) {
 				squareNumber = document.getElementById("squareNumber_0." + i + "." + j);
 				if (squareNumber != null) {
 					squareNumber.setAttribute("opacity", "0");
@@ -182,7 +189,7 @@ function validate() {
 			}
 		}
 		if (validated) {
-			for (j = 0; j < data.settings.height - 1; j++) {
+			for (j = 0; j < data.settings.horizontalNumbersLength; j++) {
 				squareNumber = document.getElementById("squareNumber_1." + i + "." + j);
 				if (squareNumber != null) {
 					squareNumber.setAttribute("opacity", "0");
@@ -201,6 +208,10 @@ function validate() {
 				mark.setAttribute("opacity", "0");
 			}
 		}
+		var calculatedHorizontal = document.getElementById("calculated_0");
+		calculatedHorizontal.textContent = "";
+		var calculatedVertical = document.getElementById("calculated_1");
+		calculatedVertical.textContent = "";
 		alert("Puzzle Solved!");
 	}
 }
@@ -486,7 +497,6 @@ function createSquare(pos_x, pos_y, i, j) {
 	square.onmouseout = fadeSquare;
 	square.onmousedown = initColorsChange;
 	square.onmousemove = changeColorSquares;
-	square.onmouseup = endColorsChange;
 	document.getElementById("area").appendChild(square);
 }
 
@@ -656,13 +666,9 @@ function fadeSquare(evt) {
 		if ((j % data.settings.multiple) != 0)
 			horizontalLine.setAttribute("stroke-width", "1");
 		var calculatedHorizontal = document.getElementById("calculated_0");
-		if (calculatedHorizontal != null) {
-			calculatedHorizontal.textContent = "";
-		}
+		calculatedHorizontal.textContent = "";
 		var calculatedVertical = document.getElementById("calculated_1");
-		if (calculatedVertical != null) {
-			calculatedVertical.textContent = "";
-		}
+		calculatedVertical.textContent = "";
 	}
 }
 
@@ -807,13 +813,6 @@ function changeColorSquares(evt) {
 			}
 		}
 		refreshCalculatedValues(i, j);
-	}
-}
-
-function endColorsChange(evt) {
-	if (!totalValidated) {
-		clicked = false;
-		validate();
 	}
 }
 
