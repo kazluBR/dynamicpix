@@ -730,83 +730,100 @@ function changeColorSquares(evt) {
 		var idSplited = id.split('.');
 		var i = parseInt(idSplited[0]);
 		var j = parseInt(idSplited[1]);
+		var count, square, mark, squareColor, markOpacity;
 		if (clicked) {
-			if ((i >= squareI) && (j == squareJ)) {
-				var count = squareI;
+			if ((i > squareI) && (j == squareJ)) {
+				count = squareI;
 				while (count <= i) {
-					var square = document.getElementById("square_" + count + "." + squareJ);
-					var mark = document.getElementById("mark_" + count + "." + squareJ);
+					square = document.getElementById("square_" + count + "." + squareJ);
+					mark = document.getElementById("mark_" + count + "." + squareJ);
 					if (markSelected) {
-						square.setAttribute("fill", data.colors[0]);
-						square.setAttribute("opacity", "0");
-						mark.setAttribute("opacity", "1");
-					} else {
+						squareColor = square.getAttribute("fill");
+						if (squareColor == data.colors[0])
+							mark.setAttribute("opacity", "1");
+					} else if (colorSquare == data.colors[0]) {
 						square.setAttribute("fill", colorSquare);
+						square.setAttribute("opacity", "0");
 						mark.setAttribute("opacity", "0");
-						if (colorSquare == data.colors[0])
-							square.setAttribute("opacity", "0");
-						else
+					} else {
+						squareColor = square.getAttribute("fill");
+						markOpacity = mark.getAttribute("opacity");
+						if (squareColor == data.colors[0] && markOpacity == "0") {
+							square.setAttribute("fill", colorSquare);
 							square.setAttribute("opacity", "1");
+						}
 					}
 					count++;
 				}
 			}
-			else if ((i <= squareI) && (j == squareJ)) {
-				var count = i;
+			else if ((i < squareI) && (j == squareJ)) {
+				count = i;
 				while (count <= squareI) {
-					var square = document.getElementById("square_" + count + "." + squareJ);
-					var mark = document.getElementById("mark_" + count + "." + squareJ);
+					square = document.getElementById("square_" + count + "." + squareJ);
+					mark = document.getElementById("mark_" + count + "." + squareJ);
 					if (markSelected) {
-						square.setAttribute("fill", data.colors[0]);
-						square.setAttribute("opacity", "0");
-						mark.setAttribute("opacity", "1");
-					} else {
+						squareColor = square.getAttribute("fill");
+						if (squareColor == data.colors[0])
+							mark.setAttribute("opacity", "1");
+					} else if (colorSquare == data.colors[0]) {
 						square.setAttribute("fill", colorSquare);
+						square.setAttribute("opacity", "0");
 						mark.setAttribute("opacity", "0");
-						if (colorSquare == data.colors[0])
-							square.setAttribute("opacity", "0");
-						else
+					} else {
+						squareColor = square.getAttribute("fill");
+						markOpacity = mark.getAttribute("opacity");
+						if (squareColor == data.colors[0] && markOpacity == "0") {
+							square.setAttribute("fill", colorSquare);
 							square.setAttribute("opacity", "1");
+						}
 					}
 					count++;
 				}
 			}
-			else if ((i == squareI) && (j >= squareJ)) {
-				var count = squareJ;
+			else if ((i == squareI) && (j > squareJ)) {
+				count = squareJ;
 				while (count <= j) {
-					var square = document.getElementById("square_" + squareI + "." + count);
-					var mark = document.getElementById("mark_" + squareI + "." + count);
+					square = document.getElementById("square_" + squareI + "." + count);
+					mark = document.getElementById("mark_" + squareI + "." + count);
 					if (markSelected) {
-						square.setAttribute("fill", data.colors[0]);
-						square.setAttribute("opacity", "0");
-						mark.setAttribute("opacity", "1");
-					} else {
+						squareColor = square.getAttribute("fill");
+						if (squareColor == data.colors[0])
+							mark.setAttribute("opacity", "1");
+					} else if (colorSquare == data.colors[0]) {
 						square.setAttribute("fill", colorSquare);
+						square.setAttribute("opacity", "0");
 						mark.setAttribute("opacity", "0");
-						if (colorSquare == data.colors[0])
-							square.setAttribute("opacity", "0");
-						else
+					} else {
+						squareColor = square.getAttribute("fill");
+						markOpacity = mark.getAttribute("opacity");
+						if (squareColor == data.colors[0] && markOpacity == "0") {
+							square.setAttribute("fill", colorSquare);
 							square.setAttribute("opacity", "1");
+						}
 					}
 					count++;
 				}
 			}
-			else if ((i == squareI) && (j <= squareJ)) {
-				var count = j;
+			else if ((i == squareI) && (j < squareJ)) {
+				count = j;
 				while (count <= squareJ) {
-					var square = document.getElementById("square_" + squareI + "." + count);
-					var mark = document.getElementById("mark_" + squareI + "." + count);
+					square = document.getElementById("square_" + squareI + "." + count);
+					mark = document.getElementById("mark_" + squareI + "." + count);
 					if (markSelected) {
-						square.setAttribute("fill", data.colors[0]);
-						square.setAttribute("opacity", "0");
-						mark.setAttribute("opacity", "1");
-					} else {
+						squareColor = square.getAttribute("fill");
+						if (squareColor == data.colors[0])
+							mark.setAttribute("opacity", "1");
+					} else if (colorSquare == data.colors[0]) {
 						square.setAttribute("fill", colorSquare);
+						square.setAttribute("opacity", "0");
 						mark.setAttribute("opacity", "0");
-						if (colorSquare == data.colors[0])
-							square.setAttribute("opacity", "0");
-						else
+					} else {
+						squareColor = square.getAttribute("fill");
+						markOpacity = mark.getAttribute("opacity");
+						if (squareColor == data.colors[0] && markOpacity == "0") {
+							square.setAttribute("fill", colorSquare);
 							square.setAttribute("opacity", "1");
+						}
 					}
 					count++;
 				}

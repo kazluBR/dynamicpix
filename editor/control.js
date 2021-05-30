@@ -104,6 +104,10 @@ function exportJson() {
     a.href = window.URL.createObjectURL(blob);
     a.click();
 }
+
+function endColorsChange() {
+    clicked = false;
+}
 //#endregion
 
 //#region Auxiliar Functions
@@ -314,7 +318,6 @@ function createSquare(i, j) {
     square.onmouseout = fadeSquare;
     square.onmousedown = initColorsChange;
     square.onmousemove = changeColorSquares;
-    square.onmouseup = endColorsChange;
     document.getElementById("squares").appendChild(square);
 }
 
@@ -453,63 +456,80 @@ function changeColorSquares(evt) {
         var idSplited = id.split('.');
         var i = parseInt(idSplited[0]);
         var j = parseInt(idSplited[1]);
-        if ((i >= squareI) && (j == squareJ)) {
-            var count = squareI;
+        var count, square, squareColor;
+        if ((i > squareI) && (j == squareJ)) {
+            count = squareI;
             while (count <= i) {
                 if (count < width) {
-                    var square = document.getElementById("square_" + count + "." + squareJ);
-                    square.setAttribute("fill", colorSquare);
-                    if (colorSquare == $BACKGROUND_COLOR)
+                    square = document.getElementById("square_" + count + "." + squareJ);
+                    if (colorSquare == $BACKGROUND_COLOR) {
+                        square.setAttribute("fill", colorSquare);
                         square.setAttribute("opacity", "0");
-                    else
-                        square.setAttribute("opacity", "1");
+                    } else {
+                        squareColor =  square.getAttribute("fill");
+                        if (squareColor == $BACKGROUND_COLOR) {
+                            square.setAttribute("fill", colorSquare);
+                            square.setAttribute("opacity", "1");
+                        }
+                    }   
                 }
                 count++;
             }
         }
-        else if ((i <= squareI) && (j == squareJ)) {
-            var count = i;
+        else if ((i < squareI) && (j == squareJ)) {
+            count = i;
             while (count <= squareI) {
-                var square = document.getElementById("square_" + count + "." + squareJ);
-                square.setAttribute("fill", colorSquare);
-                if (colorSquare == $BACKGROUND_COLOR)
+                square = document.getElementById("square_" + count + "." + squareJ);
+                if (colorSquare == $BACKGROUND_COLOR) {
+                    square.setAttribute("fill", colorSquare);
                     square.setAttribute("opacity", "0");
-                else
-                    square.setAttribute("opacity", "1");
+                } else {
+                    squareColor =  square.getAttribute("fill");
+                    if (squareColor == $BACKGROUND_COLOR) {
+                        square.setAttribute("fill", colorSquare);
+                        square.setAttribute("opacity", "1");
+                    }
+                }
                 count++;
             }
         }
-        else if ((i == squareI) && (j >= squareJ)) {
-            var count = squareJ;
+        else if ((i == squareI) && (j > squareJ)) {
+            count = squareJ;
             while (count <= j) {
                 if (count < height) {
-                    var square = document.getElementById("square_" + squareI + "." + count);
-                    square.setAttribute("fill", colorSquare);
-                    if (colorSquare == $BACKGROUND_COLOR)
+                    square = document.getElementById("square_" + squareI + "." + count);
+                    if (colorSquare == $BACKGROUND_COLOR) {
+                        square.setAttribute("fill", colorSquare);
                         square.setAttribute("opacity", "0");
-                    else
-                        square.setAttribute("opacity", "1");
+                    } else {
+                        squareColor =  square.getAttribute("fill");
+                        if (squareColor == $BACKGROUND_COLOR) {
+                            square.setAttribute("fill", colorSquare);
+                            square.setAttribute("opacity", "1");
+                        }
+                    }
                 }
                 count++;
             }
         }
-        else if ((i == squareI) && (j <= squareJ)) {
-            var count = j;
+        else if ((i == squareI) && (j < squareJ)) {
+            count = j;
             while (count <= squareJ) {
-                var square = document.getElementById("square_" + squareI + "." + count);
-                square.setAttribute("fill", colorSquare);
-                if (colorSquare == $BACKGROUND_COLOR)
+                square = document.getElementById("square_" + squareI + "." + count);
+                if (colorSquare == $BACKGROUND_COLOR) {
+                    square.setAttribute("fill", colorSquare);
                     square.setAttribute("opacity", "0");
-                else
-                    square.setAttribute("opacity", "1");
+                } else {
+                    squareColor =  square.getAttribute("fill");
+                    if (squareColor == $BACKGROUND_COLOR) {
+                        square.setAttribute("fill", colorSquare);
+                        square.setAttribute("opacity", "1");
+                    }
+                }
                 count++;
             }
         }
     }
-}
-
-function endColorsChange(evt) {
-    clicked = false;
 }
 
 function highlightDecreaseArrow(evt) {
