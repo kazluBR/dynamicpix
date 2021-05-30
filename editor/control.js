@@ -33,6 +33,7 @@ function initialize() {
     for (i = 0; i < $MAX_WIDTH_DIMENSION; i++) {
         for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
             createSquare(i, j);
+            createSquareAux(i, j);
         }
     }
     createDecreaseArrow(0);
@@ -72,22 +73,23 @@ function decreaseAreaSize() {
 }
 
 function exportJson() {
-    var data = { 
-        colors: [$BACKGROUND_COLOR], 
+    var data = {
+        colors: [$BACKGROUND_COLOR],
         settings: {
             width: width,
             height: height,
             multiple: multiple
         },
-        points: [], 
-        horizontalNumbers: [], 
-        verticalNumbers: [] 
+        points: [],
+        horizontalNumbers: [],
+        verticalNumbers: []
     };
+    var square, color;
     for (i = 0; i < height; i++) {
         data.points[i] = [];
         for (j = 0; j < width; j++) {
-            var square = document.getElementById("square_" + j + "." + i);
-            var color = square.getAttribute("fill");
+            square = document.getElementById("square_" + j + "." + i);
+            color = square.getAttribute("fill");
             if (!data.colors.includes(color)) {
                 data.colors.push(color);
             }
@@ -106,7 +108,28 @@ function exportJson() {
 }
 
 function endColorsChange() {
-    clicked = false;
+    if (clicked) {
+        var squareAux, id, square, squareColor;
+        for (i = 0; i < width; i++) {
+            for (j = 0; j < height; j++) {
+                squareAux = document.getElementById("square_aux_" + i + "." + j);
+                if (squareAux.getAttribute("opacity") == "1") {
+                    id = squareAux.getAttribute("id");
+                    id = id.replace("square_aux_", "square_");
+                    square = document.getElementById(id);
+                    squareColor = squareAux.getAttribute("fill");
+                    square.setAttribute("fill", squareColor);
+                    if (squareColor == $BACKGROUND_COLOR)
+                        square.setAttribute("opacity", "0");
+                    else
+                        square.setAttribute("opacity", "1");
+                    squareAux.setAttribute("fill", $BACKGROUND_COLOR);
+                    squareAux.setAttribute("opacity", "0");
+                }
+            }
+        }
+        clicked = false;
+    }
 }
 //#endregion
 
@@ -121,6 +144,7 @@ function changeAreaSize() {
     for (i = 0; i < $MAX_WIDTH_DIMENSION; i++) {
         for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
             changeSquareSize(i, j);
+            changeSquareAuxSize(i, j);
         }
     }
     changeDecreaseArrowSize(0);
@@ -150,6 +174,14 @@ function changeSquareSize(i, j) {
     square.setAttribute("width", size * 0.95);
     square.setAttribute("x", i * size);
     square.setAttribute("y", j * size);
+}
+
+function changeSquareAuxSize(i, j) {
+    var squareAux = document.getElementById("square_aux_" + i + "." + j);
+    squareAux.setAttribute("height", size * 0.95);
+    squareAux.setAttribute("width", size * 0.95);
+    squareAux.setAttribute("x", i * size);
+    squareAux.setAttribute("y", j * size);
 }
 
 function changeDecreaseArrowSize(orientation) {
@@ -279,6 +311,32 @@ function refresh() {
         }
     }
 }
+
+function cleanAllSquaresAux() {
+    var squareAux;
+    for (i = 0; i < width; i++) {
+        for (j = 0; j < height; j++) {
+            squareAux = document.getElementById("square_aux_" + i + "." + j);
+            if (squareAux.getAttribute("opacity") == "1") {
+                squareAux.setAttribute("fill", $BACKGROUND_COLOR);
+                squareAux.setAttribute("opacity", "0");
+            }
+        }
+    }
+}
+
+function refreshSquareAux(squareAux, square) {
+    if (colorSquare == $BACKGROUND_COLOR) {
+        squareAux.setAttribute("fill", colorSquare);
+        squareAux.setAttribute("opacity", "1");
+    } else {
+        var squareColor = square.getAttribute("fill");
+        if (squareColor == $BACKGROUND_COLOR) {
+            squareAux.setAttribute("fill", colorSquare);
+            squareAux.setAttribute("opacity", "1");
+        }
+    }
+}
 //#endregion
 
 //#region Create SVG Elements Functions
@@ -314,11 +372,23 @@ function createSquare(i, j) {
     square.setAttribute("stroke", $LINE_COLOR);
     square.setAttribute("fill", $BACKGROUND_COLOR);
     square.setAttribute("opacity", "0");
-    square.onmouseover = highlightSquare;
-    square.onmouseout = fadeSquare;
-    square.onmousedown = initColorsChange;
-    square.onmousemove = changeColorSquares;
     document.getElementById("squares").appendChild(square);
+}
+
+function createSquareAux(i, j) {
+    var squareAux = document.createElementNS($SVG_LIB, "rect");
+    squareAux.setAttribute("id", "square_aux_" + i + "." + j);
+    squareAux.setAttribute("height", size * 0.95);
+    squareAux.setAttribute("width", size * 0.95);
+    squareAux.setAttribute("x", i * size);
+    squareAux.setAttribute("y", j * size);
+    squareAux.setAttribute("fill", $BACKGROUND_COLOR);
+    squareAux.setAttribute("opacity", "0");
+    squareAux.onmouseover = highlightSquare;
+    squareAux.onmouseout = fadeSquare;
+    squareAux.onmousedown = initColorsChange;
+    squareAux.onmousemove = changeColorSquares;
+    document.getElementById("squares").appendChild(squareAux);
 }
 
 function createDecreaseArrow(orientation) {
@@ -369,7 +439,7 @@ function createIncreaseArrow(orientation) {
 //#region Event Functions
 function highlightSquare(evt) {
     var id = evt.target.getAttribute("id");
-    id = id.replace("square_", "");
+    id = id.replace("square_aux_", "");
     var idSplited = id.split('.');
     var i = parseInt(idSplited[0]);
     var j = parseInt(idSplited[1]);
@@ -397,7 +467,7 @@ function highlightSquare(evt) {
 
 function fadeSquare(evt) {
     var id = evt.target.getAttribute("id");
-    id = id.replace("square_", "");
+    id = id.replace("square_aux_", "");
     var idSplited = id.split('.');
     var i = parseInt(idSplited[0]);
     var j = parseInt(idSplited[1]);
@@ -425,23 +495,24 @@ function fadeSquare(evt) {
 
 function initColorsChange(evt) {
     var id = evt.target.getAttribute("id");
-    id = id.replace("square_", "");
+    id = id.replace("square_aux_", "");
     var idSplited = id.split('.');
     squareI = parseInt(idSplited[0]);
     squareJ = parseInt(idSplited[1]);
+    var square = document.getElementById("square_" + squareI + "." + squareJ);
     if (squareI < width && squareJ < height) {
-        colorSquare = evt.target.getAttribute("fill");
+        colorSquare = square.getAttribute("fill");
         if (colorSquare == $BACKGROUND_COLOR) {
-            evt.target.setAttribute("fill", currentColor);
-            evt.target.setAttribute("opacity", "1");
+            square.setAttribute("fill", currentColor);
+            square.setAttribute("opacity", "1");
             colorSquare = currentColor;
         } else {
             if (colorSquare == currentColor) {
-                evt.target.setAttribute("fill", $BACKGROUND_COLOR);
-                evt.target.setAttribute("opacity", "0");
+                square.setAttribute("fill", $BACKGROUND_COLOR);
+                square.setAttribute("opacity", "0");
                 colorSquare = $BACKGROUND_COLOR;
             } else {
-                evt.target.setAttribute("fill", currentColor);
+                square.setAttribute("fill", currentColor);
                 colorSquare = currentColor;
             }
         }
@@ -452,26 +523,19 @@ function initColorsChange(evt) {
 function changeColorSquares(evt) {
     if (clicked) {
         var id = evt.target.getAttribute("id");
-        id = id.replace("square_", "");
+        id = id.replace("square_aux_", "");
         var idSplited = id.split('.');
         var i = parseInt(idSplited[0]);
         var j = parseInt(idSplited[1]);
-        var count, square, squareColor;
+        var count, squareAux, square;
+        cleanAllSquaresAux();
         if ((i > squareI) && (j == squareJ)) {
             count = squareI;
             while (count <= i) {
                 if (count < width) {
+                    squareAux = document.getElementById("square_aux_" + count + "." + squareJ);
                     square = document.getElementById("square_" + count + "." + squareJ);
-                    if (colorSquare == $BACKGROUND_COLOR) {
-                        square.setAttribute("fill", colorSquare);
-                        square.setAttribute("opacity", "0");
-                    } else {
-                        squareColor =  square.getAttribute("fill");
-                        if (squareColor == $BACKGROUND_COLOR) {
-                            square.setAttribute("fill", colorSquare);
-                            square.setAttribute("opacity", "1");
-                        }
-                    }   
+                    refreshSquareAux(squareAux, square);
                 }
                 count++;
             }
@@ -479,17 +543,9 @@ function changeColorSquares(evt) {
         else if ((i < squareI) && (j == squareJ)) {
             count = i;
             while (count <= squareI) {
+                squareAux = document.getElementById("square_aux_" + count + "." + squareJ);
                 square = document.getElementById("square_" + count + "." + squareJ);
-                if (colorSquare == $BACKGROUND_COLOR) {
-                    square.setAttribute("fill", colorSquare);
-                    square.setAttribute("opacity", "0");
-                } else {
-                    squareColor =  square.getAttribute("fill");
-                    if (squareColor == $BACKGROUND_COLOR) {
-                        square.setAttribute("fill", colorSquare);
-                        square.setAttribute("opacity", "1");
-                    }
-                }
+                refreshSquareAux(squareAux, square);
                 count++;
             }
         }
@@ -497,17 +553,9 @@ function changeColorSquares(evt) {
             count = squareJ;
             while (count <= j) {
                 if (count < height) {
+                    squareAux = document.getElementById("square_aux_" + squareI + "." + count);
                     square = document.getElementById("square_" + squareI + "." + count);
-                    if (colorSquare == $BACKGROUND_COLOR) {
-                        square.setAttribute("fill", colorSquare);
-                        square.setAttribute("opacity", "0");
-                    } else {
-                        squareColor =  square.getAttribute("fill");
-                        if (squareColor == $BACKGROUND_COLOR) {
-                            square.setAttribute("fill", colorSquare);
-                            square.setAttribute("opacity", "1");
-                        }
-                    }
+                    refreshSquareAux(squareAux, square);
                 }
                 count++;
             }
@@ -515,17 +563,9 @@ function changeColorSquares(evt) {
         else if ((i == squareI) && (j < squareJ)) {
             count = j;
             while (count <= squareJ) {
+                squareAux = document.getElementById("square_aux_" + squareI + "." + count);
                 square = document.getElementById("square_" + squareI + "." + count);
-                if (colorSquare == $BACKGROUND_COLOR) {
-                    square.setAttribute("fill", colorSquare);
-                    square.setAttribute("opacity", "0");
-                } else {
-                    squareColor =  square.getAttribute("fill");
-                    if (squareColor == $BACKGROUND_COLOR) {
-                        square.setAttribute("fill", colorSquare);
-                        square.setAttribute("opacity", "1");
-                    }
-                }
+                refreshSquareAux(squareAux, square);
                 count++;
             }
         }
