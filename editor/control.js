@@ -325,7 +325,9 @@ function cleanAllSquaresAux() {
     }
 }
 
-function refreshSquareAux(squareAux, square) {
+function refreshSquareAux(i, j) {
+    squareAux = document.getElementById("square_aux_" + i + "." + j);
+    square = document.getElementById("square_" + i + "." + j);
     if (colorSquare == $BACKGROUND_COLOR) {
         squareAux.setAttribute("fill", colorSquare);
         squareAux.setAttribute("opacity", "1");
@@ -527,15 +529,13 @@ function changeColorSquares(evt) {
         var idSplited = id.split('.');
         var i = parseInt(idSplited[0]);
         var j = parseInt(idSplited[1]);
-        var count, squareAux, square;
+        var count;
         cleanAllSquaresAux();
         if ((i > squareI) && (j == squareJ)) {
             count = squareI;
             while (count <= i) {
                 if (count < width) {
-                    squareAux = document.getElementById("square_aux_" + count + "." + squareJ);
-                    square = document.getElementById("square_" + count + "." + squareJ);
-                    refreshSquareAux(squareAux, square);
+                    refreshSquareAux(count, squareJ);
                 }
                 count++;
             }
@@ -543,9 +543,7 @@ function changeColorSquares(evt) {
         else if ((i < squareI) && (j == squareJ)) {
             count = i;
             while (count <= squareI) {
-                squareAux = document.getElementById("square_aux_" + count + "." + squareJ);
-                square = document.getElementById("square_" + count + "." + squareJ);
-                refreshSquareAux(squareAux, square);
+                refreshSquareAux(count, squareJ);
                 count++;
             }
         }
@@ -553,9 +551,7 @@ function changeColorSquares(evt) {
             count = squareJ;
             while (count <= j) {
                 if (count < height) {
-                    squareAux = document.getElementById("square_aux_" + squareI + "." + count);
-                    square = document.getElementById("square_" + squareI + "." + count);
-                    refreshSquareAux(squareAux, square);
+                    refreshSquareAux(squareI, count);
                 }
                 count++;
             }
@@ -563,9 +559,7 @@ function changeColorSquares(evt) {
         else if ((i == squareI) && (j < squareJ)) {
             count = j;
             while (count <= squareJ) {
-                squareAux = document.getElementById("square_aux_" + squareI + "." + count);
-                square = document.getElementById("square_" + squareI + "." + count);
-                refreshSquareAux(squareAux, square);
+                refreshSquareAux(squareI, count);
                 count++;
             }
         }
