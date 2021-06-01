@@ -11,6 +11,9 @@
 </head>
 
 <body>
+	<div class="right">
+		<a href="../index.html">Back to Menu</a>
+	</div>
 	<div>
 		<select id="multipleInput" class="slct" onchange="setMultiplePuzzle()">
 			<option value="" disabled selected>Multiple</option>
@@ -18,18 +21,14 @@
 			<option value="4">4</option>
 			<option value="3">3</option>
 		</select>
-		<a href="../index.html">Back to Menu</a>
-	</div>
-	<br/>
-	<div>
-		<button class="btn" onclick="increaseAreaSize()"><i class="fa fa-plus"></i></button>
-		<button class="btn" onclick="decreaseAreaSize()"><i class="fa fa-minus"></i></button>
+		<button class="btn" onclick="increaseAreaSize()" title="Maximize"><i class="fa fa-plus"></i></button>
+		<button class="btn" onclick="decreaseAreaSize()" title="Minimize"><i class="fa fa-minus"></i></button>
 		<input id="colorInput" class="ipt" type="color" value="#000000" list="presetColors"
 			onchange="onColorChange()" />
 		<datalist id="presetColors">
 			<option value="#000000"></option>
 		</datalist>
-		<button class="btn-green" onclick="exportJson()"><i class="fa fa-file-o"></i> Export to JSON</button>
+		<button class="btn" onclick="exportJson()" Title="Export to Json"><i class="fa fa-file-code-o"></i></button>
 		
 	</div>
 	<hr />

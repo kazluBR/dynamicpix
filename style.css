@@ -18,6 +18,11 @@ a {
     text-decoration: none;
 }
 
+.right {
+    position: absolute;
+    right: 0px; 
+}
+
 .slct {
     padding: 12px 16px;
     font-size: 16px;
@@ -29,6 +34,7 @@ a {
     width: 70px;
     vertical-align: middle;
     text-align: center;
+    cursor: pointer;
 }
 
 .btn {
@@ -42,34 +48,6 @@ a {
 }
 
 .btn:hover {
-    opacity: 1.0;
-}
-
-.btn-green {
-    background-color: green;
-    border: none;
-    color: white;
-    padding: 12px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    opacity: 0.5;
-}
-
-.btn-green:hover {
-    opacity: 1.0;
-}
-
-.btn-red {
-    background-color: red;
-    border: none;
-    color: white;
-    padding: 12px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    opacity: 0.5;
-}
-
-.btn-red:hover {
     opacity: 1.0;
 }
 

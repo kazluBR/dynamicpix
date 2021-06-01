@@ -99,9 +99,31 @@ function decreaseAreaSize() {
 	}
 }
 
+function check() {
+	var square, squareColor, squareOpacity, mark, markOpacity;
+	var errors = 0;
+	for (i = 0; i < data.settings.width; i++) {
+		for (j = 0; j < data.settings.height; j++) {
+			square = document.getElementById("square_" + i + "." + j);
+			squareColor = square.getAttribute("fill");
+			squareOpacity = square.getAttribute("opacity");
+			if (squareColor != data.colors[data.points[j][i]] && squareOpacity == "1") {
+				errors++;
+			} else {
+				mark = document.getElementById("mark_" + i + "." + j);
+				markOpacity = mark.getAttribute("opacity");
+				if (data.points[j][i] != 0 && markOpacity == "1") {
+					errors++;
+				}
+			}
+		}
+	}
+	alert(errors + " errors found");
+}
+
 function solve() {
 	if (data != null) {
-		var square = null;
+		var square;
 		for (i = 0; i < data.settings.height; i++) {
 			for (j = 0; j < data.settings.width; j++) {
 				square = document.getElementById("square_" + j + "." + i);
@@ -109,7 +131,6 @@ function solve() {
 				square.setAttribute("opacity", "1");
 			}
 		}
-		validate();
 	}
 }
 
@@ -136,7 +157,7 @@ function switchSquareColor() {
 }
 
 function endColorsChange() {
-	if (!totalValidated && data != null) {
+	if (clicked && data != null) {
 		var squareAux, id, square, squareColor, markAux, mark;
 		for (i = 0; i < data.settings.width; i++) {
 			for (j = 0; j < data.settings.height; j++) {
@@ -161,7 +182,7 @@ function endColorsChange() {
 					mark = document.getElementById(id);
 					mark.setAttribute("opacity", "1");
 					markAux.setAttribute("opacity", "0");
-				} 
+				}
 				else if (markAux.getAttribute("opacity") == "0.1") {
 					id = markAux.getAttribute("id");
 					id = id.replace("mark_aux_", "mark_");
@@ -207,13 +228,11 @@ function validate() {
 			}
 		}
 		if (validated) {
-			for (j = 0; j < data.settings.verticalNumbersLength; j++) {
+			for (j = 0; j < data.verticalNumbers[i].length; j++) {
 				squareNumber = document.getElementById("squareNumber_0." + i + "." + j);
-				if (squareNumber != null) {
-					squareNumber.setAttribute("opacity", "0");
-					number = document.getElementById("number_0." + i + "." + j);
-					number.setAttribute("fill", squareNumber.getAttribute("fill"));
-				}
+				squareNumber.setAttribute("opacity", "0");
+				number = document.getElementById("number_0." + i + "." + j);
+				number.setAttribute("fill", squareNumber.getAttribute("fill"));
 			}
 			signal.setAttribute("fill", $VALIDATED_COLOR);
 		}
@@ -233,19 +252,17 @@ function validate() {
 			}
 		}
 		if (validated) {
-			for (j = 0; j < data.settings.horizontalNumbersLength; j++) {
+			for (j = 0; j < data.horizontalNumbers[i].length; j++) {
 				squareNumber = document.getElementById("squareNumber_1." + i + "." + j);
-				if (squareNumber != null) {
-					squareNumber.setAttribute("opacity", "0");
-					number = document.getElementById("number_1." + i + "." + j);
-					number.setAttribute("fill", squareNumber.getAttribute("fill"));
-				}
+				squareNumber.setAttribute("opacity", "0");
+				number = document.getElementById("number_1." + i + "." + j);
+				number.setAttribute("fill", squareNumber.getAttribute("fill"));
 			}
 			signal.setAttribute("fill", $VALIDATED_COLOR);
 		}
 	}
 	if (totalValidated) {
-		var mark = null;
+		var mark;
 		for (i = 0; i < data.settings.height; i++) {
 			for (j = 0; j < data.settings.width; j++) {
 				mark = document.getElementById("mark_" + j + "." + i);
@@ -278,9 +295,9 @@ function autoFill() {
 			break;
 	}
 	var count = 0;
-	var square = null;
-	var chosenColumns = new Array(data.settings.width);
-	var chosenLines = new Array(data.settings.width);
+	var square;
+	var chosenColumns = [];
+	var chosenLines = [];
 	while (count < numberRanksToFill) {
 		if (Math.random() > 0.5) {
 			randColumn = Math.floor((Math.random() * data.settings.height));
