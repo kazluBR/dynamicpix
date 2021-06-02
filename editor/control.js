@@ -496,29 +496,31 @@ function fadeSquare(evt) {
 }
 
 function initColorsChange(evt) {
-    var id = evt.target.getAttribute("id");
-    id = id.replace("square_aux_", "");
-    var idSplited = id.split('.');
-    squareI = parseInt(idSplited[0]);
-    squareJ = parseInt(idSplited[1]);
-    var square = document.getElementById("square_" + squareI + "." + squareJ);
-    if (squareI < width && squareJ < height) {
-        colorSquare = square.getAttribute("fill");
-        if (colorSquare == $BACKGROUND_COLOR) {
-            square.setAttribute("fill", currentColor);
-            square.setAttribute("opacity", "1");
-            colorSquare = currentColor;
-        } else {
-            if (colorSquare == currentColor) {
-                square.setAttribute("fill", $BACKGROUND_COLOR);
-                square.setAttribute("opacity", "0");
-                colorSquare = $BACKGROUND_COLOR;
-            } else {
+    if (evt.button == 0) {
+        var id = evt.target.getAttribute("id");
+        id = id.replace("square_aux_", "");
+        var idSplited = id.split('.');
+        squareI = parseInt(idSplited[0]);
+        squareJ = parseInt(idSplited[1]);
+        var square = document.getElementById("square_" + squareI + "." + squareJ);
+        if (squareI < width && squareJ < height) {
+            colorSquare = square.getAttribute("fill");
+            if (colorSquare == $BACKGROUND_COLOR) {
                 square.setAttribute("fill", currentColor);
+                square.setAttribute("opacity", "1");
                 colorSquare = currentColor;
+            } else {
+                if (colorSquare == currentColor) {
+                    square.setAttribute("fill", $BACKGROUND_COLOR);
+                    square.setAttribute("opacity", "0");
+                    colorSquare = $BACKGROUND_COLOR;
+                } else {
+                    square.setAttribute("fill", currentColor);
+                    colorSquare = currentColor;
+                }
             }
+            clicked = true;
         }
-        clicked = true;
     }
 }
 

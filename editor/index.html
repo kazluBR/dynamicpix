@@ -17,7 +17,7 @@
 	<div>
 		<select id="multipleInput" class="slct" onchange="setMultiplePuzzle()">
 			<option value="" disabled selected>Multiple</option>
-			<option value="5" selected>5</option>
+			<option value="5">5 (Default)</option>
 			<option value="4">4</option>
 			<option value="3">3</option>
 		</select>
@@ -41,6 +41,11 @@
 	</div>
 
 	<script>
+		document.body.onmousedown = function (e) {
+			if (e.which === 2) {
+				return false;
+			}
+		}
 		document.body.onmouseup = function (e) {
 			endColorsChange();
 		}
