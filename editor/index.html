@@ -5,9 +5,6 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../style.css">
 	<script src="control.js"></script>
-	<script>
-		window.onload = initialize;
-	</script>
 </head>
 
 <body>
@@ -15,20 +12,20 @@
 		<a href="../index.html">Back to Menu</a>
 	</div>
 	<div>
-		<select id="multipleInput" class="slct" onchange="setMultiplePuzzle()">
-			<option value="" disabled selected>Multiple</option>
+		<button class="btn" onclick="increaseAreaSize()" title="Maximize"><i class="fa fa-plus"></i></button>
+		<button class="btn" onclick="decreaseAreaSize()" title="Minimize"><i class="fa fa-minus"></i></button>
+		<select id="gridLengthInput" class="slct" onchange="setGridLengthPuzzle()">
+			<option value="" disabled selected>Grid Length</option>
 			<option value="5">5 (Default)</option>
 			<option value="4">4</option>
 			<option value="3">3</option>
 		</select>
-		<button class="btn" onclick="increaseAreaSize()" title="Maximize"><i class="fa fa-plus"></i></button>
-		<button class="btn" onclick="decreaseAreaSize()" title="Minimize"><i class="fa fa-minus"></i></button>
 		<input id="colorInput" class="ipt" type="color" value="#000000" list="presetColors"
 			onchange="onColorChange()" />
 		<datalist id="presetColors">
 			<option value="#000000"></option>
 		</datalist>
-		<button class="btn" onclick="exportJson()" Title="Export to Json"><i class="fa fa-file-code-o"></i></button>
+		<button class="btn" onclick="exportJson()">Export to Json</button>
 		
 	</div>
 	<hr />
@@ -41,6 +38,7 @@
 	</div>
 
 	<script>
+		window.onload = initialize;
 		document.body.onmousedown = function (e) {
 			if (e.which === 2) {
 				return false;

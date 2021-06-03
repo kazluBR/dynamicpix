@@ -12,7 +12,7 @@ const $ARROW_COLOR = "#ff00ff";
 var size = 20;
 var width = 5;
 var height = 5;
-var multiple = 5;
+var gridLength = 5;
 
 var currentColor = "#000000";
 var presetColors = [currentColor];
@@ -42,10 +42,22 @@ function initialize() {
     createIncreaseArrow(1);
 }
 
-function setMultiplePuzzle() {
-    multiple = parseInt(document.getElementById("multipleInput").value);
-    width = multiple;
-    height = multiple;
+function increaseAreaSize() {
+    if (size < $MAX_SIZE)
+        size += 1;
+    changeAreaSize();
+}
+
+function decreaseAreaSize() {
+    if (size > $MIN_SIZE)
+        size -= 1;
+    changeAreaSize();
+}
+
+function setGridLengthPuzzle() {
+    gridLength = parseInt(document.getElementById("gridLengthInput").value);
+    width = gridLength;
+    height = gridLength;
     refresh();
 }
 
@@ -60,25 +72,13 @@ function onColorChange() {
     }
 }
 
-function increaseAreaSize() {
-    if (size < $MAX_SIZE)
-        size += 1;
-    changeAreaSize();
-}
-
-function decreaseAreaSize() {
-    if (size > $MIN_SIZE)
-        size -= 1;
-    changeAreaSize();
-}
-
 function exportJson() {
     var data = {
         colors: [$BACKGROUND_COLOR],
         settings: {
             width: width,
             height: height,
-            multiple: multiple
+            gridLength: gridLength
         },
         points: [],
         horizontalNumbers: [],
@@ -346,7 +346,7 @@ function createLine(orientation, i) {
     var line = document.createElementNS($SVG_LIB, "line");
     line.setAttribute("id", "line_" + orientation + "." + i);
     line.setAttribute("stroke", $LINE_COLOR);
-    if ((i % multiple) == 0)
+    if ((i % gridLength) == 0)
         line.setAttribute("stroke-width", "2");
     else
         line.setAttribute("stroke-width", "1");
@@ -448,21 +448,21 @@ function highlightSquare(evt) {
     if (i < width && j < height) {
         var verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((i % multiple) != 0)
+        if ((i % gridLength) != 0)
             verticalLine.setAttribute("stroke-width", "2");
         i = i + 1;
         verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((i % multiple) != 0)
+        if ((i % gridLength) != 0)
             verticalLine.setAttribute("stroke-width", "2");
         var horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((j % multiple) != 0)
+        if ((j % gridLength) != 0)
             horizontalLine.setAttribute("stroke-width", "2");
         j = j + 1;
         horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((j % multiple) != 0)
+        if ((j % gridLength) != 0)
             horizontalLine.setAttribute("stroke-width", "2");
     }
 }
@@ -476,21 +476,21 @@ function fadeSquare(evt) {
     if (i < width && j < height) {
         var verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((i % multiple) != 0)
+        if ((i % gridLength) != 0)
             verticalLine.setAttribute("stroke-width", "1");
         i = i + 1;
         verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((i % multiple) != 0)
+        if ((i % gridLength) != 0)
             verticalLine.setAttribute("stroke-width", "1");
         var horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((j % multiple) != 0)
+        if ((j % gridLength) != 0)
             horizontalLine.setAttribute("stroke-width", "1");
         j = j + 1;
         horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((j % multiple) != 0)
+        if ((j % gridLength) != 0)
             horizontalLine.setAttribute("stroke-width", "1");
     }
 }
@@ -580,13 +580,13 @@ function decreaseSize(evt) {
     var id = evt.target.getAttribute("id");
     var orientation = id.replace("decrease_arrow_", "");
     if (orientation == 0) {
-        height -= multiple;
+        height -= gridLength;
         if (height < $MIN_DIMENSION)
-            height += multiple;
+            height += gridLength;
     } else {
-        width -= multiple;
+        width -= gridLength;
         if (width < $MIN_DIMENSION)
-            width += multiple;
+            width += gridLength;
     }
     refresh();
 }
@@ -603,13 +603,13 @@ function increaseSize(evt) {
     var id = evt.target.getAttribute("id");
     var orientation = id.replace("increase_arrow_", "");
     if (orientation == 0) {
-        height += multiple;
+        height += gridLength;
         if (height > $MAX_HEIGTH_DIMENSION)
-            height -= multiple;
+            height -= gridLength;
     } else {
-        width += multiple;
+        width += gridLength;
         if (width > $MAX_WIDTH_DIMENSION)
-            width -= multiple;
+            width -= gridLength;
     }
     refresh();
 }
