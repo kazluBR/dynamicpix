@@ -18,10 +18,6 @@ var colorSelected;
 var markSelected;
 
 //#region Main Functions
-function setFillPuzzle() {
-	fillPuzzle = document.getElementById("fillPuzzle").value;
-}
-
 function loadJson(event) {
 	var files = event.target.files;
 	if (files.length <= 0) {
@@ -80,7 +76,6 @@ function initialize() {
 		}
 		createCalculated(pos_x, pos_y, 0);
 		createCalculated(pos_x, pos_y, 1);
-		autoFill();
 		validate();
 	}
 }
@@ -277,73 +272,6 @@ function validate() {
 		calculatedVertical.textContent = "";
 		alert("Puzzle Solved!");
 	}
-}
-
-function autoFill() {
-	totalRanks = data.settings.height + data.settings.width;
-	var numberRanksToFill;
-	switch (fillPuzzle) {
-		case "1":
-			numberRanksToFill = parseInt(totalRanks * 0.5, 10);
-			break;
-		case "2":
-			numberRanksToFill = parseInt(totalRanks * 0.25, 10);
-			break;
-		case "3":
-			numberRanksToFill = parseInt(totalRanks * 0.125, 10);
-			break;
-		default:
-			numberRanksToFill = 0;
-			break;
-	}
-	var count = 0;
-	var square;
-	var chosenColumns = [];
-	var chosenLines = [];
-	while (count < numberRanksToFill) {
-		if (Math.random() > 0.5) {
-			randColumn = Math.floor((Math.random() * data.settings.height));
-			if (contains(chosenColumns, randColumn)) {
-				count--;
-			}
-			else {
-				chosenColumns.push(randColumn);
-				for (i = 0; i < data.settings.width; i++) {
-					if (data.points[randColumn][i] > 0) {
-						square = document.getElementById("square_" + i + "." + randColumn);
-						square.setAttribute("fill", data.colors[data.points[randColumn][i]]);
-						square.setAttribute("opacity", "1");
-					}
-				}
-			}
-		}
-		else {
-			randLine = Math.floor((Math.random() * data.settings.width));
-			if (contains(chosenLines, randLine)) {
-				count--;
-			}
-			else {
-				chosenLines.push(randLine);
-				for (i = 0; i < data.settings.height; i++) {
-					if (data.points[i][randLine] > 0) {
-						square = document.getElementById("square_" + randLine + "." + i);
-						square.setAttribute("fill", data.colors[data.points[i][randLine]]);
-						square.setAttribute("opacity", "1");
-					}
-				}
-			}
-		}
-		count++;
-	}
-}
-
-function contains(array, obj) {
-	for (i = 0; i < array.length; i++) {
-		if (array[i] === obj) {
-			return true;
-		}
-	}
-	return false;
 }
 
 function changeAreaSize() {

@@ -17,20 +17,11 @@
 		<input type="file" id="file-upload" onchange="loadJson(event)"/>
 	</div>
 	<br />
-	<div>
-		<select id="fillPuzzle" class="slct" onchange="setFillPuzzle()">
-			<option value="" disabled selected>Auto Fill</option>
-			<option value="0">None (Default)</option>
-			<option value="1">50%</option>
-			<option value="2">25%</option>
-			<option value="3">12,5%</option>
-		</select>
-	</div>
-	<br />
 	<div id="menu">
 		<button class="btn" onclick="increaseAreaSize()" title="Maximize"><i class="fa fa-plus"></i></button>
 		<button class="btn" onclick="decreaseAreaSize()" title="Minimize"><i class="fa fa-minus"></i></button>
-		<button class="btn" onclick="check()" title="Check"><i class="fa fa-check"></i></button>
+		<button class="btn" onclick="check()" title="Check Puzzle"><i class="fa fa-check"></i></button>
+		<button class="btn" onclick="initialize()" title="Restart Puzzle"><i class="fa fa-recycle"></i></button>
 		<button class="btn" onclick="solve()" title="Show Solution"><i class="fa fa-eye"></i></button>
 	</div>
 	<hr />
