@@ -22,12 +22,14 @@ function setFillPuzzle() {
 	fillPuzzle = document.getElementById("fillPuzzle").value;
 }
 
-function loadJson() {
-	var files = document.getElementById('selectedFile').files;
+function loadJson(event) {
+	var files = event.target.files;
 	if (files.length <= 0) {
 		alert("Select a valid JSON file");
 		return false;
 	}
+	var filename = document.getElementById("filename");
+	filename.value = files[0].name;
 	var fr = new FileReader();
 	fr.onload = function (e) {
 		var result = e.target.result;

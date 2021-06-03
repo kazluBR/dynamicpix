@@ -1,3 +1,7 @@
+body {
+    font-family: Helvetica;
+}
+
 .center-div {
     position: absolute;
     margin: auto;
@@ -37,6 +41,10 @@ a {
     cursor: pointer;
 }
 
+input[type="file"] {
+    display: none;
+}
+
 .btn {
     background-color: blue;
     border: none;
@@ -55,9 +63,9 @@ a {
     cursor: pointer
 }
 
-svg text{
+svg text {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
- }
+}

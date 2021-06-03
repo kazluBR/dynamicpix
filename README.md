@@ -15,9 +15,6 @@ Here you can create a drawing by choosing its width and height. You can use diff
 | Left Click | Paint square with the selected color |
 | Left Pressing | Paint the squares with the selected color while you hover over them |
 | Left Release | Stop painting squares |
-| Right Click | Same of Left Click |
-| Right Pressing | Same of Left Pressing |
-| Right Release | Same of Left Release |
 
 ## Game
 Here you choose the json file created from the drawing and the nonogram will be generated ready to play. You can also load the ready samples that are in the samples folder. Try online on [CodePen](https://codepen.io/kazluBR/full/pJqrgY).
@@ -33,7 +30,7 @@ Here you choose the json file created from the drawing and the nonogram will be 
 | Right Click | Mark the square to indicate that it should not be painted  |
 | Right Pressing | Mark the squares while you hover over them |
 | Right Release | Stop marking squares |
-| Middle Click | Switch color to paint |
+| Middle Click | Switch color to paint (or you can select directly from the palette) |
 
 ### Menu
 ![alt text](/docs/game_menu.png)

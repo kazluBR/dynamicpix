@@ -12,7 +12,9 @@
 		<a href="../index.html">Back to Menu</a>
 	</div>
 	<div>
-		<input type="file" id="selectedFile" />
+		<input class="slct" type="text" id="filename" placeholder="json" readonly="readonly">
+		<label class="btn" for="file-upload">Select a Json File</label>
+		<input type="file" id="file-upload" onchange="loadJson(event)"/>
 	</div>
 	<br />
 	<div>
@@ -23,7 +25,6 @@
 			<option value="2">25%</option>
 			<option value="3">12,5%</option>
 		</select>
-		<button class="btn" onclick="loadJson()" title="Load Puzzle"><i class="fa fa-play-circle"></i></button>
 	</div>
 	<br />
 	<div id="menu">
