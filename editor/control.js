@@ -12,7 +12,7 @@ const $ARROW_COLOR = "#ff00ff";
 var size = 20;
 var width = 5;
 var height = 5;
-var multiple = 5;
+var gridLength = 5;
 
 var currentColor = "#000000";
 var presetColors = [currentColor];
@@ -33,30 +33,13 @@ function initialize() {
     for (i = 0; i < $MAX_WIDTH_DIMENSION; i++) {
         for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
             createSquare(i, j);
+            createSquareAux(i, j);
         }
     }
     createDecreaseArrow(0);
     createIncreaseArrow(0);
     createDecreaseArrow(1);
     createIncreaseArrow(1);
-}
-
-function setMultiplePuzzle() {
-    multiple = parseInt(document.getElementById("multipleInput").value);
-    width = multiple;
-    height = multiple;
-    refresh();
-}
-
-function onColorChange() {
-    currentColor = document.getElementById("colorInput").value;
-    if (!presetColors.includes(currentColor)) {
-        var colorList = document.getElementById("presetColors");
-        var newColor = document.createElement("option");
-        newColor.value = currentColor;
-        colorList.appendChild(newColor);
-        presetColors.push(currentColor);
-    }
 }
 
 function increaseAreaSize() {
@@ -71,23 +54,42 @@ function decreaseAreaSize() {
     changeAreaSize();
 }
 
+function setGridLengthPuzzle() {
+    gridLength = parseInt(document.getElementById("gridLengthInput").value);
+    width = gridLength;
+    height = gridLength;
+    refresh();
+}
+
+function onColorChange() {
+    currentColor = document.getElementById("colorInput").value;
+    if (!presetColors.includes(currentColor)) {
+        var colorList = document.getElementById("presetColors");
+        var newColor = document.createElement("option");
+        newColor.value = currentColor;
+        colorList.appendChild(newColor);
+        presetColors.push(currentColor);
+    }
+}
+
 function exportJson() {
-    var data = { 
-        colors: [$BACKGROUND_COLOR], 
+    var data = {
+        colors: [$BACKGROUND_COLOR],
         settings: {
             width: width,
             height: height,
-            multiple: multiple
+            gridLength: gridLength
         },
-        points: [], 
-        horizontalNumbers: [], 
-        verticalNumbers: [] 
+        points: [],
+        horizontalNumbers: [],
+        verticalNumbers: []
     };
+    var square, color;
     for (i = 0; i < height; i++) {
         data.points[i] = [];
         for (j = 0; j < width; j++) {
-            var square = document.getElementById("square_" + j + "." + i);
-            var color = square.getAttribute("fill");
+            square = document.getElementById("square_" + j + "." + i);
+            color = square.getAttribute("fill");
             if (!data.colors.includes(color)) {
                 data.colors.push(color);
             }
@@ -104,6 +106,31 @@ function exportJson() {
     a.href = window.URL.createObjectURL(blob);
     a.click();
 }
+
+function endColorsChange() {
+    if (clicked) {
+        var squareAux, id, square, squareColor;
+        for (i = 0; i < width; i++) {
+            for (j = 0; j < height; j++) {
+                squareAux = document.getElementById("square_aux_" + i + "." + j);
+                if (squareAux.getAttribute("opacity") == "1") {
+                    id = squareAux.getAttribute("id");
+                    id = id.replace("square_aux_", "square_");
+                    square = document.getElementById(id);
+                    squareColor = squareAux.getAttribute("fill");
+                    square.setAttribute("fill", squareColor);
+                    if (squareColor == $BACKGROUND_COLOR)
+                        square.setAttribute("opacity", "0");
+                    else
+                        square.setAttribute("opacity", "1");
+                    squareAux.setAttribute("fill", $BACKGROUND_COLOR);
+                    squareAux.setAttribute("opacity", "0");
+                }
+            }
+        }
+        clicked = false;
+    }
+}
 //#endregion
 
 //#region Auxiliar Functions
@@ -117,6 +144,7 @@ function changeAreaSize() {
     for (i = 0; i < $MAX_WIDTH_DIMENSION; i++) {
         for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
             changeSquareSize(i, j);
+            changeSquareAuxSize(i, j);
         }
     }
     changeDecreaseArrowSize(0);
@@ -146,6 +174,14 @@ function changeSquareSize(i, j) {
     square.setAttribute("width", size * 0.95);
     square.setAttribute("x", i * size);
     square.setAttribute("y", j * size);
+}
+
+function changeSquareAuxSize(i, j) {
+    var squareAux = document.getElementById("square_aux_" + i + "." + j);
+    squareAux.setAttribute("height", size * 0.95);
+    squareAux.setAttribute("width", size * 0.95);
+    squareAux.setAttribute("x", i * size);
+    squareAux.setAttribute("y", j * size);
 }
 
 function changeDecreaseArrowSize(orientation) {
@@ -275,6 +311,34 @@ function refresh() {
         }
     }
 }
+
+function cleanAllSquaresAux() {
+    var squareAux;
+    for (i = 0; i < width; i++) {
+        for (j = 0; j < height; j++) {
+            squareAux = document.getElementById("square_aux_" + i + "." + j);
+            if (squareAux.getAttribute("opacity") == "1") {
+                squareAux.setAttribute("fill", $BACKGROUND_COLOR);
+                squareAux.setAttribute("opacity", "0");
+            }
+        }
+    }
+}
+
+function refreshSquareAux(i, j) {
+    squareAux = document.getElementById("square_aux_" + i + "." + j);
+    square = document.getElementById("square_" + i + "." + j);
+    if (colorSquare == $BACKGROUND_COLOR) {
+        squareAux.setAttribute("fill", colorSquare);
+        squareAux.setAttribute("opacity", "1");
+    } else {
+        var squareColor = square.getAttribute("fill");
+        if (squareColor == $BACKGROUND_COLOR) {
+            squareAux.setAttribute("fill", colorSquare);
+            squareAux.setAttribute("opacity", "1");
+        }
+    }
+}
 //#endregion
 
 //#region Create SVG Elements Functions
@@ -282,7 +346,7 @@ function createLine(orientation, i) {
     var line = document.createElementNS($SVG_LIB, "line");
     line.setAttribute("id", "line_" + orientation + "." + i);
     line.setAttribute("stroke", $LINE_COLOR);
-    if ((i % multiple) == 0)
+    if ((i % gridLength) == 0)
         line.setAttribute("stroke-width", "2");
     else
         line.setAttribute("stroke-width", "1");
@@ -310,12 +374,23 @@ function createSquare(i, j) {
     square.setAttribute("stroke", $LINE_COLOR);
     square.setAttribute("fill", $BACKGROUND_COLOR);
     square.setAttribute("opacity", "0");
-    square.onmouseover = highlightSquare;
-    square.onmouseout = fadeSquare;
-    square.onmousedown = initColorsChange;
-    square.onmousemove = changeColorSquares;
-    square.onmouseup = endColorsChange;
     document.getElementById("squares").appendChild(square);
+}
+
+function createSquareAux(i, j) {
+    var squareAux = document.createElementNS($SVG_LIB, "rect");
+    squareAux.setAttribute("id", "square_aux_" + i + "." + j);
+    squareAux.setAttribute("height", size * 0.95);
+    squareAux.setAttribute("width", size * 0.95);
+    squareAux.setAttribute("x", i * size);
+    squareAux.setAttribute("y", j * size);
+    squareAux.setAttribute("fill", $BACKGROUND_COLOR);
+    squareAux.setAttribute("opacity", "0");
+    squareAux.onmouseover = highlightSquare;
+    squareAux.onmouseout = fadeSquare;
+    squareAux.onmousedown = initColorsChange;
+    squareAux.onmousemove = changeColorSquares;
+    document.getElementById("squares").appendChild(squareAux);
 }
 
 function createDecreaseArrow(orientation) {
@@ -366,150 +441,131 @@ function createIncreaseArrow(orientation) {
 //#region Event Functions
 function highlightSquare(evt) {
     var id = evt.target.getAttribute("id");
-    id = id.replace("square_", "");
+    id = id.replace("square_aux_", "");
     var idSplited = id.split('.');
     var i = parseInt(idSplited[0]);
     var j = parseInt(idSplited[1]);
     if (i < width && j < height) {
         var verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((i % multiple) != 0)
+        if ((i % gridLength) != 0)
             verticalLine.setAttribute("stroke-width", "2");
         i = i + 1;
         verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((i % multiple) != 0)
+        if ((i % gridLength) != 0)
             verticalLine.setAttribute("stroke-width", "2");
         var horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((j % multiple) != 0)
+        if ((j % gridLength) != 0)
             horizontalLine.setAttribute("stroke-width", "2");
         j = j + 1;
         horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $RULE_COLOR);
-        if ((j % multiple) != 0)
+        if ((j % gridLength) != 0)
             horizontalLine.setAttribute("stroke-width", "2");
     }
 }
 
 function fadeSquare(evt) {
     var id = evt.target.getAttribute("id");
-    id = id.replace("square_", "");
+    id = id.replace("square_aux_", "");
     var idSplited = id.split('.');
     var i = parseInt(idSplited[0]);
     var j = parseInt(idSplited[1]);
     if (i < width && j < height) {
         var verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((i % multiple) != 0)
+        if ((i % gridLength) != 0)
             verticalLine.setAttribute("stroke-width", "1");
         i = i + 1;
         verticalLine = document.getElementById("line_0." + i);
         verticalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((i % multiple) != 0)
+        if ((i % gridLength) != 0)
             verticalLine.setAttribute("stroke-width", "1");
         var horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((j % multiple) != 0)
+        if ((j % gridLength) != 0)
             horizontalLine.setAttribute("stroke-width", "1");
         j = j + 1;
         horizontalLine = document.getElementById("line_1." + j);
         horizontalLine.setAttribute("stroke", $LINE_COLOR);
-        if ((j % multiple) != 0)
+        if ((j % gridLength) != 0)
             horizontalLine.setAttribute("stroke-width", "1");
     }
 }
 
 function initColorsChange(evt) {
-    var id = evt.target.getAttribute("id");
-    id = id.replace("square_", "");
-    var idSplited = id.split('.');
-    squareI = parseInt(idSplited[0]);
-    squareJ = parseInt(idSplited[1]);
-    if (squareI < width && squareJ < height) {
-        colorSquare = evt.target.getAttribute("fill");
-        if (colorSquare == $BACKGROUND_COLOR) {
-            evt.target.setAttribute("fill", currentColor);
-            evt.target.setAttribute("opacity", "1");
-            colorSquare = currentColor;
-        } else {
-            if (colorSquare == currentColor) {
-                evt.target.setAttribute("fill", $BACKGROUND_COLOR);
-                evt.target.setAttribute("opacity", "0");
-                colorSquare = $BACKGROUND_COLOR;
-            } else {
-                evt.target.setAttribute("fill", currentColor);
+    if (evt.button == 0) {
+        var id = evt.target.getAttribute("id");
+        id = id.replace("square_aux_", "");
+        var idSplited = id.split('.');
+        squareI = parseInt(idSplited[0]);
+        squareJ = parseInt(idSplited[1]);
+        var square = document.getElementById("square_" + squareI + "." + squareJ);
+        if (squareI < width && squareJ < height) {
+            colorSquare = square.getAttribute("fill");
+            if (colorSquare == $BACKGROUND_COLOR) {
+                square.setAttribute("fill", currentColor);
+                square.setAttribute("opacity", "1");
                 colorSquare = currentColor;
+            } else {
+                if (colorSquare == currentColor) {
+                    square.setAttribute("fill", $BACKGROUND_COLOR);
+                    square.setAttribute("opacity", "0");
+                    colorSquare = $BACKGROUND_COLOR;
+                } else {
+                    square.setAttribute("fill", currentColor);
+                    colorSquare = currentColor;
+                }
             }
+            clicked = true;
         }
-        clicked = true;
     }
 }
 
 function changeColorSquares(evt) {
     if (clicked) {
         var id = evt.target.getAttribute("id");
-        id = id.replace("square_", "");
+        id = id.replace("square_aux_", "");
         var idSplited = id.split('.');
         var i = parseInt(idSplited[0]);
         var j = parseInt(idSplited[1]);
-        if ((i >= squareI) && (j == squareJ)) {
-            var count = squareI;
+        var count;
+        cleanAllSquaresAux();
+        if ((i > squareI) && (j == squareJ)) {
+            count = squareI;
             while (count <= i) {
                 if (count < width) {
-                    var square = document.getElementById("square_" + count + "." + squareJ);
-                    square.setAttribute("fill", colorSquare);
-                    if (colorSquare == $BACKGROUND_COLOR)
-                        square.setAttribute("opacity", "0");
-                    else
-                        square.setAttribute("opacity", "1");
+                    refreshSquareAux(count, squareJ);
                 }
                 count++;
             }
         }
-        else if ((i <= squareI) && (j == squareJ)) {
-            var count = i;
+        else if ((i < squareI) && (j == squareJ)) {
+            count = i;
             while (count <= squareI) {
-                var square = document.getElementById("square_" + count + "." + squareJ);
-                square.setAttribute("fill", colorSquare);
-                if (colorSquare == $BACKGROUND_COLOR)
-                    square.setAttribute("opacity", "0");
-                else
-                    square.setAttribute("opacity", "1");
+                refreshSquareAux(count, squareJ);
                 count++;
             }
         }
-        else if ((i == squareI) && (j >= squareJ)) {
-            var count = squareJ;
+        else if ((i == squareI) && (j > squareJ)) {
+            count = squareJ;
             while (count <= j) {
                 if (count < height) {
-                    var square = document.getElementById("square_" + squareI + "." + count);
-                    square.setAttribute("fill", colorSquare);
-                    if (colorSquare == $BACKGROUND_COLOR)
-                        square.setAttribute("opacity", "0");
-                    else
-                        square.setAttribute("opacity", "1");
+                    refreshSquareAux(squareI, count);
                 }
                 count++;
             }
         }
-        else if ((i == squareI) && (j <= squareJ)) {
-            var count = j;
+        else if ((i == squareI) && (j < squareJ)) {
+            count = j;
             while (count <= squareJ) {
-                var square = document.getElementById("square_" + squareI + "." + count);
-                square.setAttribute("fill", colorSquare);
-                if (colorSquare == $BACKGROUND_COLOR)
-                    square.setAttribute("opacity", "0");
-                else
-                    square.setAttribute("opacity", "1");
+                refreshSquareAux(squareI, count);
                 count++;
             }
         }
     }
-}
-
-function endColorsChange(evt) {
-    clicked = false;
 }
 
 function highlightDecreaseArrow(evt) {
@@ -524,13 +580,13 @@ function decreaseSize(evt) {
     var id = evt.target.getAttribute("id");
     var orientation = id.replace("decrease_arrow_", "");
     if (orientation == 0) {
-        height -= multiple;
+        height -= gridLength;
         if (height < $MIN_DIMENSION)
-            height += multiple;
+            height += gridLength;
     } else {
-        width -= multiple;
+        width -= gridLength;
         if (width < $MIN_DIMENSION)
-            width += multiple;
+            width += gridLength;
     }
     refresh();
 }
@@ -547,13 +603,13 @@ function increaseSize(evt) {
     var id = evt.target.getAttribute("id");
     var orientation = id.replace("increase_arrow_", "");
     if (orientation == 0) {
-        height += multiple;
+        height += gridLength;
         if (height > $MAX_HEIGTH_DIMENSION)
-            height -= multiple;
+            height -= gridLength;
     } else {
-        width += multiple;
+        width += gridLength;
         if (width > $MAX_WIDTH_DIMENSION)
-            width -= multiple;
+            width -= gridLength;
     }
     refresh();
 }
