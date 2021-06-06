@@ -43,6 +43,8 @@ function initialize() {
     createIncreaseArrow(0);
     createDecreaseArrow(1);
     createIncreaseArrow(1);
+    createDecreaseArrow(2);
+    createIncreaseArrow(2);
 }
 
 function increaseAreaSize() {
@@ -156,6 +158,8 @@ function changeAreaSize() {
     changeIncreaseArrowSize(0);
     changeDecreaseArrowSize(1);
     changeIncreaseArrowSize(1);
+    changeDecreaseArrowSize(2);
+    changeIncreaseArrowSize(2);
 }
 
 function changeLineSize(orientation, i) {
@@ -202,11 +206,14 @@ function changeDecreaseArrowSize(orientation) {
     var decreaseArrow = document.getElementById("decrease_arrow_" + orientation);
     decreaseArrow.setAttribute("font-size", size);
     if (orientation == 0) {
-        decreaseArrow.setAttribute("x", (width * size) / 2);
-        decreaseArrow.setAttribute("y", (height * size) + size + size / 2);
-    } else {
+        decreaseArrow.setAttribute("x", (width * size) / 2 + size / 2);
+        decreaseArrow.setAttribute("y", (height * size) + size);
+    } else if (orientation == 1) {
         decreaseArrow.setAttribute("x", (width * size) + size);
         decreaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
+    } else {
+        decreaseArrow.setAttribute("x", (width * size) + size);
+        decreaseArrow.setAttribute("y", (height * size) + size);
     }
 }
 
@@ -214,11 +221,14 @@ function changeIncreaseArrowSize(orientation) {
     var increaseArrow = document.getElementById("increase_arrow_" + orientation);
     increaseArrow.setAttribute("font-size", size);
     if (orientation == 0) {
-        increaseArrow.setAttribute("x", (width * size) / 2);
-        increaseArrow.setAttribute("y", (height * size) + 2 * size + size / 2);
-    } else {
+        increaseArrow.setAttribute("x", (width * size) / 2 + size / 2);
+        increaseArrow.setAttribute("y", (height * size) + 2 * size + size / 4);
+    } else if (orientation == 1) {
         increaseArrow.setAttribute("x", (width * size) + 2 * size);
         increaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
+    } else {
+        increaseArrow.setAttribute("x", (width * size) + 2 * size - size / 4);
+        increaseArrow.setAttribute("y", (height * size) + 2 * size - size / 4);
     }
 }
 
@@ -314,6 +324,8 @@ function refresh() {
     createIncreaseArrow(0);
     createDecreaseArrow(1);
     createIncreaseArrow(1);
+    createDecreaseArrow(2);
+    createIncreaseArrow(2);
     for (i = 0; i < $MAX_WIDTH_DIMENSION; i++) {
         for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
             var square = document.getElementById("square_" + i + "." + j);
@@ -491,17 +503,23 @@ function createDecreaseArrow(orientation) {
     var decreaseArrow = document.createElementNS($SVG_LIB, "text");
     decreaseArrow.setAttribute("id", "decrease_arrow_" + orientation);
     decreaseArrow.setAttribute("font-size", size);
-    decreaseArrow.setAttribute("text-anchor", "middle");
     decreaseArrow.setAttribute("fill", $ARROW_COLOR);
     decreaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
-        decreaseArrow.setAttribute("x", (width * size) / 2);
-        decreaseArrow.setAttribute("y", (height * size) + size + size / 2);
-        decreaseArrow.textContent = "\u2B9D"; // ↑
-    } else {
+        decreaseArrow.setAttribute("text-anchor", "end");
+        decreaseArrow.setAttribute("x", (width * size) / 2 + size / 2);
+        decreaseArrow.setAttribute("y", (height * size) + size);
+        decreaseArrow.textContent = "\uD83E\uDC81"; // ↑
+    } else if (orientation == 1) {
+        decreaseArrow.setAttribute("text-anchor", "middle");
         decreaseArrow.setAttribute("x", (width * size) + size);
         decreaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
-        decreaseArrow.textContent = "\u2B9C"; // ←
+        decreaseArrow.textContent = "\uD83E\uDC80"; // ←
+    } else {
+        decreaseArrow.setAttribute("text-anchor", "middle");
+        decreaseArrow.setAttribute("x", (width * size) + size);
+        decreaseArrow.setAttribute("y", (height * size) + size);
+        decreaseArrow.textContent = "\uD83E\uDC84"; // ↖
     }
     decreaseArrow.onmouseover = highlightDecreaseArrow;
     decreaseArrow.onmouseout = fadeDecreaseArrow;
@@ -513,17 +531,23 @@ function createIncreaseArrow(orientation) {
     var increaseArrow = document.createElementNS($SVG_LIB, "text");
     increaseArrow.setAttribute("id", "increase_arrow_" + orientation);
     increaseArrow.setAttribute("font-size", size);
-    increaseArrow.setAttribute("text-anchor", "middle");
     increaseArrow.setAttribute("fill", $ARROW_COLOR);
     increaseArrow.setAttribute("opacity", "0.5");
     if (orientation == 0) {
-        increaseArrow.setAttribute("x", (width * size) / 2);
-        increaseArrow.setAttribute("y", (height * size) + 2 * size + size / 2);
-        increaseArrow.textContent = "\u2B9F"; // ↓
-    } else {
+        increaseArrow.setAttribute("text-anchor", "end");
+        increaseArrow.setAttribute("x", (width * size) / 2 + size / 2);
+        increaseArrow.setAttribute("y", (height * size) + 2 * size + size / 4);
+        increaseArrow.textContent = "\uD83E\uDC83"; // ↓
+    } else if (orientation == 1) {
+        increaseArrow.setAttribute("text-anchor", "middle");
         increaseArrow.setAttribute("x", (width * size) + 2 * size);
         increaseArrow.setAttribute("y", (height * size) / 2 + size / 4);
-        increaseArrow.textContent = "\u2B9E"; // →
+        increaseArrow.textContent = "\uD83E\uDC82"; // →
+    } else {
+        increaseArrow.setAttribute("text-anchor", "middle");
+        increaseArrow.setAttribute("x", (width * size) + 2 * size - size / 4);
+        increaseArrow.setAttribute("y", (height * size) + 2 * size - size / 4);
+        increaseArrow.textContent = "\uD83E\uDC86"; // ↘
     }
     increaseArrow.onmouseover = highlightIncreaseArrow;
     increaseArrow.onmouseout = fadeIncreaseArrow;
@@ -558,6 +582,18 @@ function highlightSquare(evt) {
         horizontalLine.setAttribute("stroke", $RULE_COLOR);
         if ((j % gridLength) != 0)
             horizontalLine.setAttribute("stroke-width", "2");
+        var decreaseArrowVertical = document.getElementById("decrease_arrow_0");
+        decreaseArrowVertical.setAttribute("opacity", "0");
+        var increaseArrowVertical = document.getElementById("increase_arrow_0");
+        increaseArrowVertical.setAttribute("opacity", "0");
+        var decreaseArrowHorizontal = document.getElementById("decrease_arrow_1");
+        decreaseArrowHorizontal.setAttribute("opacity", "0");
+        var increaseArrowHorizontal = document.getElementById("increase_arrow_1");
+        increaseArrowHorizontal.setAttribute("opacity", "0");
+        var decreaseArrowDiagonal = document.getElementById("decrease_arrow_2");
+        decreaseArrowDiagonal.setAttribute("opacity", "0");
+        var increaseArrowDiagonal = document.getElementById("increase_arrow_2");
+        increaseArrowDiagonal.setAttribute("opacity", "0");
     }
 }
 
@@ -590,6 +626,18 @@ function fadeSquare(evt) {
         calculatedHorizontal.textContent = "";
         var calculatedVertical = document.getElementById("calculated_1");
         calculatedVertical.textContent = "";
+        var decreaseArrowVertical = document.getElementById("decrease_arrow_0");
+        decreaseArrowVertical.setAttribute("opacity", "0.5");
+        var increaseArrowVertical = document.getElementById("increase_arrow_0");
+        increaseArrowVertical.setAttribute("opacity", "0.5");
+        var decreaseArrowHorizontal = document.getElementById("decrease_arrow_1");
+        decreaseArrowHorizontal.setAttribute("opacity", "0.5");
+        var increaseArrowHorizontal = document.getElementById("increase_arrow_1");
+        increaseArrowHorizontal.setAttribute("opacity", "0.5");
+        var decreaseArrowDiagonal = document.getElementById("decrease_arrow_2");
+        decreaseArrowDiagonal.setAttribute("opacity", "0.5");
+        var increaseArrowDiagonal = document.getElementById("increase_arrow_2");
+        increaseArrowDiagonal.setAttribute("opacity", "0.5");
     }
 }
 
@@ -688,7 +736,14 @@ function decreaseSize(evt) {
         height -= gridLength;
         if (height < $MIN_DIMENSION)
             height += gridLength;
+    } else if (orientation == 1) {
+        width -= gridLength;
+        if (width < $MIN_DIMENSION)
+            width += gridLength;
     } else {
+        height -= gridLength;
+        if (height < $MIN_DIMENSION)
+            height += gridLength;
         width -= gridLength;
         if (width < $MIN_DIMENSION)
             width += gridLength;
@@ -711,7 +766,14 @@ function increaseSize(evt) {
         height += gridLength;
         if (height > $MAX_HEIGTH_DIMENSION)
             height -= gridLength;
+    } else if (orientation == 1) {
+        width += gridLength;
+        if (width > $MAX_WIDTH_DIMENSION)
+            width -= gridLength;
     } else {
+        height += gridLength;
+        if (height > $MAX_HEIGTH_DIMENSION)
+            height -= gridLength;
         width += gridLength;
         if (width > $MAX_WIDTH_DIMENSION)
             width -= gridLength;
