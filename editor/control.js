@@ -59,24 +59,6 @@ function decreaseAreaSize() {
     changeAreaSize();
 }
 
-function setGridLengthPuzzle() {
-    gridLength = parseInt(document.getElementById("gridLengthInput").value);
-    width = gridLength;
-    height = gridLength;
-    refresh();
-}
-
-function onColorChange() {
-    currentColor = document.getElementById("colorInput").value;
-    if (!presetColors.includes(currentColor)) {
-        var colorList = document.getElementById("presetColors");
-        var newColor = document.createElement("option");
-        newColor.value = currentColor;
-        colorList.appendChild(newColor);
-        presetColors.push(currentColor);
-    }
-}
-
 function exportJson() {
     var data = {
         colors: [$BACKGROUND_COLOR],
@@ -110,6 +92,24 @@ function exportJson() {
     a.download = 'puzzle.json';
     a.href = window.URL.createObjectURL(blob);
     a.click();
+}
+
+function setGridLengthPuzzle(radio) {
+    gridLength = radio.value;
+    width = gridLength;
+    height = gridLength;
+    refresh();
+}
+
+function onColorChange() {
+    currentColor = document.getElementById("colorInput").value;
+    if (!presetColors.includes(currentColor)) {
+        var colorList = document.getElementById("presetColors");
+        var newColor = document.createElement("option");
+        newColor.value = currentColor;
+        colorList.appendChild(newColor);
+        presetColors.push(currentColor);
+    }
 }
 
 function endColorsChange() {
