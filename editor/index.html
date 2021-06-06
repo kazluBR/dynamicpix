@@ -14,19 +14,22 @@
 	<div>
 		<button class="btn" onclick="increaseAreaSize()" title="Maximize"><i class="fa fa-plus"></i></button>
 		<button class="btn" onclick="decreaseAreaSize()" title="Minimize"><i class="fa fa-minus"></i></button>
-		<select id="gridLengthInput" class="slct" onchange="setGridLengthPuzzle()">
-			<option value="" disabled selected>Grid Length</option>
-			<option value="5">5 (Default)</option>
-			<option value="4">4</option>
-			<option value="3">3</option>
-		</select>
+		<button class="btn" onclick="exportJson()">Export to Json</button>
+	</div>
+	<br/>
+	<div>
+		<label>Grid Length: </label>
+		<input type="radio" name="gridLength" onclick="setGridLengthPuzzle(this);" value="5" checked/>
+		<label>5</label>
+		<input type="radio" name="gridLength" onclick="setGridLengthPuzzle(this);" value="4" />
+		<label>4</label>
+		<input type="radio" name="gridLength" onclick="setGridLengthPuzzle(this);" value="3" />
+		<label>3&ensp;</label>
 		<input id="colorInput" class="ipt" type="color" value="#000000" list="presetColors"
 			onchange="onColorChange()" />
 		<datalist id="presetColors">
 			<option value="#000000"></option>
 		</datalist>
-		<button class="btn" onclick="exportJson()">Export to Json</button>
-		
 	</div>
 	<hr />
 	<div oncontextmenu="return false">

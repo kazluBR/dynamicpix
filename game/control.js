@@ -341,16 +341,13 @@ function changeSquareAuxSize(pos_x, pos_y, i, j) {
 
 function changeSignalSize(pos_x, pos_y, orientation, i) {
 	var signal = document.getElementById("signal_" + orientation + "." + i);
+	signal.setAttribute("font-size", size);
 	if (orientation == 0) {
-		signal.setAttribute("height", size / 4);
-		signal.setAttribute("width", size);
 		signal.setAttribute("x", pos_x + i * size);
-		signal.setAttribute("y", pos_y + data.settings.height * size);
+		signal.setAttribute("y", pos_y + (data.settings.height + 1) * size);
 	} else {
-		signal.setAttribute("height", size);
-		signal.setAttribute("width", size / 4);
-		signal.setAttribute("x", pos_x + data.settings.width * size);
-		signal.setAttribute("y", pos_y + i * size);
+		signal.setAttribute("x", pos_x + (data.settings.width + 1) * size);
+		signal.setAttribute("y", pos_y + (i + 1) * size);
 	}
 }
 
@@ -396,11 +393,11 @@ function changeLineSize(pos_x, pos_y, orientation, i) {
 
 function changeCalculatedSize(pos_x, pos_y, orientation) {
 	var calculated = document.getElementById("calculated_" + orientation);
-	calculated.setAttribute("font-size", size * 0.9);
+	calculated.setAttribute("font-size", size);
 	if (orientation == 0) {
-		calculated.setAttribute("x", pos_x + data.settings.width * size + 0.5 * size);
+		calculated.setAttribute("x", pos_x + (data.settings.width + 0.5) * size);
 	} else {
-		calculated.setAttribute("y", pos_y + data.settings.height * size + 0.8 * size);
+		calculated.setAttribute("y", pos_y + (data.settings.height + 1) * size);
 	}
 }
 
@@ -539,7 +536,7 @@ function createMark(pos_x, pos_y, i, j) {
 	mark.setAttribute("x", pos_x + (i + 0.5) * size);
 	mark.setAttribute("y", pos_y + (j + 0.85) * size);
 	mark.setAttribute("opacity", "0");
-	mark.textContent = "X";
+	mark.textContent = "\u2022";
 	document.getElementById("area").appendChild(mark);
 }
 
@@ -553,7 +550,7 @@ function createMarkAux(pos_x, pos_y, i, j) {
 	markAux.setAttribute("x", pos_x + (i + 0.5) * size);
 	markAux.setAttribute("y", pos_y + (j + 0.85) * size);
 	markAux.setAttribute("opacity", "0");
-	markAux.textContent = "X";
+	markAux.textContent = "\u2022";
 	document.getElementById("area").appendChild(markAux);
 }
 
@@ -586,20 +583,20 @@ function createSquareAux(pos_x, pos_y, i, j) {
 }
 
 function createSignal(pos_x, pos_y, orientation, i) {
-	var signal = document.createElementNS($SVG_LIB, "rect");
+	var signal = document.createElementNS($SVG_LIB, "text");
 	signal.setAttribute("id", "signal_" + orientation + "." + i);
 	signal.setAttribute("fill", data.colors[0]);
-	signal.setAttribute("stroke-width", "0");
+	signal.setAttribute("font-size", size);
 	if (orientation == 0) {
-		signal.setAttribute("height", size / 4);
-		signal.setAttribute("width", size);
+		signal.setAttribute("text-anchor", "start");
 		signal.setAttribute("x", pos_x + i * size);
-		signal.setAttribute("y", pos_y + data.settings.height * size);
+		signal.setAttribute("y", pos_y + (data.settings.height + 1) * size);
+		signal.textContent = "\u23F6";
 	} else {
-		signal.setAttribute("height", size);
-		signal.setAttribute("width", size / 4);
-		signal.setAttribute("x", pos_x + data.settings.width * size);
-		signal.setAttribute("y", pos_y + i * size);
+		signal.setAttribute("text-anchor", "end");
+		signal.setAttribute("x", pos_x + (data.settings.width + 1) * size);
+		signal.setAttribute("y", pos_y + (i + 1) * size);
+		signal.textContent = "\u23F4";
 	}
 	document.getElementById("area").appendChild(signal);
 }
@@ -669,16 +666,18 @@ function createLine(pos_x, pos_y, orientation, i) {
 function createCalculated(pos_x, pos_y, orientation) {
 	var calculated = document.createElementNS($SVG_LIB, "text");
 	calculated.setAttribute("id", "calculated_" + orientation);
-	calculated.setAttribute("text-anchor", "middle");
 	calculated.setAttribute("font-family", "serif");
-	calculated.setAttribute("font-size", size * 0.9);
+	calculated.setAttribute("font-size", size);
 	calculated.setAttribute("font-weight", "bold");
 	calculated.setAttribute("fill", $CALCULATED_EMPTY_COLOR);
 	calculated.textContent = " ";
-	if (orientation == 0)
-		calculated.setAttribute("x", pos_x + data.settings.width * size + 0.5 * size);
-	else
-		calculated.setAttribute("y", pos_y + data.settings.height * size + 0.8 * size);
+	if (orientation == 0) {
+		calculated.setAttribute("text-anchor", "start");
+		calculated.setAttribute("x", pos_x + (data.settings.width + 0.5) * size);
+	} else {
+		calculated.setAttribute("text-anchor", "middle");
+		calculated.setAttribute("y", pos_y + (data.settings.height + 1) * size);
+	}
 	document.getElementById("area").appendChild(calculated);
 }
 //#endregion
