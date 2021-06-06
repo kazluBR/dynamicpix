@@ -95,7 +95,7 @@ function exportJson() {
 }
 
 function setGridLengthPuzzle(radio) {
-    gridLength = radio.value;
+    gridLength = parseInt(radio.value);
     width = gridLength;
     height = gridLength;
     refresh();
