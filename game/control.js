@@ -393,11 +393,11 @@ function changeLineSize(pos_x, pos_y, orientation, i) {
 
 function changeCalculatedSize(pos_x, pos_y, orientation) {
 	var calculated = document.getElementById("calculated_" + orientation);
-	calculated.setAttribute("font-size", size * 0.9);
+	calculated.setAttribute("font-size", size);
 	if (orientation == 0) {
-		calculated.setAttribute("x", pos_x + data.settings.width * size + 0.5 * size);
+		calculated.setAttribute("x", pos_x + (data.settings.width + 0.5) * size);
 	} else {
-		calculated.setAttribute("y", pos_y + data.settings.height * size + 0.8 * size);
+		calculated.setAttribute("y", pos_y + (data.settings.height + 1) * size);
 	}
 }
 
@@ -666,16 +666,18 @@ function createLine(pos_x, pos_y, orientation, i) {
 function createCalculated(pos_x, pos_y, orientation) {
 	var calculated = document.createElementNS($SVG_LIB, "text");
 	calculated.setAttribute("id", "calculated_" + orientation);
-	calculated.setAttribute("text-anchor", "middle");
 	calculated.setAttribute("font-family", "serif");
-	calculated.setAttribute("font-size", size * 0.9);
+	calculated.setAttribute("font-size", size);
 	calculated.setAttribute("font-weight", "bold");
 	calculated.setAttribute("fill", $CALCULATED_EMPTY_COLOR);
 	calculated.textContent = " ";
-	if (orientation == 0)
-		calculated.setAttribute("x", pos_x + data.settings.width * size + 0.5 * size);
-	else
-		calculated.setAttribute("y", pos_y + data.settings.height * size + 0.8 * size);
+	if (orientation == 0) {
+		calculated.setAttribute("text-anchor", "start");
+		calculated.setAttribute("x", pos_x + (data.settings.width + 0.5) * size);
+	} else {
+		calculated.setAttribute("text-anchor", "middle");
+		calculated.setAttribute("y", pos_y + (data.settings.height + 1) * size);
+	}
 	document.getElementById("area").appendChild(calculated);
 }
 //#endregion
