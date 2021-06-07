@@ -47,7 +47,7 @@ function initialize() {
     createIncreaseArrow(1);
     createDecreaseArrow(2);
     createIncreaseArrow(2);
-    states.push((new XMLSerializer).serializeToString(document.getElementById("main")));
+    saveState();
 }
 
 function increaseAreaSize() {
@@ -151,8 +151,7 @@ function endColorsChange() {
             }
         }
         clicked = false;
-        states.push((new XMLSerializer).serializeToString(document.getElementById("main")));
-        currentKey += 1;
+        saveState();
     }
 }
 //#endregion
@@ -322,6 +321,16 @@ function getMaxNumbers(numbers) {
     return bigger;
 }
 
+function saveState() {
+    while (currentKey < states.length - 1) {
+        states.pop();
+    }
+    states.push((new XMLSerializer).serializeToString(document.getElementById("main")));
+    if (states.length > 1) {
+        currentKey += 1;
+    }
+}
+
 function recoverState() {
     var squares = document.getElementById("main");
     while (squares.firstChild) {
@@ -331,6 +340,8 @@ function recoverState() {
     while (squaresRecover.firstChild) {
         squares.appendChild(squaresRecover.firstChild);
     }
+    changeAreaSize();
+    refreshArea();
 }
 
 function refreshArea() {

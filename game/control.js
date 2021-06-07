@@ -79,7 +79,7 @@ function initialize() {
 		createCalculated(pos_x, pos_y, 0);
 		createCalculated(pos_x, pos_y, 1);
 		validate();
-		states.push((new XMLSerializer).serializeToString(document.getElementById("main")));
+		saveState();
 	}
 }
 
@@ -208,8 +208,7 @@ function endColorsChange() {
 		}
 		clicked = false;
 		validate();
-		states.push((new XMLSerializer).serializeToString(document.getElementById("main")));
-        currentKey += 1;
+		saveState();
 	}
 }
 //#endregion
@@ -429,6 +428,16 @@ function changeCalculatedSize(pos_x, pos_y, orientation) {
 	}
 }
 
+function saveState() {
+    while (currentKey < states.length - 1) {
+        states.pop();
+    }
+    states.push((new XMLSerializer).serializeToString(document.getElementById("main")));
+    if (states.length > 1) {
+        currentKey += 1;
+    }
+}
+
 function recoverState() {
 	var squares = document.getElementById("main");
     while (squares.firstChild) {
@@ -439,6 +448,7 @@ function recoverState() {
         squares.appendChild(squaresRecover.firstChild);
     }
 	validate();
+	changeAreaSize();
 }
 
 function refreshCalculatedValues(i, j) {
