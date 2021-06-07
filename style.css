@@ -59,7 +59,7 @@ input[type="file"] {
     opacity: 1.0;
 }
 
-#colors, #area, #squares, #arrows:hover {
+#colors, #components, #main, #aux, #arrows:hover {
     cursor: pointer
 }
 

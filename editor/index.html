@@ -14,6 +14,8 @@
 	<div>
 		<button class="btn" onclick="increaseAreaSize()" title="Maximize"><i class="fa fa-plus"></i></button>
 		<button class="btn" onclick="decreaseAreaSize()" title="Minimize"><i class="fa fa-minus"></i></button>
+		<button class="btn" onclick="undo()" title="Undo"><i class="fa fa-rotate-left"></i></button>
+		<button class="btn" onclick="redo()" title="Redo"><i class="fa fa-rotate-right"></i></button>
 		<button class="btn" onclick="exportJson()">Export to Json</button>
 	</div>
 	<br/>
@@ -34,8 +36,9 @@
 	<hr />
 	<div oncontextmenu="return false">
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm">
-			<g id="area" transform="translate(10, 10)" />
-			<g id="squares" transform="translate(10, 10)" />
+			<g id="components" transform="translate(10, 10)" />
+			<g id="main" transform="translate(10, 10)" />
+			<g id="aux" transform="translate(10, 10)" />
 			<g id="arrows" transform="translate(10, 10)" />
 		</svg>
 	</div>
