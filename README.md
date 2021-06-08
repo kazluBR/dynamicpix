@@ -8,6 +8,14 @@ Here you can create a drawing by choosing its width and height. You can use diff
 
 ### Menu
 ![alt text](/docs/editor_menu.png)
+- Maximize: Increases the editor area
+- Minimize: Decreases the editor area
+- Undo: Undo the last modification
+- Redo: Redo the next modification
+- Export to Json: Exports the drawing to json format compatible with the game view
+- Grid Length: Specifies the size of the editor grid
+- Input Color: Selects the color to paint and stores the list of used colors
+
 
 ### Controls
 | Mouse | Action |
@@ -34,3 +42,11 @@ Here you choose the json file created from the drawing and the nonogram will be 
 
 ### Menu
 ![alt text](/docs/game_menu.png)
+- Select a Json File: Select editor generated json to load the puzzle
+- Maximize: Increases the editor area
+- Minimize: Decreases the editor area
+- Undo: Undo the last modification
+- Redo: Redo the next modification
+- Check Puzzle: Checks for current errors in the puzzle
+- Restart Puzzle: Reset the puzzle to the beginning
+- Show Solution: Reveals the solution of the puzzle

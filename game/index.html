@@ -20,6 +20,8 @@
 	<div id="menu">
 		<button class="btn" onclick="increaseAreaSize()" title="Maximize"><i class="fa fa-plus"></i></button>
 		<button class="btn" onclick="decreaseAreaSize()" title="Minimize"><i class="fa fa-minus"></i></button>
+		<button class="btn" onclick="undo()" title="Undo"><i class="fa fa-rotate-left"></i></button>
+		<button class="btn" onclick="redo()" title="Redo"><i class="fa fa-rotate-right"></i></button>
 		<button class="btn" onclick="check()" title="Check Puzzle"><i class="fa fa-check"></i></button>
 		<button class="btn" onclick="initialize()" title="Restart Puzzle"><i class="fa fa-recycle"></i></button>
 		<button class="btn" onclick="solve()" title="Show Solution"><i class="fa fa-eye"></i></button>
@@ -28,7 +30,9 @@
 	<div oncontextmenu="return false">
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm">
 			<g id="colors" />
-			<g id="area" transform="translate(0, 60)" />
+			<g id="main" transform="translate(0, 60)" />
+			<g id="components" transform="translate(0, 60)" />
+			<g id="aux" transform="translate(0, 60)" />
 		</svg>
 	</div>
 

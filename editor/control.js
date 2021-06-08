@@ -18,6 +18,8 @@ var gridLength = 5;
 var currentColor = "#000000";
 var presetColors = [currentColor];
 var clicked = false;
+var states = [];
+var currentKey = 0;
 
 var squareI;
 var squareJ;
@@ -45,6 +47,7 @@ function initialize() {
     createIncreaseArrow(1);
     createDecreaseArrow(2);
     createIncreaseArrow(2);
+    saveState();
 }
 
 function increaseAreaSize() {
@@ -57,6 +60,20 @@ function decreaseAreaSize() {
     if (size > $MIN_SIZE)
         size -= 1;
     changeAreaSize();
+}
+
+function undo() {
+    if (currentKey > 0) {
+        currentKey -= 1;
+        recoverState();
+    }
+}
+
+function redo() {
+    if (currentKey < states.length - 1) {
+        currentKey += 1;
+        recoverState();
+    }
 }
 
 function exportJson() {
@@ -98,7 +115,7 @@ function setGridLengthPuzzle(radio) {
     gridLength = parseInt(radio.value);
     width = gridLength;
     height = gridLength;
-    refresh();
+    refreshArea();
 }
 
 function onColorChange() {
@@ -134,6 +151,7 @@ function endColorsChange() {
             }
         }
         clicked = false;
+        saveState();
     }
 }
 //#endregion
@@ -303,10 +321,33 @@ function getMaxNumbers(numbers) {
     return bigger;
 }
 
-function refresh() {
-    var area = document.getElementById("area");
-    while (area.firstChild) {
-        area.removeChild(area.firstChild);
+function saveState() {
+    while (currentKey < states.length - 1) {
+        states.pop();
+    }
+    states.push((new XMLSerializer).serializeToString(document.getElementById("main")));
+    if (states.length > 1) {
+        currentKey += 1;
+    }
+}
+
+function recoverState() {
+    var squares = document.getElementById("main");
+    while (squares.firstChild) {
+        squares.removeChild(squares.firstChild);
+    }
+    var squaresRecover = (new DOMParser()).parseFromString(states[currentKey], "image/svg+xml").documentElement;
+    while (squaresRecover.firstChild) {
+        squares.appendChild(squaresRecover.firstChild);
+    }
+    changeAreaSize();
+    refreshArea();
+}
+
+function refreshArea() {
+    var components = document.getElementById("components");
+    while (components.firstChild) {
+        components.removeChild(components.firstChild);
     }
     for (i = 0; i <= width; i++) {
         createLine(0, i);
@@ -450,7 +491,7 @@ function createLine(orientation, i) {
         line.setAttribute("y1", i * size);
         line.setAttribute("y2", i * size);
     }
-    document.getElementById("area").appendChild(line);
+    document.getElementById("components").appendChild(line);
 }
 
 function createSquare(i, j) {
@@ -463,7 +504,7 @@ function createSquare(i, j) {
     square.setAttribute("stroke", $LINE_COLOR);
     square.setAttribute("fill", $BACKGROUND_COLOR);
     square.setAttribute("opacity", "0");
-    document.getElementById("squares").appendChild(square);
+    document.getElementById("main").appendChild(square);
 }
 
 function createSquareAux(i, j) {
@@ -479,7 +520,7 @@ function createSquareAux(i, j) {
     squareAux.onmouseout = fadeSquare;
     squareAux.onmousedown = initColorsChange;
     squareAux.onmousemove = changeColorSquares;
-    document.getElementById("squares").appendChild(squareAux);
+    document.getElementById("aux").appendChild(squareAux);
 }
 
 function createCalculated(orientation) {
@@ -496,7 +537,7 @@ function createCalculated(orientation) {
         calculated.setAttribute("text-anchor", "middle");
         calculated.setAttribute("y", (height + 1) * size);
     }
-    document.getElementById("area").appendChild(calculated);
+    document.getElementById("components").appendChild(calculated);
 }
 
 function createDecreaseArrow(orientation) {
@@ -748,7 +789,7 @@ function decreaseSize(evt) {
         if (width < $MIN_DIMENSION)
             width += gridLength;
     }
-    refresh();
+    refreshArea();
 }
 
 function highlightIncreaseArrow(evt) {
@@ -778,6 +819,6 @@ function increaseSize(evt) {
         if (width > $MAX_WIDTH_DIMENSION)
             width -= gridLength;
     }
-    refresh();
+    refreshArea();
 }
 //#endregion

@@ -9,6 +9,8 @@ var size = 20;
 var fillPuzzle = '0';
 var totalValidated = false;
 var clicked = false;
+var states = [];
+var currentKey = 0;
 
 var data;
 var squareI;
@@ -77,6 +79,7 @@ function initialize() {
 		createCalculated(pos_x, pos_y, 0);
 		createCalculated(pos_x, pos_y, 1);
 		validate();
+		saveState();
 	}
 }
 
@@ -94,6 +97,20 @@ function decreaseAreaSize() {
 			size -= 1;
 		changeAreaSize();
 	}
+}
+
+function undo() {
+    if (currentKey > 0) {
+        currentKey -= 1;
+        recoverState();
+    }
+}
+
+function redo() {
+    if (currentKey < states.length - 1) {
+        currentKey += 1;
+        recoverState();
+    }
 }
 
 function check() {
@@ -191,6 +208,7 @@ function endColorsChange() {
 		}
 		clicked = false;
 		validate();
+		saveState();
 	}
 }
 //#endregion
@@ -201,10 +219,19 @@ function clean() {
 	while (colors.firstChild) {
 		colors.removeChild(colors.firstChild);
 	}
-	var area = document.getElementById("area");
-	while (area.firstChild) {
-		area.removeChild(area.firstChild);
+	var components = document.getElementById("components");
+	while (components.firstChild) {
+		components.removeChild(components.firstChild);
 	}
+	var main = document.getElementById("main");
+	while (main.firstChild) {
+		main.removeChild(main.firstChild);
+	}
+	var aux = document.getElementById("aux");
+	while (aux.firstChild) {
+		aux.removeChild(aux.firstChild);
+	}
+	states = [];
 }
 
 function validate() {
@@ -401,6 +428,29 @@ function changeCalculatedSize(pos_x, pos_y, orientation) {
 	}
 }
 
+function saveState() {
+    while (currentKey < states.length - 1) {
+        states.pop();
+    }
+    states.push((new XMLSerializer).serializeToString(document.getElementById("main")));
+    if (states.length > 1) {
+        currentKey += 1;
+    }
+}
+
+function recoverState() {
+	var squares = document.getElementById("main");
+    while (squares.firstChild) {
+        squares.removeChild(squares.firstChild);
+    }
+    var squaresRecover = (new DOMParser()).parseFromString(states[currentKey], "image/svg+xml").documentElement;
+    while (squaresRecover.firstChild) {
+        squares.appendChild(squaresRecover.firstChild);
+    }
+	validate();
+	changeAreaSize();
+}
+
 function refreshCalculatedValues(i, j) {
 	var squarePivot = document.getElementById("square_" + i + "." + j);
 	if (clicked)
@@ -537,7 +587,7 @@ function createMark(pos_x, pos_y, i, j) {
 	mark.setAttribute("y", pos_y + (j + 0.85) * size);
 	mark.setAttribute("opacity", "0");
 	mark.textContent = "\u2022";
-	document.getElementById("area").appendChild(mark);
+	document.getElementById("main").appendChild(mark);
 }
 
 function createMarkAux(pos_x, pos_y, i, j) {
@@ -551,7 +601,7 @@ function createMarkAux(pos_x, pos_y, i, j) {
 	markAux.setAttribute("y", pos_y + (j + 0.85) * size);
 	markAux.setAttribute("opacity", "0");
 	markAux.textContent = "\u2022";
-	document.getElementById("area").appendChild(markAux);
+	document.getElementById("aux").appendChild(markAux);
 }
 
 function createSquare(pos_x, pos_y, i, j) {
@@ -563,7 +613,7 @@ function createSquare(pos_x, pos_y, i, j) {
 	square.setAttribute("width", size);
 	square.setAttribute("x", pos_x + i * size);
 	square.setAttribute("y", pos_y + j * size);
-	document.getElementById("area").appendChild(square);
+	document.getElementById("main").appendChild(square);
 }
 
 function createSquareAux(pos_x, pos_y, i, j) {
@@ -579,7 +629,7 @@ function createSquareAux(pos_x, pos_y, i, j) {
 	squareAux.onmouseout = fadeSquare;
 	squareAux.onmousedown = initColorsChange;
 	squareAux.onmousemove = changeColorSquares;
-	document.getElementById("area").appendChild(squareAux);
+	document.getElementById("aux").appendChild(squareAux);
 }
 
 function createSignal(pos_x, pos_y, orientation, i) {
@@ -598,7 +648,7 @@ function createSignal(pos_x, pos_y, orientation, i) {
 		signal.setAttribute("y", pos_y + (i + 1) * size);
 		signal.textContent = "\u23F4";
 	}
-	document.getElementById("area").appendChild(signal);
+	document.getElementById("components").appendChild(signal);
 }
 
 function createSquareNumber(pos_x, pos_y, orientation, i, j) {
@@ -617,7 +667,7 @@ function createSquareNumber(pos_x, pos_y, orientation, i, j) {
 		squareNumber.setAttribute("fill", data.horizontalNumbers[i][j - 1].color);
 	}
 	squareNumber.onclick = markSquareNumber;
-	document.getElementById("area").appendChild(squareNumber);
+	document.getElementById("components").appendChild(squareNumber);
 }
 
 function createNumber(pos_x, pos_y, orientation, i, j) {
@@ -638,7 +688,7 @@ function createNumber(pos_x, pos_y, orientation, i, j) {
 		number.textContent = data.horizontalNumbers[i][j - 1].number;
 	}
 	number.onclick = markNumber;
-	document.getElementById("area").appendChild(number);
+	document.getElementById("components").appendChild(number);
 }
 
 function createLine(pos_x, pos_y, orientation, i) {
@@ -660,7 +710,7 @@ function createLine(pos_x, pos_y, orientation, i) {
 		line.setAttribute("y1", pos_y + i * size);
 		line.setAttribute("y2", pos_y + i * size);
 	}
-	document.getElementById("area").appendChild(line);
+	document.getElementById("components").appendChild(line);
 }
 
 function createCalculated(pos_x, pos_y, orientation) {
@@ -678,7 +728,7 @@ function createCalculated(pos_x, pos_y, orientation) {
 		calculated.setAttribute("text-anchor", "middle");
 		calculated.setAttribute("y", pos_y + (data.settings.height + 1) * size);
 	}
-	document.getElementById("area").appendChild(calculated);
+	document.getElementById("components").appendChild(calculated);
 }
 //#endregion
 
