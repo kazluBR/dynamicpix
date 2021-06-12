@@ -660,11 +660,13 @@ function createSquareNumber(pos_x, pos_y, orientation, i, j) {
 	if (orientation == 0) {
 		squareNumber.setAttribute("x", pos_x + i * size);
 		squareNumber.setAttribute("y", pos_y - j * size);
-		squareNumber.setAttribute("fill", data.verticalNumbers[i][j - 1].color);
+		var colorIndex = data.verticalNumbers[i][j - 1].color;
+		squareNumber.setAttribute("fill", data.colors[colorIndex]);
 	} else {
 		squareNumber.setAttribute("x", pos_x - j * size);
 		squareNumber.setAttribute("y", pos_y + i * size);
-		squareNumber.setAttribute("fill", data.horizontalNumbers[i][j - 1].color);
+		var colorIndex = data.horizontalNumbers[i][j - 1].color;
+		squareNumber.setAttribute("fill", data.colors[colorIndex]);
 	}
 	squareNumber.onclick = markSquareNumber;
 	document.getElementById("components").appendChild(squareNumber);

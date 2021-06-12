@@ -265,7 +265,7 @@ function getHorizontalNumbers(data) {
                 if (data.points[i][j] == 0 || data.points[i][j] != aux) {
                     if (data.points[i][j] == 0)
                         counting = false;
-                    horizontalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
+                    horizontalNumbers[i].push({ number: count, color: aux });
                     count = 0;
                 }
             } else if (data.points[i][j] > 0 && data.points[i][j] != aux)
@@ -274,7 +274,7 @@ function getHorizontalNumbers(data) {
         }
         if (counting) {
             count++;
-            horizontalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
+            horizontalNumbers[i].push({ number: count, color: aux });
         }
     }
     return horizontalNumbers;
@@ -295,7 +295,7 @@ function getVerticalNumbers(data) {
                 if (data.points[j][i] == 0 || data.points[j][i] != aux) {
                     if (data.points[j][i] == 0)
                         counting = false;
-                    verticalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
+                    verticalNumbers[i].push({ number: count, color: aux });
                     count = 0;
                 }
             } else if (data.points[j][i] > 0 && data.points[j][i] != aux)
@@ -304,7 +304,7 @@ function getVerticalNumbers(data) {
         }
         if (counting) {
             count++;
-            verticalNumbers[i].push({ number: count.toString(), color: data.colors[aux] });
+            verticalNumbers[i].push({ number: count, color: aux });
         }
     }
     return verticalNumbers;
