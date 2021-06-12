@@ -6,7 +6,6 @@ const $RULE_COLOR = "#ff00ff";
 const $VALIDATED_COLOR = "#adff2f";
 
 var size = 20;
-var fillPuzzle = '0';
 var totalValidated = false;
 var clicked = false;
 var states = [];
@@ -48,6 +47,7 @@ function initialize() {
 		}
 		var pos_x = data.settings.horizontalNumbersLength * size;
 		var pos_y = data.settings.verticalNumbersLength * size;
+		createBackground(pos_x, pos_y);
 		for (i = 0; i < data.settings.width; i++) {
 			for (j = 0; j < data.settings.height; j++) {
 				createMark(pos_x, pos_y, i, j);
@@ -246,8 +246,8 @@ function validate() {
 			if (color != data.colors[data.points[j][i]]) {
 				validated = false;
 				totalValidated = false;
-				if (signal.getAttribute("fill") == $VALIDATED_COLOR)
-					signal.setAttribute("fill", data.colors[0]);
+				if (signal.getAttribute("opacity") == "1")
+					signal.setAttribute("opacity", "0");
 				break;
 			}
 		}
@@ -258,7 +258,8 @@ function validate() {
 				number = document.getElementById("number_0." + i + "." + j);
 				number.setAttribute("fill", squareNumber.getAttribute("fill"));
 			}
-			signal.setAttribute("fill", $VALIDATED_COLOR);
+			if (signal.getAttribute("opacity") == "0")
+				signal.setAttribute("opacity", "1");
 		}
 	}
 	for (i = 0; i < data.settings.height; i++) {
@@ -270,8 +271,8 @@ function validate() {
 			if (color != data.colors[data.points[i][j]]) {
 				validated = false;
 				totalValidated = false;
-				if (signal.getAttribute("fill") == $VALIDATED_COLOR)
-					signal.setAttribute("fill", data.colors[0]);
+				if (signal.getAttribute("opacity") == "1")
+					signal.setAttribute("opacity", "0");
 				break;
 			}
 		}
@@ -282,7 +283,8 @@ function validate() {
 				number = document.getElementById("number_1." + i + "." + j);
 				number.setAttribute("fill", squareNumber.getAttribute("fill"));
 			}
-			signal.setAttribute("fill", $VALIDATED_COLOR);
+			if (signal.getAttribute("opacity") == "0")
+				signal.setAttribute("opacity", "1");
 		}
 	}
 	if (totalValidated) {
@@ -304,6 +306,7 @@ function validate() {
 function changeAreaSize() {
 	var pos_x = data.settings.horizontalNumbersLength * size;
 	var pos_y = data.settings.verticalNumbersLength * size;
+	changeBackgroundSize(pos_x, pos_y);
 	for (i = 0; i < data.settings.width; i++) {
 		for (j = 0; j < data.settings.height; j++) {
 			changeMarkSize(pos_x, pos_y, i, j);
@@ -334,6 +337,14 @@ function changeAreaSize() {
 	}
 	changeCalculatedSize(pos_x, pos_y, 0);
 	changeCalculatedSize(pos_x, pos_y, 1);
+}
+
+function changeBackgroundSize(pos_x, pos_y) {
+	var background = document.getElementById("background");
+	background.setAttribute("height", size * data.settings.height);
+	background.setAttribute("width", size * data.settings.width);
+	background.setAttribute("x", pos_x);
+	background.setAttribute("y", pos_y);
 }
 
 function changeMarkSize(pos_x, pos_y, i, j) {
@@ -576,6 +587,17 @@ function createSquareColor(i) {
 	document.getElementById("colors").appendChild(squareColor);
 }
 
+function createBackground(pos_x, pos_y) {
+	var background = document.createElementNS($SVG_LIB, "rect");
+	background.setAttribute("id", "background");
+	background.setAttribute("fill", data.colors[0]);
+	background.setAttribute("height", size * data.settings.height);
+	background.setAttribute("width", size * data.settings.width);
+	background.setAttribute("x", pos_x);
+	background.setAttribute("y", pos_y);
+	document.getElementById("main").appendChild(background);
+}
+
 function createMark(pos_x, pos_y, i, j) {
 	var mark = document.createElementNS($SVG_LIB, "text");
 	mark.setAttribute("id", "mark_" + i + "." + j);
@@ -635,8 +657,9 @@ function createSquareAux(pos_x, pos_y, i, j) {
 function createSignal(pos_x, pos_y, orientation, i) {
 	var signal = document.createElementNS($SVG_LIB, "text");
 	signal.setAttribute("id", "signal_" + orientation + "." + i);
-	signal.setAttribute("fill", data.colors[0]);
+	signal.setAttribute("fill", $VALIDATED_COLOR);
 	signal.setAttribute("font-size", size);
+	signal.setAttribute("opacity", "0");
 	if (orientation == 0) {
 		signal.setAttribute("text-anchor", "start");
 		signal.setAttribute("x", pos_x + i * size);
@@ -722,7 +745,6 @@ function createCalculated(pos_x, pos_y, orientation) {
 	calculated.setAttribute("font-size", size);
 	calculated.setAttribute("font-weight", "bold");
 	calculated.setAttribute("fill", $CALCULATED_EMPTY_COLOR);
-	calculated.textContent = " ";
 	if (orientation == 0) {
 		calculated.setAttribute("text-anchor", "start");
 		calculated.setAttribute("x", pos_x + (data.settings.width + 0.5) * size);
