@@ -28,10 +28,12 @@
 		<input type="radio" name="gridLength" onclick="setGridLengthPuzzle(this);" value="3" />
 		<label>3&ensp;</label>
 		<input id="colorInput" class="ipt" type="color" value="#000000" list="presetColors"
-			onchange="onColorChange()" />
+			title="Current Color" onchange="onColorChange()" />
 		<datalist id="presetColors">
 			<option value="#000000"></option>
 		</datalist>
+		<input id="colorBackInput" class="ipt" type="color" value="#ffffff"
+			title="Background Color" onchange="onColorBackgroundChange()" />
 	</div>
 	<hr />
 	<div oncontextmenu="return false">

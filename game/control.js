@@ -3,10 +3,11 @@ const $LINE_COLOR = "#808080";
 const $MARK_COLOR = "#808080";
 const $CALCULATED_EMPTY_COLOR = "#808080";
 const $RULE_COLOR = "#ff00ff";
-const $VALIDATED_COLOR = "#adff2f";
+const $SIGNAL_CORRECT_COLOR = "#adff2f";
+const $SIGNAL_ERROR_COLOR = "#b22222";
+const $NUMBER_DEFAULT_COLOR = "#ffffff";
 
 var size = 20;
-var fillPuzzle = '0';
 var totalValidated = false;
 var clicked = false;
 var states = [];
@@ -48,6 +49,7 @@ function initialize() {
 		}
 		var pos_x = data.settings.horizontalNumbersLength * size;
 		var pos_y = data.settings.verticalNumbersLength * size;
+		createBackground(pos_x, pos_y);
 		for (i = 0; i < data.settings.width; i++) {
 			for (j = 0; j < data.settings.height; j++) {
 				createMark(pos_x, pos_y, i, j);
@@ -114,19 +116,29 @@ function redo() {
 }
 
 function check() {
-	var square, squareColor, squareOpacity, mark, markOpacity;
+	var square, squareColor, squareOpacity, mark, markOpacity, signalHorizontal, signalVertical;
 	var errors = 0;
 	for (i = 0; i < data.settings.width; i++) {
+		signalHorizontal = document.getElementById("signal_0." + i);
 		for (j = 0; j < data.settings.height; j++) {
 			square = document.getElementById("square_" + i + "." + j);
 			squareColor = square.getAttribute("fill");
 			squareOpacity = square.getAttribute("opacity");
+			signalVertical = document.getElementById("signal_1." + j);
 			if (squareColor != data.colors[data.points[j][i]] && squareOpacity == "1") {
+				signalHorizontal.setAttribute("opacity", "1");
+				signalHorizontal.setAttribute("fill", $SIGNAL_ERROR_COLOR);
+				signalVertical.setAttribute("opacity", "1");
+				signalVertical.setAttribute("fill", $SIGNAL_ERROR_COLOR);
 				errors++;
 			} else {
 				mark = document.getElementById("mark_" + i + "." + j);
 				markOpacity = mark.getAttribute("opacity");
 				if (data.points[j][i] != 0 && markOpacity == "1") {
+					signalHorizontal.setAttribute("opacity", "1");
+					signalHorizontal.setAttribute("fill", $SIGNAL_ERROR_COLOR);
+					signalVertical.setAttribute("opacity", "1");
+					signalVertical.setAttribute("fill", $SIGNAL_ERROR_COLOR);
 					errors++;
 				}
 			}
@@ -246,8 +258,8 @@ function validate() {
 			if (color != data.colors[data.points[j][i]]) {
 				validated = false;
 				totalValidated = false;
-				if (signal.getAttribute("fill") == $VALIDATED_COLOR)
-					signal.setAttribute("fill", data.colors[0]);
+				if (signal.getAttribute("opacity") == "1") 
+					signal.setAttribute("opacity", "0");
 				break;
 			}
 		}
@@ -258,7 +270,10 @@ function validate() {
 				number = document.getElementById("number_0." + i + "." + j);
 				number.setAttribute("fill", squareNumber.getAttribute("fill"));
 			}
-			signal.setAttribute("fill", $VALIDATED_COLOR);
+			if (signal.getAttribute("opacity") == "0" || signal.getAttribute("fill") == $SIGNAL_ERROR_COLOR) {
+				signal.setAttribute("fill", $SIGNAL_CORRECT_COLOR);
+				signal.setAttribute("opacity", "1");
+			}	
 		}
 	}
 	for (i = 0; i < data.settings.height; i++) {
@@ -270,8 +285,8 @@ function validate() {
 			if (color != data.colors[data.points[i][j]]) {
 				validated = false;
 				totalValidated = false;
-				if (signal.getAttribute("fill") == $VALIDATED_COLOR)
-					signal.setAttribute("fill", data.colors[0]);
+				if (signal.getAttribute("opacity") == "1")
+					signal.setAttribute("opacity", "0");
 				break;
 			}
 		}
@@ -282,7 +297,10 @@ function validate() {
 				number = document.getElementById("number_1." + i + "." + j);
 				number.setAttribute("fill", squareNumber.getAttribute("fill"));
 			}
-			signal.setAttribute("fill", $VALIDATED_COLOR);
+			if (signal.getAttribute("opacity") == "0" || signal.getAttribute("fill") == $SIGNAL_ERROR_COLOR) {
+				signal.setAttribute("fill", $SIGNAL_CORRECT_COLOR);
+				signal.setAttribute("opacity", "1");
+			}	
 		}
 	}
 	if (totalValidated) {
@@ -304,6 +322,7 @@ function validate() {
 function changeAreaSize() {
 	var pos_x = data.settings.horizontalNumbersLength * size;
 	var pos_y = data.settings.verticalNumbersLength * size;
+	changeBackgroundSize(pos_x, pos_y);
 	for (i = 0; i < data.settings.width; i++) {
 		for (j = 0; j < data.settings.height; j++) {
 			changeMarkSize(pos_x, pos_y, i, j);
@@ -334,6 +353,14 @@ function changeAreaSize() {
 	}
 	changeCalculatedSize(pos_x, pos_y, 0);
 	changeCalculatedSize(pos_x, pos_y, 1);
+}
+
+function changeBackgroundSize(pos_x, pos_y) {
+	var background = document.getElementById("background");
+	background.setAttribute("height", size * data.settings.height);
+	background.setAttribute("width", size * data.settings.width);
+	background.setAttribute("x", pos_x);
+	background.setAttribute("y", pos_y);
 }
 
 function changeMarkSize(pos_x, pos_y, i, j) {
@@ -374,7 +401,7 @@ function changeSignalSize(pos_x, pos_y, orientation, i) {
 		signal.setAttribute("y", pos_y + (data.settings.height + 1) * size);
 	} else {
 		signal.setAttribute("x", pos_x + (data.settings.width + 1) * size);
-		signal.setAttribute("y", pos_y + (i + 1) * size);
+		signal.setAttribute("y", pos_y + (i + 0.9) * size);
 	}
 }
 
@@ -422,9 +449,9 @@ function changeCalculatedSize(pos_x, pos_y, orientation) {
 	var calculated = document.getElementById("calculated_" + orientation);
 	calculated.setAttribute("font-size", size);
 	if (orientation == 0) {
-		calculated.setAttribute("x", pos_x + (data.settings.width + 0.5) * size);
+		calculated.setAttribute("x", pos_x + (data.settings.width + 1) * size + size / 4);
 	} else {
-		calculated.setAttribute("y", pos_y + (data.settings.height + 1) * size);
+		calculated.setAttribute("y", pos_y + (data.settings.height + 1) * size + size);
 	}
 }
 
@@ -507,7 +534,7 @@ function refreshCalculatedValues(i, j) {
 	calculatedHorizontal.textContent = calcHorizontal;
 	calculatedVertical.textContent = calcVertical;
 	var pos_y = data.settings.verticalNumbersLength * size;
-	calculatedHorizontal.setAttribute("y", pos_y + size * (j + 1));
+	calculatedHorizontal.setAttribute("y", pos_y + size * (j + 0.9));
 	var pos_x = data.settings.horizontalNumbersLength * size;
 	calculatedVertical.setAttribute("x", pos_x + size * (i + 0.5));
 }
@@ -576,6 +603,17 @@ function createSquareColor(i) {
 	document.getElementById("colors").appendChild(squareColor);
 }
 
+function createBackground(pos_x, pos_y) {
+	var background = document.createElementNS($SVG_LIB, "rect");
+	background.setAttribute("id", "background");
+	background.setAttribute("fill", data.colors[0]);
+	background.setAttribute("height", size * data.settings.height);
+	background.setAttribute("width", size * data.settings.width);
+	background.setAttribute("x", pos_x);
+	background.setAttribute("y", pos_y);
+	document.getElementById("main").appendChild(background);
+}
+
 function createMark(pos_x, pos_y, i, j) {
 	var mark = document.createElementNS($SVG_LIB, "text");
 	mark.setAttribute("id", "mark_" + i + "." + j);
@@ -635,8 +673,8 @@ function createSquareAux(pos_x, pos_y, i, j) {
 function createSignal(pos_x, pos_y, orientation, i) {
 	var signal = document.createElementNS($SVG_LIB, "text");
 	signal.setAttribute("id", "signal_" + orientation + "." + i);
-	signal.setAttribute("fill", data.colors[0]);
 	signal.setAttribute("font-size", size);
+	signal.setAttribute("opacity", "0");
 	if (orientation == 0) {
 		signal.setAttribute("text-anchor", "start");
 		signal.setAttribute("x", pos_x + i * size);
@@ -645,7 +683,7 @@ function createSignal(pos_x, pos_y, orientation, i) {
 	} else {
 		signal.setAttribute("text-anchor", "end");
 		signal.setAttribute("x", pos_x + (data.settings.width + 1) * size);
-		signal.setAttribute("y", pos_y + (i + 1) * size);
+		signal.setAttribute("y", pos_y + (i + 0.9) * size);
 		signal.textContent = "\u23F4";
 	}
 	document.getElementById("components").appendChild(signal);
@@ -660,11 +698,13 @@ function createSquareNumber(pos_x, pos_y, orientation, i, j) {
 	if (orientation == 0) {
 		squareNumber.setAttribute("x", pos_x + i * size);
 		squareNumber.setAttribute("y", pos_y - j * size);
-		squareNumber.setAttribute("fill", data.verticalNumbers[i][j - 1].color);
+		var colorIndex = data.verticalNumbers[i][j - 1].color;
+		squareNumber.setAttribute("fill", data.colors[colorIndex]);
 	} else {
 		squareNumber.setAttribute("x", pos_x - j * size);
 		squareNumber.setAttribute("y", pos_y + i * size);
-		squareNumber.setAttribute("fill", data.horizontalNumbers[i][j - 1].color);
+		var colorIndex = data.horizontalNumbers[i][j - 1].color;
+		squareNumber.setAttribute("fill", data.colors[colorIndex]);
 	}
 	squareNumber.onclick = markSquareNumber;
 	document.getElementById("components").appendChild(squareNumber);
@@ -677,7 +717,7 @@ function createNumber(pos_x, pos_y, orientation, i, j) {
 	number.setAttribute("font-family", "serif");
 	number.setAttribute("font-size", size * 0.9);
 	number.setAttribute("font-weight", "normal");
-	number.setAttribute("fill", data.colors[0]);
+	number.setAttribute("fill", $NUMBER_DEFAULT_COLOR);
 	if (orientation == 0) {
 		number.setAttribute("x", pos_x + i * size + 0.5 * size);
 		number.setAttribute("y", pos_y - j * size + 0.8 * size);
@@ -720,13 +760,12 @@ function createCalculated(pos_x, pos_y, orientation) {
 	calculated.setAttribute("font-size", size);
 	calculated.setAttribute("font-weight", "bold");
 	calculated.setAttribute("fill", $CALCULATED_EMPTY_COLOR);
-	calculated.textContent = " ";
 	if (orientation == 0) {
 		calculated.setAttribute("text-anchor", "start");
-		calculated.setAttribute("x", pos_x + (data.settings.width + 0.5) * size);
+		calculated.setAttribute("x", pos_x + (data.settings.width + 1) * size + size / 4);
 	} else {
 		calculated.setAttribute("text-anchor", "middle");
-		calculated.setAttribute("y", pos_y + (data.settings.height + 1) * size);
+		calculated.setAttribute("y", pos_y + (data.settings.height + 1) * size + size);
 	}
 	document.getElementById("components").appendChild(calculated);
 }
@@ -931,7 +970,7 @@ function markSquareNumber(evt) {
 		}
 		else {
 			evt.target.setAttribute("opacity", "1");
-			number.setAttribute("fill", data.colors[0]);
+			number.setAttribute("fill", $NUMBER_DEFAULT_COLOR);
 			number.setAttribute("font-weight", "normal");
 		}
 	}
@@ -954,7 +993,7 @@ function markNumber(evt) {
 		}
 		else {
 			squareNumber.setAttribute("opacity", "1");
-			evt.target.setAttribute("fill", data.colors[0]);
+			evt.target.setAttribute("fill", $NUMBER_DEFAULT_COLOR);
 			evt.target.setAttribute("font-weight", "normal");
 		}
 	}

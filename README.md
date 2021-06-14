@@ -14,8 +14,8 @@ Here you can create a drawing by choosing its width and height. You can use diff
 - Redo: Redo the next modification
 - Export to Json: Exports the drawing to json format compatible with the game view
 - Grid Length: Specifies the size of the editor grid
-- Input Color: Selects the color to paint and stores the list of used colors
-
+- Current Color: Selects the color to paint and stores the list of used colors
+- Background Color: Sets the background color of the drawing
 
 ### Controls
 | Mouse | Action |
