@@ -4,7 +4,6 @@ const $MAX_WIDTH_DIMENSION = 125;
 const $MAX_HEIGTH_DIMENSION = 50;
 const $MIN_SIZE = 10;
 const $MAX_SIZE = 30;
-const $BACKGROUND_COLOR = "#ffffff";
 const $LINE_COLOR = "#808080";
 const $RULE_COLOR = "#ff00ff";
 const $ARROW_COLOR = "#ff00ff";
@@ -17,6 +16,7 @@ var gridLength = 5;
 
 var currentColor = "#000000";
 var presetColors = [currentColor];
+var backgroundColor = "#ffffff";
 var clicked = false;
 var states = [];
 var currentKey = 0;
@@ -27,6 +27,7 @@ var colorSquare;
 
 //#region Main Functions
 function initialize() {
+    createBackground();
     for (i = 0; i <= width; i++) {
         createLine(0, i);
     }
@@ -78,7 +79,7 @@ function redo() {
 
 function exportJson() {
     var data = {
-        colors: [$BACKGROUND_COLOR],
+        colors: [backgroundColor],
         settings: {
             width: width,
             height: height,
@@ -129,6 +130,12 @@ function onColorChange() {
     }
 }
 
+function onColorBackgroundChange() {
+    var backgroundColorOld = backgroundColor;
+    backgroundColor = document.getElementById("colorBackInput").value;
+    refreshBackground(backgroundColorOld);
+}
+
 function endColorsChange() {
     if (clicked) {
         var squareAux, id, square, squareColor;
@@ -141,11 +148,11 @@ function endColorsChange() {
                     square = document.getElementById(id);
                     squareColor = squareAux.getAttribute("fill");
                     square.setAttribute("fill", squareColor);
-                    if (squareColor == $BACKGROUND_COLOR)
+                    if (squareColor == backgroundColor)
                         square.setAttribute("opacity", "0");
                     else
                         square.setAttribute("opacity", "1");
-                    squareAux.setAttribute("fill", $BACKGROUND_COLOR);
+                    squareAux.setAttribute("fill", backgroundColor);
                     squareAux.setAttribute("opacity", "0");
                 }
             }
@@ -158,6 +165,7 @@ function endColorsChange() {
 
 //#region Auxiliar Functions
 function changeAreaSize() {
+    changeBackgroundSize();
     for (i = 0; i <= width; i++) {
         changeLineSize(0, i);
     }
@@ -178,6 +186,12 @@ function changeAreaSize() {
     changeIncreaseArrowSize(1);
     changeDecreaseArrowSize(2);
     changeIncreaseArrowSize(2);
+}
+
+function changeBackgroundSize() {
+    var background = document.getElementById("background");
+    background.setAttribute("height", size * height);
+	background.setAttribute("width", size * width);
 }
 
 function changeLineSize(orientation, i) {
@@ -349,6 +363,7 @@ function refreshArea() {
     while (components.firstChild) {
         components.removeChild(components.firstChild);
     }
+    createBackground();
     for (i = 0; i <= width; i++) {
         createLine(0, i);
     }
@@ -371,7 +386,7 @@ function refreshArea() {
         for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
             var square = document.getElementById("square_" + i + "." + j);
             var color = square.getAttribute("fill");
-            if (color != $BACKGROUND_COLOR) {
+            if (color != backgroundColor) {
                 if (i >= width || j >= height)
                     square.setAttribute("opacity", "0");
                 else
@@ -381,13 +396,28 @@ function refreshArea() {
     }
 }
 
+function refreshBackground(backgroundColorOld){
+    var background = document.getElementById("background");
+    background.setAttribute("fill", backgroundColor);
+    var square, squareAux;
+    for (i = 0; i < $MAX_WIDTH_DIMENSION; i++) {
+        for (j = 0; j < $MAX_HEIGTH_DIMENSION; j++) {
+            squareAux = document.getElementById("square_aux_" + i + "." + j);
+            squareAux.setAttribute("fill", backgroundColor);
+            square = document.getElementById("square_" + i + "." + j);
+            if (square.getAttribute("fill") == backgroundColorOld)
+                square.setAttribute("fill", backgroundColor);
+        }
+    } 
+}
+
 function cleanAllSquaresAux() {
     var squareAux;
     for (i = 0; i < width; i++) {
         for (j = 0; j < height; j++) {
             squareAux = document.getElementById("square_aux_" + i + "." + j);
             if (squareAux.getAttribute("opacity") == "1") {
-                squareAux.setAttribute("fill", $BACKGROUND_COLOR);
+                squareAux.setAttribute("fill", backgroundColor);
                 squareAux.setAttribute("opacity", "0");
             }
         }
@@ -397,12 +427,12 @@ function cleanAllSquaresAux() {
 function refreshSquareAux(i, j) {
     squareAux = document.getElementById("square_aux_" + i + "." + j);
     square = document.getElementById("square_" + i + "." + j);
-    if (colorSquare == $BACKGROUND_COLOR) {
+    if (colorSquare == backgroundColor) {
         squareAux.setAttribute("fill", colorSquare);
         squareAux.setAttribute("opacity", "1");
     } else {
         var squareColor = square.getAttribute("fill");
-        if (squareColor == $BACKGROUND_COLOR) {
+        if (squareColor == backgroundColor) {
             squareAux.setAttribute("fill", colorSquare);
             squareAux.setAttribute("opacity", "1");
         }
@@ -421,7 +451,7 @@ function refreshCalculatedValues(i, j) {
         while (countRight <= width - 1) {
             square = document.getElementById("square_" + countRight + "." + j);
             squareAux = document.getElementById("square_aux_" + countRight + "." + j);
-            if (square.getAttribute("fill") == colorSquare || (squareAux.getAttribute("fill") == colorSquare && colorSquare != $BACKGROUND_COLOR)) {
+            if (square.getAttribute("fill") == colorSquare || (squareAux.getAttribute("fill") == colorSquare && colorSquare != backgroundColor)) {
                 countRight++;
                 calcHorizontal++;
             } else break;
@@ -430,7 +460,7 @@ function refreshCalculatedValues(i, j) {
         while (countLeft >= 0) {
             square = document.getElementById("square_" + countLeft + "." + j);
             squareAux = document.getElementById("square_aux_" + countLeft + "." + j);
-            if (square.getAttribute("fill") == colorSquare || (squareAux.getAttribute("fill") == colorSquare && colorSquare != $BACKGROUND_COLOR)) {
+            if (square.getAttribute("fill") == colorSquare || (squareAux.getAttribute("fill") == colorSquare && colorSquare != backgroundColor)) {
                 countLeft--;
                 calcHorizontal++;
             } else break;
@@ -440,7 +470,7 @@ function refreshCalculatedValues(i, j) {
         while (countDown <= height - 1) {
             square = document.getElementById("square_" + i + "." + countDown);
             squareAux = document.getElementById("square_aux_" + i + "." + countDown);
-            if (square.getAttribute("fill") == colorSquare || (squareAux.getAttribute("fill") == colorSquare && colorSquare != $BACKGROUND_COLOR)) {
+            if (square.getAttribute("fill") == colorSquare || (squareAux.getAttribute("fill") == colorSquare && colorSquare != backgroundColor)) {
                 countDown++;
                 calcVertical++;
             } else break;
@@ -449,14 +479,14 @@ function refreshCalculatedValues(i, j) {
         while (countUp >= 0) {
             square = document.getElementById("square_" + i + "." + countUp);
             squareAux = document.getElementById("square_aux_" + i + "." + countUp);
-            if (square.getAttribute("fill") == colorSquare || (squareAux.getAttribute("fill") == colorSquare && colorSquare != $BACKGROUND_COLOR)) {
+            if (square.getAttribute("fill") == colorSquare || (squareAux.getAttribute("fill") == colorSquare && colorSquare != backgroundColor)) {
                 countUp--;
                 calcVertical++;
             } else break;
         }
         var calculatedHorizontal = document.getElementById("calculated_0");
         var calculatedVertical = document.getElementById("calculated_1");
-        if (colorSquare != $BACKGROUND_COLOR) {
+        if (colorSquare != backgroundColor) {
             calculatedHorizontal.setAttribute("fill", colorSquare);
             calculatedVertical.setAttribute("fill", colorSquare);
         } else {
@@ -472,6 +502,15 @@ function refreshCalculatedValues(i, j) {
 //#endregion
 
 //#region Create SVG Elements Functions
+function createBackground() {
+	var background = document.createElementNS($SVG_LIB, "rect");
+	background.setAttribute("id", "background");
+	background.setAttribute("fill", backgroundColor);
+	background.setAttribute("height", size * height);
+	background.setAttribute("width", size * width);
+	document.getElementById("components").appendChild(background);
+}
+
 function createLine(orientation, i) {
     var line = document.createElementNS($SVG_LIB, "line");
     line.setAttribute("id", "line_" + orientation + "." + i);
@@ -502,7 +541,7 @@ function createSquare(i, j) {
     square.setAttribute("x", i * size);
     square.setAttribute("y", j * size);
     square.setAttribute("stroke", $LINE_COLOR);
-    square.setAttribute("fill", $BACKGROUND_COLOR);
+    square.setAttribute("fill", backgroundColor);
     square.setAttribute("opacity", "0");
     document.getElementById("main").appendChild(square);
 }
@@ -514,7 +553,7 @@ function createSquareAux(i, j) {
     squareAux.setAttribute("width", size * 0.95);
     squareAux.setAttribute("x", i * size);
     squareAux.setAttribute("y", j * size);
-    squareAux.setAttribute("fill", $BACKGROUND_COLOR);
+    squareAux.setAttribute("fill", backgroundColor);
     squareAux.setAttribute("opacity", "0");
     squareAux.onmouseover = highlightSquare;
     squareAux.onmouseout = fadeSquare;
@@ -692,7 +731,7 @@ function initColorsChange(evt) {
         var square = document.getElementById("square_" + squareI + "." + squareJ);
         if (squareI < width && squareJ < height) {
             colorSquare = square.getAttribute("fill");
-            if (colorSquare == $BACKGROUND_COLOR) {
+            if (colorSquare == backgroundColor) {
                 evt.target.setAttribute("fill", currentColor);
                 evt.target.setAttribute("opacity", "1");
                 square.setAttribute("fill", currentColor);
@@ -700,11 +739,11 @@ function initColorsChange(evt) {
                 colorSquare = currentColor;
             } else {
                 if (colorSquare == currentColor) {
-                    evt.target.setAttribute("fill", $BACKGROUND_COLOR);
+                    evt.target.setAttribute("fill", backgroundColor);
                     evt.target.setAttribute("opacity", "0");
-                    square.setAttribute("fill", $BACKGROUND_COLOR);
+                    square.setAttribute("fill", backgroundColor);
                     square.setAttribute("opacity", "0");
-                    colorSquare = $BACKGROUND_COLOR;
+                    colorSquare = backgroundColor;
                 } else {
                     evt.target.setAttribute("fill", currentColor);
                     square.setAttribute("fill", currentColor);

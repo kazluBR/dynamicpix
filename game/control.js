@@ -5,6 +5,7 @@ const $CALCULATED_EMPTY_COLOR = "#808080";
 const $RULE_COLOR = "#ff00ff";
 const $SIGNAL_CORRECT_COLOR = "#adff2f";
 const $SIGNAL_ERROR_COLOR = "#b22222";
+const $NUMBER_DEFAULT_COLOR = "#ffffff";
 
 var size = 20;
 var totalValidated = false;
@@ -716,7 +717,7 @@ function createNumber(pos_x, pos_y, orientation, i, j) {
 	number.setAttribute("font-family", "serif");
 	number.setAttribute("font-size", size * 0.9);
 	number.setAttribute("font-weight", "normal");
-	number.setAttribute("fill", data.colors[0]);
+	number.setAttribute("fill", $NUMBER_DEFAULT_COLOR);
 	if (orientation == 0) {
 		number.setAttribute("x", pos_x + i * size + 0.5 * size);
 		number.setAttribute("y", pos_y - j * size + 0.8 * size);
@@ -969,7 +970,7 @@ function markSquareNumber(evt) {
 		}
 		else {
 			evt.target.setAttribute("opacity", "1");
-			number.setAttribute("fill", data.colors[0]);
+			number.setAttribute("fill", $NUMBER_DEFAULT_COLOR);
 			number.setAttribute("font-weight", "normal");
 		}
 	}
@@ -992,7 +993,7 @@ function markNumber(evt) {
 		}
 		else {
 			squareNumber.setAttribute("opacity", "1");
-			evt.target.setAttribute("fill", data.colors[0]);
+			evt.target.setAttribute("fill", $NUMBER_DEFAULT_COLOR);
 			evt.target.setAttribute("font-weight", "normal");
 		}
 	}
