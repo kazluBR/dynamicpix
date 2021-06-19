@@ -4,6 +4,8 @@ const $MAX_WIDTH_DIMENSION = 125;
 const $MAX_HEIGTH_DIMENSION = 50;
 const $MIN_SIZE = 10;
 const $MAX_SIZE = 30;
+const $TRANSLATE_X = 10;
+const $TRANSLATE_Y = 10;
 const $LINE_COLOR = "#808080";
 const $RULE_COLOR = "#ff00ff";
 const $ARROW_COLOR = "#ff00ff";
@@ -26,7 +28,8 @@ var squareJ;
 var colorSquare;
 
 //#region Main Functions
-function initialize() {
+function init() {
+    createSvgDocument();
     createBackground();
     for (i = 0; i <= width; i++) {
         createLine(0, i);
@@ -49,6 +52,14 @@ function initialize() {
     createDecreaseArrow(2);
     createIncreaseArrow(2);
     saveState();
+    document.body.onmousedown = function (e) {
+        if (e.button == 1) {
+            return false;
+        }
+    }
+    document.body.onmouseup = function (e) {
+        endColorsChange();
+    }
 }
 
 function increaseAreaSize() {
@@ -135,36 +146,11 @@ function onColorBackgroundChange() {
     backgroundColor = document.getElementById("colorBackInput").value;
     refreshBackground(backgroundColorOld);
 }
-
-function endColorsChange() {
-    if (clicked) {
-        var squareAux, id, square, squareColor;
-        for (i = 0; i < width; i++) {
-            for (j = 0; j < height; j++) {
-                squareAux = document.getElementById("square_aux_" + i + "." + j);
-                if (squareAux.getAttribute("opacity") == "1") {
-                    id = squareAux.getAttribute("id");
-                    id = id.replace("square_aux_", "square_");
-                    square = document.getElementById(id);
-                    squareColor = squareAux.getAttribute("fill");
-                    square.setAttribute("fill", squareColor);
-                    if (squareColor == backgroundColor)
-                        square.setAttribute("opacity", "0");
-                    else
-                        square.setAttribute("opacity", "1");
-                    squareAux.setAttribute("fill", backgroundColor);
-                    squareAux.setAttribute("opacity", "0");
-                }
-            }
-        }
-        clicked = false;
-        saveState();
-    }
-}
 //#endregion
 
 //#region Auxiliar Functions
 function changeAreaSize() {
+    changeSvgDocumentSize();
     changeBackgroundSize();
     for (i = 0; i <= width; i++) {
         changeLineSize(0, i);
@@ -188,10 +174,16 @@ function changeAreaSize() {
     changeIncreaseArrowSize(2);
 }
 
+function changeSvgDocumentSize() {
+    var svg = document.getElementById("svg");
+    svg.setAttribute("height", size * (height + 3) + $TRANSLATE_Y);
+    svg.setAttribute("width", size * (width + 3) + $TRANSLATE_X);
+}
+
 function changeBackgroundSize() {
     var background = document.getElementById("background");
     background.setAttribute("height", size * height);
-	background.setAttribute("width", size * width);
+    background.setAttribute("width", size * width);
 }
 
 function changeLineSize(orientation, i) {
@@ -359,6 +351,7 @@ function recoverState() {
 }
 
 function refreshArea() {
+    changeSvgDocumentSize();
     var components = document.getElementById("components");
     while (components.firstChild) {
         components.removeChild(components.firstChild);
@@ -396,7 +389,7 @@ function refreshArea() {
     }
 }
 
-function refreshBackground(backgroundColorOld){
+function refreshBackground(backgroundColorOld) {
     var background = document.getElementById("background");
     background.setAttribute("fill", backgroundColor);
     var square, squareAux;
@@ -408,7 +401,7 @@ function refreshBackground(backgroundColorOld){
             if (square.getAttribute("fill") == backgroundColorOld)
                 square.setAttribute("fill", backgroundColor);
         }
-    } 
+    }
 }
 
 function cleanAllSquaresAux() {
@@ -502,13 +495,42 @@ function refreshCalculatedValues(i, j) {
 //#endregion
 
 //#region Create SVG Elements Functions
+function createSvgDocument() {
+    var editor = document.getElementById("editor");
+    editor.oncontextmenu = function () {
+        return false;
+    }
+    var svg = document.createElementNS($SVG_LIB, "svg");
+    svg.setAttribute("id", "svg");
+    svg.setAttribute("height", size * (height + 3) + $TRANSLATE_Y);
+    svg.setAttribute("width", size * (width + 3) + $TRANSLATE_X);
+    var transform = "translate(" + $TRANSLATE_X + "," + $TRANSLATE_Y + ")";
+    var components = document.createElementNS($SVG_LIB, "g");
+    components.setAttribute("id", "components");
+    components.setAttribute("transform", transform);
+    svg.appendChild(components);
+    var main = document.createElementNS($SVG_LIB, "g");
+    main.setAttribute("id", "main");
+    main.setAttribute("transform", transform);
+    svg.appendChild(main);
+    var aux = document.createElementNS($SVG_LIB, "g");
+    aux.setAttribute("id", "aux");
+    aux.setAttribute("transform", transform);
+    svg.appendChild(aux);
+    var arrows = document.createElementNS($SVG_LIB, "g");
+    arrows.setAttribute("id", "arrows");
+    arrows.setAttribute("transform", transform);
+    svg.appendChild(arrows);
+    editor.appendChild(svg);
+}
+
 function createBackground() {
-	var background = document.createElementNS($SVG_LIB, "rect");
-	background.setAttribute("id", "background");
-	background.setAttribute("fill", backgroundColor);
-	background.setAttribute("height", size * height);
-	background.setAttribute("width", size * width);
-	document.getElementById("components").appendChild(background);
+    var background = document.createElementNS($SVG_LIB, "rect");
+    background.setAttribute("id", "background");
+    background.setAttribute("fill", backgroundColor);
+    background.setAttribute("height", size * height);
+    background.setAttribute("width", size * width);
+    document.getElementById("components").appendChild(background);
 }
 
 function createLine(orientation, i) {
@@ -859,5 +881,31 @@ function increaseSize(evt) {
             width -= gridLength;
     }
     refreshArea();
+}
+
+function endColorsChange() {
+    if (clicked) {
+        var squareAux, id, square, squareColor;
+        for (i = 0; i < width; i++) {
+            for (j = 0; j < height; j++) {
+                squareAux = document.getElementById("square_aux_" + i + "." + j);
+                if (squareAux.getAttribute("opacity") == "1") {
+                    id = squareAux.getAttribute("id");
+                    id = id.replace("square_aux_", "square_");
+                    square = document.getElementById(id);
+                    squareColor = squareAux.getAttribute("fill");
+                    square.setAttribute("fill", squareColor);
+                    if (squareColor == backgroundColor)
+                        square.setAttribute("opacity", "0");
+                    else
+                        square.setAttribute("opacity", "1");
+                    squareAux.setAttribute("fill", backgroundColor);
+                    squareAux.setAttribute("opacity", "0");
+                }
+            }
+        }
+        clicked = false;
+        saveState();
+    }
 }
 //#endregion
