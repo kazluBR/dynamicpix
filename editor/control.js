@@ -909,3 +909,5 @@ function endColorsChange() {
     }
 }
 //#endregion
+
+window.onload = init;
