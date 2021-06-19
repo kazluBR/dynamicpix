@@ -36,26 +36,7 @@
 			title="Background Color" onchange="onColorBackgroundChange()" />
 	</div>
 	<hr />
-	<div oncontextmenu="return false">
-		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100cm" height="100cm">
-			<g id="components" transform="translate(10, 10)" />
-			<g id="main" transform="translate(10, 10)" />
-			<g id="aux" transform="translate(10, 10)" />
-			<g id="arrows" transform="translate(10, 10)" />
-		</svg>
-	</div>
-
-	<script>
-		window.onload = initialize;
-		document.body.onmousedown = function (e) {
-			if (e.which === 2) {
-				return false;
-			}
-		}
-		document.body.onmouseup = function (e) {
-			endColorsChange();
-		}
-	</script>
+	<div id="editor"></div>
 </body>
 
 </html>

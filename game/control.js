@@ -1,4 +1,7 @@
 const $SVG_LIB = "http://www.w3.org/2000/svg";
+const $SQUARE_COLOR_SIZE = 40;
+const $TRANSLATE_X = 10;
+const $TRANSLATE_Y = 0;
 const $LINE_COLOR = "#808080";
 const $MARK_COLOR = "#808080";
 const $CALCULATED_EMPTY_COLOR = "#808080";
@@ -21,6 +24,19 @@ var colorSelected;
 var markSelected;
 
 //#region Main Functions
+function init() {
+	document.body.onmousedown = function (e) {
+		if (e.button == 1) {
+			switchSquareColor();
+			return false;
+		}
+	}
+	document.body.onmouseup = function (e) {
+		endColorsChange();
+	}
+	createSvgDocument();
+}
+
 function loadJson(event) {
 	var files = event.target.files;
 	if (files.length <= 0) {
@@ -33,15 +49,16 @@ function loadJson(event) {
 	fr.onload = function (e) {
 		var result = e.target.result;
 		data = JSON.parse(result);
-		initialize();
+		loadPuzzle();
 		window.location.hash = "#menu";
 	}
 	fr.readAsText(files.item(0));
 }
 
-function initialize() {
+function loadPuzzle() {
 	if (data != null) {
 		clean();
+		changeSvgDocumentSize();
 		totalValidated = false;
 		colorSelected = data.colors[1];
 		for (i = 1; i < data.colors.length; i++) {
@@ -159,70 +176,6 @@ function solve() {
 		}
 	}
 }
-
-function switchSquareColor() {
-	var colors = document.getElementById("colors").children;
-	var selected;
-	for (i = 0; i < colors.length; i++) {
-		if (colors[i].getAttribute("stroke-width") == 3) {
-			if (i == colors.length - 1)
-				selected = 0;
-			else
-				selected = i + 1;
-			break;
-		}
-	}
-	colorSelected = data.colors[selected + 1];
-	colors[selected].setAttribute("stroke-width", "3");
-	var squareColor;
-	for (i = 1; i < data.colors.length; i++) {
-		squareColor = document.getElementById("squareColor_" + i);
-		if (i != selected + 1)
-			squareColor.setAttribute("stroke-width", "1");
-	}
-}
-
-function endColorsChange() {
-	if (clicked && data != null) {
-		var squareAux, id, square, squareColor, markAux, mark;
-		for (i = 0; i < data.settings.width; i++) {
-			for (j = 0; j < data.settings.height; j++) {
-				squareAux = document.getElementById("square_aux_" + i + "." + j);
-				if (squareAux.getAttribute("opacity") == "1") {
-					id = squareAux.getAttribute("id");
-					id = id.replace("square_aux_", "square_");
-					square = document.getElementById(id);
-					squareColor = squareAux.getAttribute("fill");
-					square.setAttribute("fill", squareColor);
-					if (squareColor == data.colors[0])
-						square.setAttribute("opacity", "0");
-					else
-						square.setAttribute("opacity", "1");
-					squareAux.setAttribute("fill", data.colors[0]);
-					squareAux.setAttribute("opacity", "0");
-				}
-				markAux = document.getElementById("mark_aux_" + i + "." + j);
-				if (markAux.getAttribute("opacity") == "1") {
-					id = markAux.getAttribute("id");
-					id = id.replace("mark_aux_", "mark_");
-					mark = document.getElementById(id);
-					mark.setAttribute("opacity", "1");
-					markAux.setAttribute("opacity", "0");
-				}
-				else if (markAux.getAttribute("opacity") == "0.1") {
-					id = markAux.getAttribute("id");
-					id = id.replace("mark_aux_", "mark_");
-					mark = document.getElementById(id);
-					mark.setAttribute("opacity", "0");
-					markAux.setAttribute("opacity", "0");
-				}
-			}
-		}
-		clicked = false;
-		validate();
-		saveState();
-	}
-}
 //#endregion
 
 //#region Auxiliar Functions
@@ -320,6 +273,7 @@ function validate() {
 }
 
 function changeAreaSize() {
+	changeSvgDocumentSize();
 	var pos_x = data.settings.horizontalNumbersLength * size;
 	var pos_y = data.settings.verticalNumbersLength * size;
 	changeBackgroundSize(pos_x, pos_y);
@@ -353,6 +307,12 @@ function changeAreaSize() {
 	}
 	changeCalculatedSize(pos_x, pos_y, 0);
 	changeCalculatedSize(pos_x, pos_y, 1);
+}
+
+function changeSvgDocumentSize() {
+    var svg = document.getElementById("svg");
+    svg.setAttribute("height", size * (data.settings.verticalNumbersLength) + size * (data.settings.height + 3) + $TRANSLATE_Y + $SQUARE_COLOR_SIZE + $SQUARE_COLOR_SIZE / 2);
+    svg.setAttribute("width", size * (data.settings.horizontalNumbersLength) + size * (data.settings.width + 3) + $TRANSLATE_X);
 }
 
 function changeBackgroundSize(pos_x, pos_y) {
@@ -586,6 +546,35 @@ function refreshSquareAndMark(i, j) {
 //#endregion
 
 //#region Create SVG Element Functions
+function createSvgDocument() {
+    var game = document.getElementById("game");
+    game.oncontextmenu = function () {
+        return false;
+    }
+    var svg = document.createElementNS($SVG_LIB, "svg");
+    svg.setAttribute("id", "svg");
+	var transform = "translate(" + $TRANSLATE_X + "," + $TRANSLATE_Y + ")";
+	var colors = document.createElementNS($SVG_LIB, "g");
+	colors.setAttribute("transform", transform);
+    colors.setAttribute("id", "colors");
+	svg.appendChild(colors);
+	var calculatedY = $TRANSLATE_Y + $SQUARE_COLOR_SIZE + $SQUARE_COLOR_SIZE / 2;
+    transform = "translate(" + $TRANSLATE_X + "," + calculatedY + ")";
+	var main = document.createElementNS($SVG_LIB, "g");
+    main.setAttribute("id", "main");
+    main.setAttribute("transform", transform);
+	svg.appendChild(main);
+    var components = document.createElementNS($SVG_LIB, "g");
+    components.setAttribute("id", "components");
+    components.setAttribute("transform", transform);
+    svg.appendChild(components);
+    var aux = document.createElementNS($SVG_LIB, "g");
+    aux.setAttribute("id", "aux");
+    aux.setAttribute("transform", transform);
+    svg.appendChild(aux);
+    game.appendChild(svg);
+}
+
 function createSquareColor(i) {
 	var squareColor = document.createElementNS($SVG_LIB, "rect");
 	squareColor.setAttribute("id", "squareColor_" + i);
@@ -594,11 +583,11 @@ function createSquareColor(i) {
 	else
 		squareColor.setAttribute("stroke-width", "1");
 	squareColor.setAttribute("stroke", "black");
-	squareColor.setAttribute("height", 40);
-	squareColor.setAttribute("width", 40);
+	squareColor.setAttribute("height", $SQUARE_COLOR_SIZE);
+	squareColor.setAttribute("width", $SQUARE_COLOR_SIZE);
 	squareColor.setAttribute("fill", data.colors[i]);
-	squareColor.setAttribute("x", ((i - 1) * 40) + 5);
-	squareColor.setAttribute("y", 5);
+	squareColor.setAttribute("x", ((i - 1) * $SQUARE_COLOR_SIZE) + $SQUARE_COLOR_SIZE / 8);
+	squareColor.setAttribute("y", $SQUARE_COLOR_SIZE / 8);
 	squareColor.onclick = markSquareColor;
 	document.getElementById("colors").appendChild(squareColor);
 }
@@ -998,4 +987,70 @@ function markNumber(evt) {
 		}
 	}
 }
+
+function switchSquareColor() {
+	var colors = document.getElementById("colors").children;
+	var selected;
+	for (i = 0; i < colors.length; i++) {
+		if (colors[i].getAttribute("stroke-width") == 3) {
+			if (i == colors.length - 1)
+				selected = 0;
+			else
+				selected = i + 1;
+			break;
+		}
+	}
+	colorSelected = data.colors[selected + 1];
+	colors[selected].setAttribute("stroke-width", "3");
+	var squareColor;
+	for (i = 1; i < data.colors.length; i++) {
+		squareColor = document.getElementById("squareColor_" + i);
+		if (i != selected + 1)
+			squareColor.setAttribute("stroke-width", "1");
+	}
+}
+
+function endColorsChange() {
+	if (clicked && data != null) {
+		var squareAux, id, square, squareColor, markAux, mark;
+		for (i = 0; i < data.settings.width; i++) {
+			for (j = 0; j < data.settings.height; j++) {
+				squareAux = document.getElementById("square_aux_" + i + "." + j);
+				if (squareAux.getAttribute("opacity") == "1") {
+					id = squareAux.getAttribute("id");
+					id = id.replace("square_aux_", "square_");
+					square = document.getElementById(id);
+					squareColor = squareAux.getAttribute("fill");
+					square.setAttribute("fill", squareColor);
+					if (squareColor == data.colors[0])
+						square.setAttribute("opacity", "0");
+					else
+						square.setAttribute("opacity", "1");
+					squareAux.setAttribute("fill", data.colors[0]);
+					squareAux.setAttribute("opacity", "0");
+				}
+				markAux = document.getElementById("mark_aux_" + i + "." + j);
+				if (markAux.getAttribute("opacity") == "1") {
+					id = markAux.getAttribute("id");
+					id = id.replace("mark_aux_", "mark_");
+					mark = document.getElementById(id);
+					mark.setAttribute("opacity", "1");
+					markAux.setAttribute("opacity", "0");
+				}
+				else if (markAux.getAttribute("opacity") == "0.1") {
+					id = markAux.getAttribute("id");
+					id = id.replace("mark_aux_", "mark_");
+					mark = document.getElementById(id);
+					mark.setAttribute("opacity", "0");
+					markAux.setAttribute("opacity", "0");
+				}
+			}
+		}
+		clicked = false;
+		validate();
+		saveState();
+	}
+}
 //#endregion
+
+window.onload = init;
