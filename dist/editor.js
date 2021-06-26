@@ -1,4 +1,5 @@
 const SVG_LIB = "http://www.w3.org/2000/svg";
+const SQUARE_COLOR_SIZE = 40;
 const MIN_DIMENSION = 3;
 const MAX_WIDTH_DIMENSION = 125;
 const MAX_HEIGTH_DIMENSION = 50;
@@ -15,16 +16,18 @@ class editor {
         this.width = config.width || 5;
         this.height = config.height || 5;
         this.gridLength = config.gridLength || 5;
-        this.currentColor = config.currentColor || "#000000";
-        this.backgroundColor = config.backgroundColor || "#ffffff";
+        this.palette = config.palette || ["#ffffff", "#8e3179", "#ca3435", "#ff91a4", "#fcd667", "#93dfb8", "#b5b35c", "#02a4d3", "#00468c"];
+        this.backgroundColor = this.palette[0];
+        this.currentColor = this.palette[1];
         this.clicked = false;
         this.states = [];
         this.currentKey = 0;
         this.squareI = null;
         this.squareJ = null;
         this.colorSquare = null;
-        document.body.onmousedown = function (e) {
+        document.body.onmousedown = (e) => {
             if (e.button == 1) {
+                this.switchSquareColor();
                 return false;
             }
         }
@@ -34,6 +37,9 @@ class editor {
     //#region Main Functions
     init() {
         this.createSvgDocument();
+        for (let i = 1; i < this.palette.length; i++) {
+            this.createSquareColor(i);
+        }
         this.createBackground();
         for (let i = 0; i <= this.width; i++) {
             this.createLine(0, i);
@@ -94,14 +100,14 @@ class editor {
         }
     }
 
-    setCurrentColor(value) {
-        this.currentColor = value;
-    }
-
-    setBackgroundColor(value) {
+    setPalette(list) {
+        this.palette = list;
+        this.refreshSquareColors();
         let backgroundColorOld = this.backgroundColor;
-        this.backgroundColor = value;
+        this.backgroundColor = list[0];
         this.refreshBackground(backgroundColorOld);
+        this.currentColor = list[1];
+        
     }
 
     exportJson() {
@@ -148,9 +154,19 @@ class editor {
         }
         let svg = document.createElementNS(SVG_LIB, "svg");
         svg.setAttribute("id", "svg");
-        svg.setAttribute("height", this.size * (this.height + 3) + TRANSLATE_Y);
-        svg.setAttribute("width", this.size * (this.width + 3) + TRANSLATE_X);
         let transform = "translate(" + TRANSLATE_X + "," + TRANSLATE_Y + ")";
+        let colors = document.createElementNS(SVG_LIB, "g");
+        colors.setAttribute("transform", transform);
+        colors.setAttribute("id", "colors");
+        svg.appendChild(colors);
+        let calculatedY = TRANSLATE_Y + SQUARE_COLOR_SIZE + SQUARE_COLOR_SIZE / 2;
+        transform = "translate(" + TRANSLATE_X + "," + calculatedY + ")";
+        svg.setAttribute("height", this.size * (this.height + 3) + TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5);
+        if (this.size * (this.width + 3) > SQUARE_COLOR_SIZE * this.palette.length) {
+            svg.setAttribute("width", this.size * (this.width + 3) + TRANSLATE_X);
+        } else {
+            svg.setAttribute("width", SQUARE_COLOR_SIZE * this.palette.length + TRANSLATE_X);
+        }
         let components = document.createElementNS(SVG_LIB, "g");
         components.setAttribute("id", "components");
         components.setAttribute("transform", transform);
@@ -168,6 +184,23 @@ class editor {
         arrows.setAttribute("transform", transform);
         svg.appendChild(arrows);
         editorElem.appendChild(svg);
+    }
+
+    createSquareColor(i) {
+        let squareColor = document.createElementNS(SVG_LIB, "rect");
+        squareColor.setAttribute("id", "squareColor_" + i);
+        if (i == 1)
+            squareColor.setAttribute("stroke-width", "3");
+        else
+            squareColor.setAttribute("stroke-width", "1");
+        squareColor.setAttribute("stroke", "black");
+        squareColor.setAttribute("height", SQUARE_COLOR_SIZE);
+        squareColor.setAttribute("width", SQUARE_COLOR_SIZE);
+        squareColor.setAttribute("fill", this.palette[i]);
+        squareColor.setAttribute("x", ((i - 1) * SQUARE_COLOR_SIZE) + SQUARE_COLOR_SIZE / 8);
+        squareColor.setAttribute("y", SQUARE_COLOR_SIZE / 8);
+        squareColor.onclick = (evt) => this.markSquareColor(evt);
+        document.getElementById("colors").appendChild(squareColor);
     }
 
     createBackground() {
@@ -353,8 +386,12 @@ class editor {
 
     changeSvgDocumentSize() {
         let svg = document.getElementById("svg");
-        svg.setAttribute("height", this.size * (this.height + 3) + TRANSLATE_Y);
-        svg.setAttribute("width", this.size * (this.width + 3) + TRANSLATE_X);
+        svg.setAttribute("height", this.size * (this.height + 3) + TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5);
+        if (this.size * (this.width + 3) > SQUARE_COLOR_SIZE * this.palette.length) {
+            svg.setAttribute("width", this.size * (this.width + 3) + TRANSLATE_X);
+        } else {
+            svg.setAttribute("width", SQUARE_COLOR_SIZE * this.palette.length + TRANSLATE_X);
+        }
     }
 
     changeBackgroundSize() {
@@ -561,6 +598,16 @@ class editor {
         }
     }
 
+    refreshSquareColors() {
+        let colors = document.getElementById("colors");
+        while (colors.firstChild) {
+            colors.removeChild(colors.firstChild);
+        }
+        for (let i = 1; i < this.palette.length; i++) {
+            this.createSquareColor(i);
+        }
+    }
+
     refreshBackground(backgroundColorOld) {
         let background = document.getElementById("background");
         background.setAttribute("fill", this.backgroundColor);
@@ -649,6 +696,19 @@ class editor {
     //#endregion
 
     //#region Event Functions
+    markSquareColor(evt) {
+        let id = evt.target.getAttribute("id");
+        id = id.replace("squareColor_", "");
+        this.currentColor = this.palette[id];
+        evt.target.setAttribute("stroke-width", "3");
+        let squareColor;
+        for (let i = 1; i < this.palette.length; i++) {
+            squareColor = document.getElementById("squareColor_" + i);
+            if (i != id)
+                squareColor.setAttribute("stroke-width", "1");
+        }
+    }
+
     highlightSquare(evt) {
         let id = evt.target.getAttribute("id");
         id = id.replace("square_aux_", "");
@@ -871,6 +931,28 @@ class editor {
                 this.width -= this.gridLength;
         }
         this.refreshArea();
+    }
+
+    switchSquareColor() {
+        let colors = document.getElementById("colors").children;
+        let selected;
+        for (let i = 0; i < colors.length; i++) {
+            if (colors[i].getAttribute("stroke-width") == 3) {
+                if (i == colors.length - 1)
+                    selected = 0;
+                else
+                    selected = i + 1;
+                break;
+            }
+        }
+        this.currentColor = this.palette[selected + 1];
+        colors[selected].setAttribute("stroke-width", "3");
+        let squareColor;
+        for (let i = 1; i < this.palette.length; i++) {
+            squareColor = document.getElementById("squareColor_" + i);
+            if (i != selected + 1)
+                squareColor.setAttribute("stroke-width", "1");
+        }
     }
 
     endColorsChange() {

@@ -176,7 +176,7 @@ class nonogram {
         colors.setAttribute("transform", transform);
         colors.setAttribute("id", "colors");
         svg.appendChild(colors);
-        let calculatedY = TRANSLATE_Y + SQUARE_COLOR_SIZE + SQUARE_COLOR_SIZE / 2;
+        let calculatedY = TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5;
         transform = "translate(" + TRANSLATE_X + "," + calculatedY + ")";
         let main = document.createElementNS(SVG_LIB, "g");
         main.setAttribute("id", "main");
@@ -399,7 +399,7 @@ class nonogram {
 
     changeSvgDocumentSize() {
         let svg = document.getElementById("svg");
-        svg.setAttribute("height", this.size * (this.data.settings.verticalNumbersLength) + this.size * (this.data.settings.height + 3) + TRANSLATE_Y + SQUARE_COLOR_SIZE + SQUARE_COLOR_SIZE / 2);
+        svg.setAttribute("height", this.size * (this.data.settings.verticalNumbersLength) + this.size * (this.data.settings.height + 3) + TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5);
         svg.setAttribute("width", this.size * (this.data.settings.horizontalNumbersLength) + this.size * (this.data.settings.width + 3) + TRANSLATE_X);
     }
 
