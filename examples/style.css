@@ -22,11 +22,6 @@ a {
     text-decoration: none;
 }
 
-.right {
-    position: absolute;
-    right: 0px; 
-}
-
 .txt {
     padding: 12px 16px;
     font-size: 16px;
@@ -59,8 +54,12 @@ input[type="file"] {
     opacity: 1.0;
 }
 
-#colors, #components, #main, #aux, #arrows:hover {
-    cursor: pointer
+#colors, #components, #aux:hover {
+    cursor: url(https://ani.cursors-4u.net/others/oth-9/oth838.cur), auto !important;
+}
+
+#arrows:hover {
+    cursor: pointer;
 }
 
 svg text {

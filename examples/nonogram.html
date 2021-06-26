@@ -1,0 +1,56 @@
+<html>
+
+<head>
+	<title>Dynamic Pix - Nonogram</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="style.css">
+	<script src="../dist/nonogram.js"></script>
+</head>
+
+<body>
+	<div>
+		<input class="txt" type="text" id="filename" placeholder="json" readonly="readonly">
+		<label class="btn" for="file-upload">Select a Json File</label>
+		<input type="file" id="file-upload" onchange="loadJson(event)" />
+	</div>
+	<br />
+	<div id="menu">
+		<button class="btn" onclick="nng.maximize(5)" title="Maximize"><i class="fa fa-plus"></i></button>
+		<button class="btn" onclick="nng.minimize(5)" title="Minimize"><i class="fa fa-minus"></i></button>
+		<button class="btn" onclick="nng.undo()" title="Undo"><i class="fa fa-rotate-left"></i></button>
+		<button class="btn" onclick="nng.redo()" title="Redo"><i class="fa fa-rotate-right"></i></button>
+		<button class="btn" onclick="nng.check()" title="Check Puzzle"><i class="fa fa-check"></i></button>
+		<button class="btn" onclick="restart()" title="Restart Puzzle"><i class="fa fa-recycle"></i></button>
+		<button class="btn" onclick="nng.solve()" title="Show Solution"><i class="fa fa-eye"></i></button>
+	</div>
+	<hr />
+	<div id="nonogram"></div>
+	<script>
+		var data = {};
+		const nng = new nonogram();
+
+		function loadJson(event) {
+			let files = event.target.files;
+			if (files.length <= 0) {
+				alert("Select a valid JSON file");
+				return false;
+			}
+			let filename = document.getElementById("filename");
+			filename.value = files[0].name;
+			let fr = new FileReader();
+			fr.onload = function (e) {
+				let result = e.target.result;
+				data = JSON.parse(result);
+				nng.init(data);
+				window.location.hash = "#menu";
+			}
+			fr.readAsText(files.item(0));
+		}
+
+		function restart() {
+			nng.init(data);
+		}
+	</script>
+</body>
+
+</html>

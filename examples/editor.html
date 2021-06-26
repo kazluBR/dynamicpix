@@ -1,0 +1,61 @@
+<html>
+
+<head>
+	<title>Dynamic Pix - Editor</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="style.css">
+	<script src="../dist/editor.js"></script>
+</head>
+
+<body>
+	<div>
+		<button class="btn" onclick="edt.maximize(5)" title="Maximize"><i class="fa fa-plus"></i></button>
+		<button class="btn" onclick="edt.minimize(5)" title="Minimize"><i class="fa fa-minus"></i></button>
+		<button class="btn" onclick="edt.undo()" title="Undo"><i class="fa fa-rotate-left"></i></button>
+		<button class="btn" onclick="edt.redo()" title="Redo"><i class="fa fa-rotate-right"></i></button>
+		<button class="btn" onclick="edt.exportJson()">Export to Json</button>
+	</div>
+	<br />
+	<div>
+		<label>Grid Length: </label>
+		<input type="radio" name="gridLength" onclick="edt.setGridLength(5)" checked />
+		<label>5</label>
+		<input type="radio" name="gridLength" onclick="edt.setGridLength(4)" />
+		<label>4</label>
+		<input type="radio" name="gridLength" onclick="edt.setGridLength(3)" />
+		<label>3&ensp;</label>
+		<input id="currentColorInput" class="ipt" type="color" value="#000000" list="presetColors" title="Current Color"
+			onchange="onCurrentColorChange()" />
+		<datalist id="presetColors">
+			<option value="#000000"></option>
+		</datalist>
+		<input id="backgroundColorInput" class="ipt" type="color" value="#ffffff" title="Background Color"
+			onchange="onBackgroundColorChange()" />
+	</div>
+	<hr />
+	<div id="editor"></div>
+	<script>
+		var colorList = ["#000000"];
+		const edt = new editor();
+		edt.init();
+
+		function onCurrentColorChange() {
+			let currentColor = document.getElementById("currentColorInput").value;
+			if (!colorList.includes(currentColor)) {
+				let presetColors = document.getElementById("presetColors");
+				let newColor = document.createElement("option");
+				newColor.value = currentColor;
+				presetColors.appendChild(newColor);
+				colorList.push(currentColor);
+			}
+			edt.setCurrentColor(currentColor);
+		}
+
+		function onBackgroundColorChange() {
+			let backgroundColor = document.getElementById("backgroundColorInput").value;
+			edt.setBackgroundColor(backgroundColor);
+		}
+	</script>
+</body>
+
+</html>
