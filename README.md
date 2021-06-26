@@ -1,6 +1,17 @@
 # DynamicPix
 A javascript library to generate nonograms through a pixel editor and an interface to play them
 
+## Files
+
+On /dist you can find the files you need
+
+| file | description  |
+|--|--|
+| [editor.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/editor.js) | javascript es6 file |
+| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/editor-min.js) | javascript minified |
+| [nonogram.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/nonogram.js) | javascript es6 file |
+| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/nonogram-min.js) | javascript minified |
+
 ## Editor
 Try online on [CodePen](https://codepen.io/kazluBR/full/WNpvEJz).
 
