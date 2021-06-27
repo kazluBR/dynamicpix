@@ -267,10 +267,10 @@ class nonogram {
         square.setAttribute("id", "square_" + i + "." + j);
         square.setAttribute("fill", this.#data.colors[0]);
         square.setAttribute("opacity", "0");
-        square.setAttribute("height", this.#size);
-        square.setAttribute("width", this.#size);
-        square.setAttribute("x", pos_x + i * this.#size);
-        square.setAttribute("y", pos_y + j * this.#size);
+        square.setAttribute("height", this.#size * 0.9);
+        square.setAttribute("width", this.#size * 0.9);
+        square.setAttribute("x", pos_x + i * this.#size + this.#size * 0.05);
+        square.setAttribute("y", pos_y + j * this.#size + this.#size * 0.05);
         document.getElementById("main").appendChild(square);
     }
 
@@ -279,10 +279,10 @@ class nonogram {
         squareAux.setAttribute("id", "square_aux_" + i + "." + j);
         squareAux.setAttribute("fill", this.#data.colors[0]);
         squareAux.setAttribute("opacity", "0");
-        squareAux.setAttribute("height", this.#size);
-        squareAux.setAttribute("width", this.#size);
-        squareAux.setAttribute("x", pos_x + i * this.#size);
-        squareAux.setAttribute("y", pos_y + j * this.#size);
+        squareAux.setAttribute("height", this.#size * 0.9);
+        squareAux.setAttribute("width", this.#size * 0.9);
+        squareAux.setAttribute("x", pos_x + i * this.#size + this.#size * 0.05);
+        squareAux.setAttribute("y", pos_y + j * this.#size + this.#size * 0.05);
         squareAux.onmouseover = (evt) => this.#highlightSquare(evt);
         squareAux.onmouseout = (evt) => this.#fadeSquare(evt);
         squareAux.onmousedown = (evt) => this.#initColorsChange(evt);
@@ -525,7 +525,7 @@ class nonogram {
         this.#changeCalculatedSize(pos_x, pos_y, 0);
         this.#changeCalculatedSize(pos_x, pos_y, 1);
     }
-    
+
     #changeBackgroundSize(pos_x, pos_y) {
         var background = document.getElementById("background");
         background.setAttribute("height", this.#size * this.#data.settings.height);
@@ -533,37 +533,37 @@ class nonogram {
         background.setAttribute("x", pos_x);
         background.setAttribute("y", pos_y);
     }
-    
+
     #changeMarkSize(pos_x, pos_y, i, j) {
         var mark = document.getElementById("mark_" + i + "." + j);
         mark.setAttribute("font-size", this.#size);
         mark.setAttribute("x", pos_x + (i + 0.5) * this.#size);
         mark.setAttribute("y", pos_y + (j + 0.85) * this.#size);
     }
-    
+
     #changeMarkAuxSize(pos_x, pos_y, i, j) {
         var markAux = document.getElementById("mark_aux_" + i + "." + j);
         markAux.setAttribute("font-size", this.#size);
         markAux.setAttribute("x", pos_x + (i + 0.5) * this.#size);
         markAux.setAttribute("y", pos_y + (j + 0.85) * this.#size);
     }
-    
+
     #changeSquareSize(pos_x, pos_y, i, j) {
         var square = document.getElementById("square_" + i + "." + j);
-        square.setAttribute("height", this.#size);
-        square.setAttribute("width", this.#size);
-        square.setAttribute("x", pos_x + i * this.#size);
-        square.setAttribute("y", pos_y + j * this.#size);
+        square.setAttribute("height", this.#size * 0.9);
+        square.setAttribute("width", this.#size * 0.9);
+        square.setAttribute("x", pos_x + i * this.#size + this.#size * 0.05);
+        square.setAttribute("y", pos_y + j * this.#size + this.#size * 0.05);
     }
-    
+
     #changeSquareAuxSize(pos_x, pos_y, i, j) {
         var squareAux = document.getElementById("square_aux_" + i + "." + j);
-        squareAux.setAttribute("height", this.#size);
-        squareAux.setAttribute("width", this.#size);
-        squareAux.setAttribute("x", pos_x + i * this.#size);
-        squareAux.setAttribute("y", pos_y + j * this.#size);
+        squareAux.setAttribute("height", this.#size * 0.9);
+        squareAux.setAttribute("width", this.#size * 0.9);
+        squareAux.setAttribute("x", pos_x + i * this.#size + this.#size * 0.05);
+        squareAux.setAttribute("y", pos_y + j * this.#size + this.#size * 0.05);
     }
-    
+
     #changeSignalSize(pos_x, pos_y, orientation, i) {
         var signal = document.getElementById("signal_" + orientation + "." + i);
         signal.setAttribute("font-size", this.#size);
@@ -575,7 +575,7 @@ class nonogram {
             signal.setAttribute("y", pos_y + (i + 0.9) * this.#size);
         }
     }
-    
+
     #changeNumberSize(pos_x, pos_y, orientation, i, j) {
         var number = document.getElementById("number_" + orientation + "." + i + "." + (j - 1));
         number.setAttribute("font-size", 0.9 * this.#size);
@@ -587,7 +587,7 @@ class nonogram {
             number.setAttribute("y", pos_y + i * this.#size + 0.8 * this.#size);
         }
     }
-    
+
     #changeSquareNumberSize(pos_x, pos_y, orientation, i, j) {
         var squareNumber = document.getElementById("squareNumber_" + orientation + "." + i + "." + (j - 1));
         squareNumber.setAttribute("height", this.#size);
@@ -600,7 +600,7 @@ class nonogram {
             squareNumber.setAttribute("y", pos_y + i * this.#size);
         }
     }
-    
+
     #changeLineSize(pos_x, pos_y, orientation, i) {
         var line = document.getElementById("line_" + orientation + "." + i);
         if (orientation == 0) {
@@ -615,7 +615,7 @@ class nonogram {
             line.setAttribute("y2", pos_y + i * this.#size);
         }
     }
-    
+
     #changeCalculatedSize(pos_x, pos_y, orientation) {
         var calculated = document.getElementById("calculated_" + orientation);
         calculated.setAttribute("font-size", this.#size);

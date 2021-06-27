@@ -11,7 +11,7 @@ const ARROW_COLOR = "#ff00ff";
 const CALCULATED_EMPTY_COLOR = "#808080";
 
 class editor {
-    
+
     #size;
     #width;
     #height;
@@ -56,17 +56,17 @@ class editor {
             this.#createSquareColor(i);
         }
         this.#createBackground();
-        for (let i = 0; i <= this.#width; i++) {
-            this.#createLine(0, i);
-        }
-        for (let i = 0; i <= this.#height; i++) {
-            this.#createLine(1, i);
-        }
         for (let i = 0; i < MAX_WIDTH_DIMENSION; i++) {
             for (let j = 0; j < MAX_HEIGTH_DIMENSION; j++) {
                 this.#createSquare(i, j);
                 this.#createSquareAux(i, j);
             }
+        }
+        for (let i = 0; i <= this.#width; i++) {
+            this.#createLine(0, i);
+        }
+        for (let i = 0; i <= this.#height; i++) {
+            this.#createLine(1, i);
         }
         this.#createCalculated(0);
         this.#createCalculated(1);
@@ -122,7 +122,7 @@ class editor {
         this.#backgroundColor = list[0];
         this.#refreshBackground(backgroundColorOld);
         this.#currentColor = list[1];
-        
+
     }
 
     exportJson() {
@@ -227,6 +227,34 @@ class editor {
         document.getElementById("components").appendChild(background);
     }
 
+    #createSquare(i, j) {
+        let square = document.createElementNS(SVG_LIB, "rect");
+        square.setAttribute("id", "square_" + i + "." + j);
+        square.setAttribute("height", this.#size * 0.9);
+        square.setAttribute("width", this.#size * 0.9);
+        square.setAttribute("x", i * this.#size + this.#size * 0.05);
+        square.setAttribute("y", j * this.#size + this.#size * 0.05);
+        square.setAttribute("fill", this.#backgroundColor);
+        square.setAttribute("opacity", "0");
+        document.getElementById("main").appendChild(square);
+    }
+
+    #createSquareAux(i, j) {
+        let squareAux = document.createElementNS(SVG_LIB, "rect");
+        squareAux.setAttribute("id", "square_aux_" + i + "." + j);
+        squareAux.setAttribute("height", this.#size * 0.9);
+        squareAux.setAttribute("width", this.#size * 0.9);
+        squareAux.setAttribute("x", i * this.#size + this.#size * 0.05);
+        squareAux.setAttribute("y", j * this.#size + this.#size * 0.05);
+        squareAux.setAttribute("fill", this.#backgroundColor);
+        squareAux.setAttribute("opacity", "0");
+        squareAux.onmouseover = (evt) => this.#highlightSquare(evt);
+        squareAux.onmouseout = (evt) => this.#fadeSquare(evt);
+        squareAux.onmousedown = (evt) => this.#initColorsChange(evt);
+        squareAux.onmousemove = (evt) => this.#changeColorSquares(evt);
+        document.getElementById("aux").appendChild(squareAux);
+    }
+
     #createLine(orientation, i) {
         let line = document.createElementNS(SVG_LIB, "line");
         line.setAttribute("id", "line_" + orientation + "." + i);
@@ -247,35 +275,6 @@ class editor {
             line.setAttribute("y2", i * this.#size);
         }
         document.getElementById("components").appendChild(line);
-    }
-
-    #createSquare(i, j) {
-        let square = document.createElementNS(SVG_LIB, "rect");
-        square.setAttribute("id", "square_" + i + "." + j);
-        square.setAttribute("height", this.#size * 0.95);
-        square.setAttribute("width", this.#size * 0.95);
-        square.setAttribute("x", i * this.#size);
-        square.setAttribute("y", j * this.#size);
-        square.setAttribute("stroke", LINE_COLOR);
-        square.setAttribute("fill", this.#backgroundColor);
-        square.setAttribute("opacity", "0");
-        document.getElementById("main").appendChild(square);
-    }
-
-    #createSquareAux(i, j) {
-        let squareAux = document.createElementNS(SVG_LIB, "rect");
-        squareAux.setAttribute("id", "square_aux_" + i + "." + j);
-        squareAux.setAttribute("height", this.#size * 0.95);
-        squareAux.setAttribute("width", this.#size * 0.95);
-        squareAux.setAttribute("x", i * this.#size);
-        squareAux.setAttribute("y", j * this.#size);
-        squareAux.setAttribute("fill", this.#backgroundColor);
-        squareAux.setAttribute("opacity", "0");
-        squareAux.onmouseover = (evt) => this.#highlightSquare(evt);
-        squareAux.onmouseout = (evt) => this.#fadeSquare(evt);
-        squareAux.onmousedown = (evt) => this.#initColorsChange(evt);
-        squareAux.onmousemove = (evt) => this.#changeColorSquares(evt);
-        document.getElementById("aux").appendChild(squareAux);
     }
 
     #createCalculated(orientation) {
@@ -432,18 +431,18 @@ class editor {
 
     #changeSquareSize(i, j) {
         let square = document.getElementById("square_" + i + "." + j);
-        square.setAttribute("height", this.#size * 0.95);
-        square.setAttribute("width", this.#size * 0.95);
-        square.setAttribute("x", i * this.#size);
-        square.setAttribute("y", j * this.#size);
+        square.setAttribute("height", this.#size * 0.9);
+        square.setAttribute("width", this.#size * 0.9);
+        square.setAttribute("x", i * this.#size + this.#size * 0.05);
+        square.setAttribute("y", j * this.#size + this.#size * 0.05);
     }
 
     #changeSquareAuxSize(i, j) {
         let squareAux = document.getElementById("square_aux_" + i + "." + j);
-        squareAux.setAttribute("height", this.#size * 0.95);
-        squareAux.setAttribute("width", this.#size * 0.95);
-        squareAux.setAttribute("x", i * this.#size);
-        squareAux.setAttribute("y", j * this.#size);
+        squareAux.setAttribute("height", this.#size * 0.9);
+        squareAux.setAttribute("width", this.#size * 0.9);
+        squareAux.setAttribute("x", i * this.#size + this.#size * 0.05);
+        squareAux.setAttribute("y", j * this.#size + this.#size * 0.05);
     }
 
     #changeCalculatedSize(orientation) {
@@ -667,7 +666,7 @@ class editor {
         }
         return horizontalNumbers;
     }
-    
+
     #getVerticalNumbers(data) {
         var verticalNumbers = [];
         for (let k = 0; k < data.points[0].length; k++)
@@ -697,7 +696,7 @@ class editor {
         }
         return verticalNumbers;
     }
-    
+
     #getMaxNumbers(numbers) {
         var bigger = 0;
         var aux = 0;
