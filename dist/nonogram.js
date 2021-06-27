@@ -355,7 +355,7 @@ class nonogram {
         let line = document.createElementNS(SVG_LIB, "line");
         line.setAttribute("id", "line_" + orientation + "." + i);
         line.setAttribute("stroke", LINE_COLOR);
-        if ((i % this.#data.settings.multiple) == 0)
+        if ((i % this.#data.settings.gridLength) == 0)
             line.setAttribute("stroke-width", "2");
         else
             line.setAttribute("stroke-width", "1");
@@ -779,21 +779,21 @@ class nonogram {
             let j = parseInt(idSplited[1]);
             let verticalLine = document.getElementById("line_0." + i);
             verticalLine.setAttribute("stroke", RULE_COLOR);
-            if ((i % this.#data.settings.multiple) != 0)
+            if ((i % this.#data.settings.gridLength) != 0)
                 verticalLine.setAttribute("stroke-width", "2");
             let horizontalLine = document.getElementById("line_1." + j);
             horizontalLine.setAttribute("stroke", RULE_COLOR);
-            if ((j % this.#data.settings.multiple) != 0)
+            if ((j % this.#data.settings.gridLength) != 0)
                 horizontalLine.setAttribute("stroke-width", "2");
             i = i + 1;
             j = j + 1;
             verticalLine = document.getElementById("line_0." + i);
             verticalLine.setAttribute("stroke", RULE_COLOR);
-            if ((i % this.#data.settings.multiple) != 0)
+            if ((i % this.#data.settings.gridLength) != 0)
                 verticalLine.setAttribute("stroke-width", "2");
             horizontalLine = document.getElementById("line_1." + j);
             horizontalLine.setAttribute("stroke", RULE_COLOR);
-            if ((j % this.#data.settings.multiple) != 0)
+            if ((j % this.#data.settings.gridLength) != 0)
                 horizontalLine.setAttribute("stroke-width", "2");
         }
     }
@@ -807,21 +807,21 @@ class nonogram {
             let j = parseInt(idSplited[1]);
             let verticalLine = document.getElementById("line_0." + i);
             verticalLine.setAttribute("stroke", LINE_COLOR);
-            if ((i % this.#data.settings.multiple) != 0)
+            if ((i % this.#data.settings.gridLength) != 0)
                 verticalLine.setAttribute("stroke-width", "1");
             let horizontalLine = document.getElementById("line_1." + j);
             horizontalLine.setAttribute("stroke", LINE_COLOR);
-            if ((j % this.#data.settings.multiple) != 0)
+            if ((j % this.#data.settings.gridLength) != 0)
                 horizontalLine.setAttribute("stroke-width", "1");
             i = i + 1;
             j = j + 1;
             verticalLine = document.getElementById("line_0." + i);
             verticalLine.setAttribute("stroke", LINE_COLOR);
-            if ((i % this.#data.settings.multiple) != 0)
+            if ((i % this.#data.settings.gridLength) != 0)
                 verticalLine.setAttribute("stroke-width", "1");
             horizontalLine = document.getElementById("line_1." + j);
             horizontalLine.setAttribute("stroke", LINE_COLOR);
-            if ((j % this.#data.settings.multiple) != 0)
+            if ((j % this.#data.settings.gridLength) != 0)
                 horizontalLine.setAttribute("stroke-width", "1");
             let calculatedHorizontal = document.getElementById("calculated_0");
             calculatedHorizontal.textContent = "";
