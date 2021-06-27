@@ -8,7 +8,7 @@
   "settings": {
 	"width": 28,
 	"height": 24,
-	"multiple": 4,
+	"gridLength": 4,
 	"horizontalNumbersLength": 13,
 	"verticalNumbersLength": 9
   },
