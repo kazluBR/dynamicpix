@@ -24,12 +24,29 @@
 		<label>4</label>
 		<input type="radio" name="gridLength" onclick="edt.setGridLength(3)" />
 		<label>3&ensp;</label>
+		<select class="slct" onchange="setPalette(this)">
+			<option value="" disabled selected>Select a Palette</option>
+			<option value=0>8 Colors (Default)</option>
+			<option value=1>6 Colors</option>
+			<option value=2>5 Colors</option>
+			<option value=3>3 Colors</option>
+		</select>
 	</div>
 	<hr />
 	<div id="editor"></div>
 	<script>
+		const PALETTES = [
+			["#ffffff", "#8e3179", "#ca3435", "#ff91a4", "#fcd667", "#93dfb8", "#b5b35c", "#02a4d3", "#00468c"],
+			["#fff394", "#00083d", "#680067", "#930440", "#be0707", "#e16710", "#ffb821"],
+			["#f5efeb", "#d3473d", "#f6ad0f", "#86bcd1", "#316a96", "#2e243f"],
+			["#f7e7c6", "#331e50", "#a63725", "#d68e49"]
+		]
 		const edt = new editor();
 		edt.init();
+		
+		function setPalette(evt) { 
+			edt.setPalette(PALETTES[evt.value]);
+		}
 	</script>
 </body>
 

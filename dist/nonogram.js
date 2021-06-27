@@ -172,10 +172,10 @@ class nonogram {
         let svg = document.createElementNS(SVG_LIB, "svg");
         svg.setAttribute("id", "svg");
         let transform = "translate(" + TRANSLATE_X + "," + TRANSLATE_Y + ")";
-        let colors = document.createElementNS(SVG_LIB, "g");
-        colors.setAttribute("transform", transform);
-        colors.setAttribute("id", "colors");
-        svg.appendChild(colors);
+        let palette = document.createElementNS(SVG_LIB, "g");
+        palette.setAttribute("transform", transform);
+        palette.setAttribute("id", "palette");
+        svg.appendChild(palette);
         let calculatedY = TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5;
         transform = "translate(" + TRANSLATE_X + "," + calculatedY + ")";
         let main = document.createElementNS(SVG_LIB, "g");
@@ -207,7 +207,7 @@ class nonogram {
         squareColor.setAttribute("x", ((i - 1) * SQUARE_COLOR_SIZE) + SQUARE_COLOR_SIZE / 8);
         squareColor.setAttribute("y", SQUARE_COLOR_SIZE / 8);
         squareColor.onclick = (evt) => this.markSquareColor(evt);
-        document.getElementById("colors").appendChild(squareColor);
+        document.getElementById("palette").appendChild(squareColor);
     }
 
     createBackground(pos_x, pos_y) {
@@ -378,9 +378,9 @@ class nonogram {
     }
 
     clean() {
-        let colors = document.getElementById("colors");
-        while (colors.firstChild) {
-            colors.removeChild(colors.firstChild);
+        let palette = document.getElementById("palette");
+        while (palette.firstChild) {
+            palette.removeChild(palette.firstChild);
         }
         let components = document.getElementById("components");
         while (components.firstChild) {
@@ -972,11 +972,11 @@ class nonogram {
     }
 
     switchSquareColor() {
-        let colors = document.getElementById("colors").children;
+        let palette = document.getElementById("palette").children;
         let selected;
-        for (let i = 0; i < colors.length; i++) {
-            if (colors[i].getAttribute("stroke-width") == 3) {
-                if (i == colors.length - 1)
+        for (let i = 0; i < palette.length; i++) {
+            if (palette[i].getAttribute("stroke-width") == 3) {
+                if (i == palette.length - 1)
                     selected = 0;
                 else
                     selected = i + 1;
@@ -984,7 +984,7 @@ class nonogram {
             }
         }
         this.colorSelected = this.data.colors[selected + 1];
-        colors[selected].setAttribute("stroke-width", "3");
+        palette[selected].setAttribute("stroke-width", "3");
         let squareColor;
         for (let i = 1; i < this.data.colors.length; i++) {
             squareColor = document.getElementById("squareColor_" + i);
