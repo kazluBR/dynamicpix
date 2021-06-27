@@ -7,10 +7,10 @@ On /dist you can find the files you need
 
 | File | Description  |
 |--|--|
-| [editor.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/editor.js) | javascript es6 file |
-| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/editor-min.js) | javascript minified |
-| [nonogram.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/nonogram.js) | javascript es6 file |
-| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/nonogram-min.js) | javascript minified |
+| [editor.js](https://raw.githubusercontent.com/kazluBR/DynamicPix/master/dist/editor.js) | javascript es6 file |
+| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/1.0.0/editor-min.js) | javascript minified |
+| [nonogram.js](https://raw.githubusercontent.com/kazluBR/DynamicPix/master/dist/nonogram.js) | javascript es6 file |
+| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/1.0.0/nonogram-min.js) | javascript minified |
 
 ## Editor
 Try online on [CodePen](https://codepen.io/kazluBR/full/WNpvEJz).
