@@ -1,16 +1,16 @@
 {
   "colors": [
     "#ffffff",
-    "#b53220",
-    "#6b6d00",
-    "#ea9f23"
+    "#ca3435",
+    "#00468c",
+    "#fcd667"
   ],
   "settings": {
-	"width": 12,
-	"height": 16,
-	"multiple": 4,
-	"horizontalNumbersLength": 9,
-	"verticalNumbersLength": 8
+    "width": 12,
+    "height": 16,
+    "gridLength": 4,
+    "horizontalNumbersLength": 9,
+    "verticalNumbersLength": 8
   },
   "points": [
     [

@@ -1,11 +1,11 @@
 # DynamicPix
-A javascript library to generate nonograms through a pixel editor and an interface to play them
+Javascript library to generate nonograms through a pixel editor and an interface to play them
 
 ## Files
 
 On /dist you can find the files you need
 
-| file | description  |
+| File | Description  |
 |--|--|
 | [editor.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/editor.js) | javascript es6 file |
 | [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/editor-min.js) | javascript minified |
@@ -21,32 +21,25 @@ Try online on [CodePen](https://codepen.io/kazluBR/full/WNpvEJz).
 To use the default config of editor you need a div with name "editor" and then load the script as following:
 
 ```html
-    <div id="editor"></div>
-    <script src="editor.js"></script>
-    <script>
-      const edt = new editor();
-	  edt.init();
-    </script>
+<div id="editor"></div>
+<script src="editor.js"></script>
+<script>
+  const edt = new editor();
+  edt.init();
+</script>
 ```
 
 You can configure this settings to customize your editor:
 
 ```javascript
-    const config = {
-      size : int,
-      //defaults to 20
-      width : int, 
-      //defaults to 5
-      height : int 
-      //defaults to 5
-      gridLength : int, 
-      //defaults to 5
-      currentColor: hex, 
-      //defaults to #000000
-      backgroundColor: hex, 
-      //defaults to #ffffff
-    }
-    const edt = new editor(config);
+const config = {
+  size : int, //defaults to 20
+  width : int, //defaults to 5
+  height : int, //defaults to 5
+  gridLength : int, //defaults to 5
+  palette: list //defaults to fixed palette with 8 colors
+}
+const edt = new editor(config);
 ```
 
 | Method | Description |
@@ -57,8 +50,7 @@ You can configure this settings to customize your editor:
 | undo() | Undo the last modification |
 | redo() | Redo the next modification |
 | setGridLength(value) | Sets the size of the editor grid |
-| setCurrentColor(value) | Sets the color to paint and stores the list of used colors |
-| setBackgroundColor(value) | Sets the background color of the drawing |
+| setPalette(list) | Sets the palette passing a list of colors in hexadecimal |
 | exportJson() | Exports the drawing to json format compatible with the game view |
 
 ### Controls
@@ -67,44 +59,44 @@ You can configure this settings to customize your editor:
 | Left Click | Paint square with the selected color |
 | Left Pressing | Paint the squares with the selected color while you hover over them |
 | Left Release | Stop painting squares |
+| Middle Click | Switch color to paint (or you can select directly from the palette) |
 
-## Game
+## Nonogram
 Try online on [CodePen](https://codepen.io/kazluBR/full/pJqrgY).
 
-![alt text](/docs/game_view.png)
+![alt text](/docs/nonogram_view.png)
 
 ### Documentation
 To use the default config of nonogram you need a div with name "nonogram" and a input file to get the generate json data as following:
 
 ```html
-    <input type="file" onchange="loadJson(event)"/>
-    <div id="nonogram"></div>
-    <script src="nonogram.js"></script>
-    <script>
-      const nng = new nonogram();
-      function loadJson(event) {
-        let files = event.target.files;
-        if (files.length <= 0) {
-          return false;
-        }
-        let fr = new FileReader();
-        fr.onload = function (e) {
-          let data = JSON.parse(e.target.result);
-          nng.init(data);
-        }
-        fr.readAsText(files.item(0));
-      }
-    </script>
+<input type="file" onchange="loadJson(event)"/>
+<div id="nonogram"></div>
+<script src="nonogram.js"></script>
+<script>
+  const nng = new nonogram();
+  function loadJson(event) {
+	let files = event.target.files;
+	if (files.length <= 0) {
+	  return false;
+	}
+	let fr = new FileReader();
+	fr.onload = function (e) {
+	  let data = JSON.parse(e.target.result);
+	  nng.init(data);
+	}
+	fr.readAsText(files.item(0));
+  }
+</script>
 ```
 
 You can configure this settings to customize your nonogram:
 
 ```javascript
-    const config = {
-      size : int,
-      //defaults to 20
-    }
-    const nng = new nonogram(config);
+const config = {
+  size : int //defaults to 20
+}
+const nng = new nonogram(config);
 ```
 
 | Method | Description |
