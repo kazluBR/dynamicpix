@@ -77,6 +77,7 @@ class editor {
         this.#createDecreaseArrow(2);
         this.#createIncreaseArrow(2);
         this.#saveState();
+        this.#refreshCursor();
     }
 
     maximize(value) {
@@ -168,7 +169,6 @@ class editor {
             return false;
         }
         let svg = document.createElementNS(SVG_LIB, "svg");
-        svg.setAttribute("id", "svg");
         let transform = "translate(" + TRANSLATE_X + "," + TRANSLATE_Y + ")";
         let palette = document.createElementNS(SVG_LIB, "g");
         palette.setAttribute("transform", transform);
@@ -316,6 +316,7 @@ class editor {
             decreaseArrow.setAttribute("y", (this.#height * this.#size) + this.#size);
             decreaseArrow.textContent = "\uD83E\uDC84"; // ↖
         }
+        decreaseArrow.setAttribute("style", "-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;");
         decreaseArrow.onmouseover = (evt) => this.#highlightDecreaseArrow(evt);
         decreaseArrow.onmouseout = (evt) => this.#fadeDecreaseArrow(evt);
         decreaseArrow.onclick = (evt) => this.#decreaseSize(evt);
@@ -344,10 +345,20 @@ class editor {
             increaseArrow.setAttribute("y", (this.#height * this.#size) + 2 * this.#size - this.#size / 4);
             increaseArrow.textContent = "\uD83E\uDC86"; // ↘
         }
+        increaseArrow.setAttribute("style", "-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;");
         increaseArrow.onmouseover = (evt) => this.#highlightIncreaseArrow(evt);
         increaseArrow.onmouseout = (evt) => this.#fadeIncreaseArrow(evt);
         increaseArrow.onclick = (evt) => this.#increaseSize(evt);
         document.getElementById("arrows").appendChild(increaseArrow);
+    }
+
+    #refreshCursor() {
+        let editorElem = document.getElementById("editor");
+        editorElem.style = "cursor: url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' "
+        + "width='32' height='32' viewBox='0 0 24 24'%3e%3cpath fill='%23" + this.#currentColor.replace("#","") + "' "
+        + "stroke='black' d='M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 "
+        + "11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z'/%3e%3c/svg%3e\") " 
+        + "0 32, pointer;";
     }
 
     #saveState() {
@@ -399,7 +410,7 @@ class editor {
     }
 
     #changeSvgDocumentSize() {
-        let svg = document.getElementById("svg");
+        let svg = document.getElementsByTagName("svg")[0];
         svg.setAttribute("height", this.#size * (this.#height + 3) + TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5);
         if (this.#size * (this.#width + 3) > SQUARE_COLOR_SIZE * this.#palette.length) {
             svg.setAttribute("width", this.#size * (this.#width + 3) + TRANSLATE_X);
@@ -721,6 +732,7 @@ class editor {
             if (i != id)
                 squareColor.setAttribute("stroke-width", "1");
         }
+        this.#refreshCursor();
     }
 
     #highlightSquare(evt) {
@@ -967,6 +979,7 @@ class editor {
             if (i != selected + 1)
                 squareColor.setAttribute("stroke-width", "1");
         }
+        this.#refreshCursor();
     }
 
     #endColorsChange() {
