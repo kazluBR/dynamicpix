@@ -31,18 +31,3 @@ input[type="file"] {
 .btn:hover {
     opacity: 1.0;
 }
-
-#palette, #components, #aux:hover {
-    cursor: url(https://ani.cursors-4u.net/others/oth-9/oth838.cur), auto !important;
-}
-
-#arrows:hover {
-    cursor: pointer;
-}
-
-svg text {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}

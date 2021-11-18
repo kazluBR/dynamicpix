@@ -91,6 +91,7 @@ class nonogram {
         this.#createCalculated(pos_x, pos_y, 1);
         this.#validate();
         this.#saveState();
+        this.#refreshCursor();
     }
 
     maximize(value) {
@@ -183,7 +184,6 @@ class nonogram {
             return false;
         }
         let svg = document.createElementNS(SVG_LIB, "svg");
-        svg.setAttribute("id", "svg");
         let transform = "translate(" + TRANSLATE_X + "," + TRANSLATE_Y + ")";
         let palette = document.createElementNS(SVG_LIB, "g");
         palette.setAttribute("transform", transform);
@@ -245,6 +245,7 @@ class nonogram {
         mark.setAttribute("y", pos_y + (j + 0.85) * this.#size);
         mark.setAttribute("opacity", "0");
         mark.textContent = "\u2022";
+        mark.setAttribute("style", "-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;");
         document.getElementById("main").appendChild(mark);
     }
 
@@ -259,6 +260,7 @@ class nonogram {
         markAux.setAttribute("y", pos_y + (j + 0.85) * this.#size);
         markAux.setAttribute("opacity", "0");
         markAux.textContent = "\u2022";
+        markAux.setAttribute("style", "-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;");
         document.getElementById("aux").appendChild(markAux);
     }
 
@@ -306,6 +308,7 @@ class nonogram {
             signal.setAttribute("y", pos_y + (i + 0.9) * this.#size);
             signal.textContent = "\u23F4";
         }
+        signal.setAttribute("style", "-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;");
         document.getElementById("components").appendChild(signal);
     }
 
@@ -347,6 +350,7 @@ class nonogram {
             number.setAttribute("y", pos_y + i * this.#size + 0.8 * this.#size);
             number.textContent = this.#data.horizontalNumbers[i][j - 1].number;
         }
+        number.setAttribute("style", "-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;");
         number.onclick = (evt) => this.#markNumber(evt);
         document.getElementById("components").appendChild(number);
     }
@@ -390,6 +394,15 @@ class nonogram {
         document.getElementById("components").appendChild(calculated);
     }
 
+    #refreshCursor() {
+        let nonogramElement = document.getElementById("nonogram");
+        nonogramElement.style = "cursor: url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' "
+        + "width='32' height='32' viewBox='0 0 24 24'%3e%3cpath fill='%23" + this.#colorSelected.replace("#","") + "' "
+        + "stroke='black' d='M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 "
+        + "11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z'/%3e%3c/svg%3e\") " 
+        + "0 32, pointer;";
+    }
+
     #clean() {
         let palette = document.getElementById("palette");
         while (palette.firstChild) {
@@ -411,7 +424,7 @@ class nonogram {
     }
 
     #changeSvgDocumentSize() {
-        let svg = document.getElementById("svg");
+        let svg = document.getElementsByTagName("svg")[0];
         svg.setAttribute("height", this.#size * (this.#data.settings.verticalNumbersLength) + this.#size * (this.#data.settings.height + 3) + TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5);
         svg.setAttribute("width", this.#size * (this.#data.settings.horizontalNumbersLength) + this.#size * (this.#data.settings.width + 3) + TRANSLATE_X);
     }
@@ -768,6 +781,7 @@ class nonogram {
             if (i != id)
                 squareColor.setAttribute("stroke-width", "1");
         }
+        this.#refreshCursor();
     }
 
     #highlightSquare(evt) {
@@ -1004,6 +1018,7 @@ class nonogram {
             if (i != selected + 1)
                 squareColor.setAttribute("stroke-width", "1");
         }
+        this.#refreshCursor();
     }
 
     #endColorsChange() {
