@@ -126,7 +126,7 @@ class editor {
 
     }
 
-    exportJson() {
+    generateJson() {
         let data = {
             colors: [this.#backgroundColor],
             settings: {
@@ -154,11 +154,7 @@ class editor {
         data.verticalNumbers = this.#getVerticalNumbers(data);
         data.settings.horizontalNumbersLength = this.#getMaxNumbers(data.horizontalNumbers);
         data.settings.verticalNumbersLength = this.#getMaxNumbers(data.verticalNumbers);
-        var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-        var a = document.createElement("a");
-        a.download = 'puzzle.json';
-        a.href = window.URL.createObjectURL(blob);
-        a.click();
+        return JSON.stringify(data, null, 2);
     }
     //#endregion
 
@@ -291,6 +287,7 @@ class editor {
             calculated.setAttribute("text-anchor", "middle");
             calculated.setAttribute("y", (this.#height + 1) * this.#size);
         }
+        calculated.setAttribute("style", "-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;");
         document.getElementById("components").appendChild(calculated);
     }
 

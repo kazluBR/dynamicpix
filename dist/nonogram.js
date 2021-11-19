@@ -391,6 +391,7 @@ class nonogram {
             calculated.setAttribute("text-anchor", "middle");
             calculated.setAttribute("y", pos_y + (this.#data.settings.height + 1) * this.#size + this.#size);
         }
+        calculated.setAttribute("style", "-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;");
         document.getElementById("components").appendChild(calculated);
     }
 

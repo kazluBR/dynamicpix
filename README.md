@@ -51,7 +51,7 @@ const edt = new editor(config);
 | redo() | Redo the next modification |
 | setGridLength(value) | Sets the size of the editor grid |
 | setPalette(list) | Sets the palette passing a list of colors in hexadecimal |
-| exportJson() | Exports the drawing to json format compatible with the game view |
+| generateJson() | Exports the drawing to json string format compatible with the game view |
 
 ### Controls
 | Mouse | Action |
