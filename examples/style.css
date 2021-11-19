@@ -1,33 +1,33 @@
 body {
-    font-family: Helvetica;
+  font-family: Helvetica;
 }
 
 .txt {
-    padding: 12px 16px;
-    font-size: 16px;
-    cursor: pointer;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .slct {
-    padding: 12px 16px;
-    font-size: 16px;
-    cursor: pointer;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-input[type="file"] {
-    display: none;
+input[type='file'] {
+  display: none;
 }
 
 .btn {
-    background-color: blue;
-    border: none;
-    color: white;
-    padding: 12px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    opacity: 0.5;
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.5;
 }
 
 .btn:hover {
-    opacity: 1.0;
+  opacity: 1;
 }
