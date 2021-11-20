@@ -1,53 +1,81 @@
 <html>
+  <head>
+    <title>Dynamic Pix - Editor</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="../dist/editor.js"></script>
+  </head>
 
-<head>
-	<title>Dynamic Pix - Editor</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="style.css">
-	<script src="../dist/editor.js"></script>
-</head>
+  <body>
+    <div>
+      <button class="btn" onclick="edt.maximize(5)" title="Maximize">
+        <i class="fa fa-plus"></i>
+      </button>
+      <button class="btn" onclick="edt.minimize(5)" title="Minimize">
+        <i class="fa fa-minus"></i>
+      </button>
+      <button class="btn" onclick="edt.undo()" title="Undo">
+        <i class="fa fa-rotate-left"></i>
+      </button>
+      <button class="btn" onclick="edt.redo()" title="Redo">
+        <i class="fa fa-rotate-right"></i>
+      </button>
+      <button class="btn" onclick="exportJson()">Export to Json</button>
+    </div>
+    <br />
+    <div>
+      <label>Grid Length: </label>
+      <input type="radio" name="gridLength" onclick="edt.setGridLength(5)" checked />
+      <label>5</label>
+      <input type="radio" name="gridLength" onclick="edt.setGridLength(4)" />
+      <label>4</label>
+      <input type="radio" name="gridLength" onclick="edt.setGridLength(3)" />
+      <label>3&ensp;</label>
+      <select class="slct" onchange="setPalette(this)">
+        <option value="" disabled selected>Select a Palette</option>
+        <option value="0">8 Colors (Default)</option>
+        <option value="1">6 Colors</option>
+        <option value="2">5 Colors</option>
+        <option value="3">3 Colors</option>
+      </select>
+    </div>
+    <hr />
+    <div id="editor"></div>
+    <script>
+      const PALETTES = [
+        [
+          '#ffffff',
+          '#8e3179',
+          '#ca3435',
+          '#ff91a4',
+          '#fcd667',
+          '#93dfb8',
+          '#b5b35c',
+          '#02a4d3',
+          '#00468c',
+        ],
+        ['#fff394', '#00083d', '#680067', '#930440', '#be0707', '#e16710', '#ffb821'],
+        ['#f5efeb', '#d3473d', '#f6ad0f', '#86bcd1', '#316a96', '#2e243f'],
+        ['#f7e7c6', '#331e50', '#a63725', '#d68e49'],
+      ]
+      const edt = new editor()
+      edt.init()
 
-<body>
-	<div>
-		<button class="btn" onclick="edt.maximize(5)" title="Maximize"><i class="fa fa-plus"></i></button>
-		<button class="btn" onclick="edt.minimize(5)" title="Minimize"><i class="fa fa-minus"></i></button>
-		<button class="btn" onclick="edt.undo()" title="Undo"><i class="fa fa-rotate-left"></i></button>
-		<button class="btn" onclick="edt.redo()" title="Redo"><i class="fa fa-rotate-right"></i></button>
-		<button class="btn" onclick="edt.exportJson()">Export to Json</button>
-	</div>
-	<br />
-	<div>
-		<label>Grid Length: </label>
-		<input type="radio" name="gridLength" onclick="edt.setGridLength(5)" checked />
-		<label>5</label>
-		<input type="radio" name="gridLength" onclick="edt.setGridLength(4)" />
-		<label>4</label>
-		<input type="radio" name="gridLength" onclick="edt.setGridLength(3)" />
-		<label>3&ensp;</label>
-		<select class="slct" onchange="setPalette(this)">
-			<option value="" disabled selected>Select a Palette</option>
-			<option value=0>8 Colors (Default)</option>
-			<option value=1>6 Colors</option>
-			<option value=2>5 Colors</option>
-			<option value=3>3 Colors</option>
-		</select>
-	</div>
-	<hr />
-	<div id="editor"></div>
-	<script>
-		const PALETTES = [
-			["#ffffff", "#8e3179", "#ca3435", "#ff91a4", "#fcd667", "#93dfb8", "#b5b35c", "#02a4d3", "#00468c"],
-			["#fff394", "#00083d", "#680067", "#930440", "#be0707", "#e16710", "#ffb821"],
-			["#f5efeb", "#d3473d", "#f6ad0f", "#86bcd1", "#316a96", "#2e243f"],
-			["#f7e7c6", "#331e50", "#a63725", "#d68e49"]
-		];
-		const edt = new editor();
-		edt.init();
-		
-		function setPalette(evt) { 
-			edt.setPalette(PALETTES[evt.value]);
-		}
-	</script>
-</body>
+      function setPalette(evt) {
+        edt.setPalette(PALETTES[evt.value])
+      }
 
+      function exportJson() {
+        let json = edt.generateJson()
+        let blob = new Blob([json], { type: 'application/json' })
+        let a = document.createElement('a')
+        a.download = 'puzzle.json'
+        a.href = window.URL.createObjectURL(blob)
+        a.click()
+      }
+    </script>
+  </body>
 </html>
