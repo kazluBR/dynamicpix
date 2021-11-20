@@ -623,7 +623,7 @@ class editor {
   }
 
   #cleanAllSquaresAux() {
-    var squareAux
+    let squareAux
     for (let i = 0; i < this.#width; i++) {
       for (let j = 0; j < this.#height; j++) {
         squareAux = document.getElementById('square_aux_' + i + '.' + j)
@@ -676,9 +676,9 @@ class editor {
   }
 
   #getHorizontalNumbers(data) {
-    var horizontalNumbers = []
+    let horizontalNumbers = []
     for (let k = 0; k < data.points.length; k++) horizontalNumbers[k] = []
-    var count, aux, counting
+    let count, aux, counting
     for (let i = 0; i < data.points.length; i++) {
       count = 0
       aux = -1
@@ -703,9 +703,9 @@ class editor {
   }
 
   #getVerticalNumbers(data) {
-    var verticalNumbers = []
+    let verticalNumbers = []
     for (let k = 0; k < data.points[0].length; k++) verticalNumbers[k] = []
-    var count, aux, counting
+    let count, aux, counting
     for (let i = 0; i < data.points[0].length; i++) {
       count = 0
       aux = -1
@@ -730,8 +730,8 @@ class editor {
   }
 
   #getMaxNumbers(numbers) {
-    var bigger = 0
-    var aux = 0
+    let bigger = 0
+    let aux = 0
     for (let i = 0; i < numbers.length; i++) {
       aux = numbers[i].length
       if (aux > bigger) bigger = aux

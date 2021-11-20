@@ -12,6 +12,7 @@ const NUMBER_DEFAULT_COLOR = '#ffffff'
 
 class nonogram {
   #size
+  #showErrorsOnCheck
   #data
   #totalValidated
   #clicked
@@ -25,6 +26,7 @@ class nonogram {
 
   constructor(config = {}) {
     this.#size = config.size || 20
+    this.#showErrorsOnCheck = config.showErrorsOnCheck || false
     this.#data = {}
     this.#totalValidated = false
     this.#clicked = false
@@ -128,8 +130,8 @@ class nonogram {
 
   check() {
     if (this.#data != null) {
-      var square, squareColor, squareOpacity, mark, markOpacity, signalHorizontal, signalVertical
-      var errors = 0
+      let square, squareColor, squareOpacity, mark, markOpacity, signalHorizontal, signalVertical
+      let errors = 0
       for (let i = 0; i < this.#data.settings.width; i++) {
         signalHorizontal = document.getElementById('signal_0.' + i)
         for (let j = 0; j < this.#data.settings.height; j++) {
@@ -138,31 +140,35 @@ class nonogram {
           squareOpacity = square.getAttribute('opacity')
           signalVertical = document.getElementById('signal_1.' + j)
           if (squareColor != this.#data.colors[this.#data.points[j][i]] && squareOpacity == '1') {
-            signalHorizontal.setAttribute('opacity', '1')
-            signalHorizontal.setAttribute('fill', SIGNAL_ERROR_COLOR)
-            signalVertical.setAttribute('opacity', '1')
-            signalVertical.setAttribute('fill', SIGNAL_ERROR_COLOR)
+            if (this.#showErrorsOnCheck) {
+              signalHorizontal.setAttribute('opacity', '1')
+              signalHorizontal.setAttribute('fill', SIGNAL_ERROR_COLOR)
+              signalVertical.setAttribute('opacity', '1')
+              signalVertical.setAttribute('fill', SIGNAL_ERROR_COLOR)
+            }
             errors++
           } else {
             mark = document.getElementById('mark_' + i + '.' + j)
             markOpacity = mark.getAttribute('opacity')
             if (this.#data.points[j][i] != 0 && markOpacity == '1') {
-              signalHorizontal.setAttribute('opacity', '1')
-              signalHorizontal.setAttribute('fill', SIGNAL_ERROR_COLOR)
-              signalVertical.setAttribute('opacity', '1')
-              signalVertical.setAttribute('fill', SIGNAL_ERROR_COLOR)
+              if (this.#showErrorsOnCheck) {
+                signalHorizontal.setAttribute('opacity', '1')
+                signalHorizontal.setAttribute('fill', SIGNAL_ERROR_COLOR)
+                signalVertical.setAttribute('opacity', '1')
+                signalVertical.setAttribute('fill', SIGNAL_ERROR_COLOR)
+              }
               errors++
             }
           }
         }
       }
-      alert(errors + ' errors found')
+      return errors
     }
   }
 
   solve() {
     if (this.#data != null) {
-      var square
+      let square
       for (let i = 0; i < this.#data.settings.height; i++) {
         for (let j = 0; j < this.#data.settings.width; j++) {
           square = document.getElementById('square_' + j + '.' + i)
@@ -170,6 +176,7 @@ class nonogram {
           square.setAttribute('opacity', '1')
         }
       }
+      this.#validate()
     }
   }
   //#endregion
@@ -480,6 +487,7 @@ class nonogram {
           squareNumber.setAttribute('opacity', '0')
           number = document.getElementById('number_0.' + i + '.' + j)
           number.setAttribute('fill', squareNumber.getAttribute('fill'))
+          number.setAttribute('font-weight', 'bold')
         }
         if (
           signal.getAttribute('opacity') == '0' ||
@@ -509,6 +517,7 @@ class nonogram {
           squareNumber.setAttribute('opacity', '0')
           number = document.getElementById('number_1.' + i + '.' + j)
           number.setAttribute('fill', squareNumber.getAttribute('fill'))
+          number.setAttribute('font-weight', 'bold')
         }
         if (
           signal.getAttribute('opacity') == '0' ||
@@ -531,14 +540,13 @@ class nonogram {
       calculatedHorizontal.textContent = ''
       let calculatedVertical = document.getElementById('calculated_1')
       calculatedVertical.textContent = ''
-      alert('Puzzle Solved!')
     }
   }
 
   #changeAreaSize() {
     this.#changeSvgDocumentSize()
-    var pos_x = this.#data.settings.horizontalNumbersLength * this.#size
-    var pos_y = this.#data.settings.verticalNumbersLength * this.#size
+    let pos_x = this.#data.settings.horizontalNumbersLength * this.#size
+    let pos_y = this.#data.settings.verticalNumbersLength * this.#size
     this.#changeBackgroundSize(pos_x, pos_y)
     for (let i = 0; i < this.#data.settings.width; i++) {
       for (let j = 0; j < this.#data.settings.height; j++) {
@@ -573,7 +581,7 @@ class nonogram {
   }
 
   #changeBackgroundSize(pos_x, pos_y) {
-    var background = document.getElementById('background')
+    let background = document.getElementById('background')
     background.setAttribute('height', this.#size * this.#data.settings.height)
     background.setAttribute('width', this.#size * this.#data.settings.width)
     background.setAttribute('x', pos_x)
@@ -581,21 +589,21 @@ class nonogram {
   }
 
   #changeMarkSize(pos_x, pos_y, i, j) {
-    var mark = document.getElementById('mark_' + i + '.' + j)
+    let mark = document.getElementById('mark_' + i + '.' + j)
     mark.setAttribute('font-size', this.#size)
     mark.setAttribute('x', pos_x + (i + 0.5) * this.#size)
     mark.setAttribute('y', pos_y + (j + 0.85) * this.#size)
   }
 
   #changeMarkAuxSize(pos_x, pos_y, i, j) {
-    var markAux = document.getElementById('mark_aux_' + i + '.' + j)
+    let markAux = document.getElementById('mark_aux_' + i + '.' + j)
     markAux.setAttribute('font-size', this.#size)
     markAux.setAttribute('x', pos_x + (i + 0.5) * this.#size)
     markAux.setAttribute('y', pos_y + (j + 0.85) * this.#size)
   }
 
   #changeSquareSize(pos_x, pos_y, i, j) {
-    var square = document.getElementById('square_' + i + '.' + j)
+    let square = document.getElementById('square_' + i + '.' + j)
     square.setAttribute('height', this.#size * 0.9)
     square.setAttribute('width', this.#size * 0.9)
     square.setAttribute('x', pos_x + i * this.#size + this.#size * 0.05)
@@ -603,7 +611,7 @@ class nonogram {
   }
 
   #changeSquareAuxSize(pos_x, pos_y, i, j) {
-    var squareAux = document.getElementById('square_aux_' + i + '.' + j)
+    let squareAux = document.getElementById('square_aux_' + i + '.' + j)
     squareAux.setAttribute('height', this.#size * 0.9)
     squareAux.setAttribute('width', this.#size * 0.9)
     squareAux.setAttribute('x', pos_x + i * this.#size + this.#size * 0.05)
@@ -611,7 +619,7 @@ class nonogram {
   }
 
   #changeSignalSize(pos_x, pos_y, orientation, i) {
-    var signal = document.getElementById('signal_' + orientation + '.' + i)
+    let signal = document.getElementById('signal_' + orientation + '.' + i)
     signal.setAttribute('font-size', this.#size)
     if (orientation == 0) {
       signal.setAttribute('x', pos_x + i * this.#size)
@@ -623,7 +631,7 @@ class nonogram {
   }
 
   #changeNumberSize(pos_x, pos_y, orientation, i, j) {
-    var number = document.getElementById('number_' + orientation + '.' + i + '.' + (j - 1))
+    let number = document.getElementById('number_' + orientation + '.' + i + '.' + (j - 1))
     number.setAttribute('font-size', 0.9 * this.#size)
     if (orientation == 0) {
       number.setAttribute('x', pos_x + i * this.#size + 0.5 * this.#size)
@@ -635,7 +643,7 @@ class nonogram {
   }
 
   #changeSquareNumberSize(pos_x, pos_y, orientation, i, j) {
-    var squareNumber = document.getElementById(
+    let squareNumber = document.getElementById(
       'squareNumber_' + orientation + '.' + i + '.' + (j - 1),
     )
     squareNumber.setAttribute('height', this.#size)
@@ -650,7 +658,7 @@ class nonogram {
   }
 
   #changeLineSize(pos_x, pos_y, orientation, i) {
-    var line = document.getElementById('line_' + orientation + '.' + i)
+    let line = document.getElementById('line_' + orientation + '.' + i)
     if (orientation == 0) {
       line.setAttribute('x1', pos_x + i * this.#size)
       line.setAttribute('x2', pos_x + i * this.#size)
@@ -665,7 +673,7 @@ class nonogram {
   }
 
   #changeCalculatedSize(pos_x, pos_y, orientation) {
-    var calculated = document.getElementById('calculated_' + orientation)
+    let calculated = document.getElementById('calculated_' + orientation)
     calculated.setAttribute('font-size', this.#size)
     if (orientation == 0) {
       calculated.setAttribute(
