@@ -6,6 +6,8 @@ pipelines:
         configuration:
           requiresApproval:
             timeoutSeconds: 43200 # if not approved in this timeframe, the step will be cancelled
+            approvers:
+              - lucas.rollemberg@gmail.com # must be a valid Artifactory user
         execution:
           onExecute:
             - echo "executing step..."
