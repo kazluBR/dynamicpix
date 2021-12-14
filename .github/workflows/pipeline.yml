@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: dev
-      url: 'www.dev.com.br'
     needs: build
     steps:
       - name: Run a one-line script
@@ -26,8 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
-      url: 'www.staging.com.br'
-    needs: [build, deploy-dev]
+    needs: deploy-dev
     steps:
       - name: Run a one-line script
         run: echo Deploy Staging running
@@ -36,8 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: prod
-      url: 'www.prod.com.br'
-    needs: [build, deploy-staging]
+    needs: deploy-staging
     steps:
       - name: Run a one-line script
         run: echo Deploy Prod running
