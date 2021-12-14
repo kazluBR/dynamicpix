@@ -21,13 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Configs A
-        if: ${{ github.event.inputs.function }} != ''
+        if: github.event.inputs.function != ''
         run: |
           echo stage: ${{ github.event.inputs.stage }}
           echo service: ${{ github.event.inputs.service }}
           echo function: ${{ github.event.inputs.function }}
       - name: Configs B
-        if: ${{ github.event.inputs.function }} == ''
+        if: github.event.inputs.function == ''
         run: |
           echo stage: ${{ github.event.inputs.stage }}
           echo service: ${{ github.event.inputs.service }}
