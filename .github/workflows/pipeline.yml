@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run a one-line script
+        run: echo Build running!
+        
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    needs: build
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy Dev running!
+  
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+    needs: [build, deploy-dev]
+    steps:
+      - name: echo Deploy Staging running!
+      
+  deploy-prod:
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+    needs: [build, deploy-staging]
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy Prod running!
