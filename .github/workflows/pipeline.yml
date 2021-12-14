@@ -27,7 +27,8 @@ jobs:
       name: staging
     needs: [build, deploy-dev]
     steps:
-      - name: echo Deploy Staging running!
+      - name: Run a one-line script
+        run: echo Deploy Staging running!
       
   deploy-prod:
     runs-on: ubuntu-latest
