@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: calls-events
+name: serverless-pipeline
 
 on:
   workflow_dispatch:
@@ -9,16 +9,26 @@ on:
         description: 'Stage'
         required: true
         default: 'staging'
+      service:
+        description: 'Service'
+        required: true
       function:
-        description: 'Function Name'
+        description: 'Function'
         required: false
-        default: ''
 
 jobs:  
-  calls-events:
+  setup:
     runs-on: ubuntu-latest
+    steps:
+      - name: Configs
+        run: echo service ${{ github.event.inputs.service }} | function ${{ github.event.inputs.function }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: setup
     environment:
       name: ${{ github.event.inputs.stage }}
     steps:
+      - name: Go to service directory
+        run: echo cd ./services/${{ github.event.inputs.service }}
       - name: Run a one-line script
         run: echo sls deploy -s staging -f ${{ github.event.inputs.function }}
