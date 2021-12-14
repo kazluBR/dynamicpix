@@ -21,7 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Configs
-        run: echo service ${{ github.event.inputs.service }} | function ${{ github.event.inputs.function }}
+        run: |
+          echo service: ${{ github.event.inputs.service }} 
+          echo function: ${{ github.event.inputs.function }}
   deploy:
     runs-on: ubuntu-latest
     needs: setup
