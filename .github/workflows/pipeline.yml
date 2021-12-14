@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: staging
+name: calls-events-staging
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ jobs:
   calls-events-all-functions-deploy:
     runs-on: ubuntu-latest
     environment:
-      name: staging
+      name: calls-events-full
     steps:
       - name: Run a one-line script
         run: echo sls deploy -s staging
@@ -17,15 +17,7 @@ jobs:
   calls-events-calls-aggregator-deploy:
     runs-on: ubuntu-latest
     environment:
-      name: staging
+      name: calls-events-aggregator
     steps:
       - name: Run a one-line script
         run: echo sls deploy -s staging -f calls-aggregator
-  
-  calls-events-cdr-to-es-deploy:
-    runs-on: ubuntu-latest
-    environment:
-      name: staging
-    steps:
-      - name: Run a one-line script
-        run: echo sls deploy -s staging -f cdr-to-es
