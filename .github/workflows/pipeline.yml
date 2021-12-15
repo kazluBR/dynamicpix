@@ -1,6 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
-name: serverless-pipeline
+name: pipeline-per-function
 
 on:
   workflow_dispatch:
@@ -14,27 +12,11 @@ on:
         required: true
       function:
         description: 'Function'
-        required: false
+        required: true
 
 jobs:  
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Configs A
-        if: github.event.inputs.function != ''
-        run: |
-          echo stage: ${{ github.event.inputs.stage }}
-          echo service: ${{ github.event.inputs.service }}
-          echo function: ${{ github.event.inputs.function }}
-      - name: Configs B
-        if: github.event.inputs.function == ''
-        run: |
-          echo stage: ${{ github.event.inputs.stage }}
-          echo service: ${{ github.event.inputs.service }}
-          echo all functions
   deploy:
     runs-on: ubuntu-latest
-    needs: setup
     environment:
       name: ${{ github.event.inputs.stage }}
     steps:
