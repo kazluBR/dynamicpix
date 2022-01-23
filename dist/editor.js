@@ -59,8 +59,14 @@ class editor {
   }
 
   //#region Main Functions
-  init() {
+  init(data) {
     this.#createSvgDocument()
+    if (data) {
+      this.#palette = data.colors
+      this.#width = data.settings.width
+      this.#height = data.settings.height
+      this.#gridLength = data.settings.gridLength
+    }
     for (let i = 1; i < this.#palette.length; i++) {
       this.#createSquareColor(i)
     }
@@ -87,6 +93,10 @@ class editor {
     this.#createIncreaseArrow(2)
     this.#saveState()
     this.#refreshCursor()
+    if (data) {
+      this.#refreshArea()
+      this.#loadPoints(data)
+    }
   }
 
   maximize(value) {
@@ -161,6 +171,16 @@ class editor {
     data.settings.horizontalNumbersLength = this.#getMaxNumbers(data.horizontalNumbers)
     data.settings.verticalNumbersLength = this.#getMaxNumbers(data.verticalNumbers)
     return JSON.stringify(data, null, 2)
+  }
+
+  openJson(data) {
+    this.setPalette(data.colors)
+    this.#width = data.settings.width
+    this.#height = data.settings.height
+    this.#gridLength = data.settings.gridLength
+    this.#refreshArea()
+    this.#refreshCursor()
+    this.#loadPoints(data)
   }
   //#endregion
 
@@ -737,6 +757,20 @@ class editor {
       if (aux > bigger) bigger = aux
     }
     return bigger
+  }
+
+  #loadPoints(data) {
+    let square, squareAux
+    for (let i = 0; i < this.#height; i++) {
+      for (let j = 0; j < this.#width; j++) {
+        square = document.getElementById('square_' + j + '.' + i)
+        square.setAttribute('fill', data.colors[data.points[i][j]])
+        square.setAttribute('opacity', '1')
+        squareAux = document.getElementById('square_aux_' + j + '.' + i)
+        squareAux.setAttribute('fill', data.colors[data.points[i][j]])
+        squareAux.setAttribute('opacity', '1')
+      }
+    }
   }
   //#endregion
 

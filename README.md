@@ -6,12 +6,12 @@ Javascript library to generate nonograms through a pixel editor and an interface
 
 On /dist you can find the files you need
 
-| File                                                                                         | Description         |
-| -------------------------------------------------------------------------------------------- | ------------------- |
-| [editor.js](https://raw.githubusercontent.com/kazluBR/DynamicPix/master/dist/editor.js)      | javascript es6 file |
-| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/1.0.0/editor-min.js)     | javascript minified |
-| [nonogram.js](https://raw.githubusercontent.com/kazluBR/DynamicPix/master/dist/nonogram.js)  | javascript es6 file |
-| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/1.0.0/nonogram-min.js) | javascript minified |
+| File                                                                                          | Description         |
+| --------------------------------------------------------------------------------------------- | ------------------- |
+| [editor.js](/dist/editor.js)                                                                  | javascript es6 file |
+| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/v1.0.0/editor-min.js)     | javascript minified |
+| [nonogram.js](/dist/nonogram.js)                                                              | javascript es6 file |
+| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/v1.0.0/nonogram-min.js) | javascript minified |
 
 ## Editor
 
@@ -45,16 +45,17 @@ const config = {
 const edt = new editor(config)
 ```
 
-| Method               | Description                                                             |
-| -------------------- | ----------------------------------------------------------------------- |
-| init()               | Initialize editor with the settings                                     |
-| maximize(value)      | Increases the editor area                                               |
-| minimize(value)      | Decreases the editor area                                               |
-| undo()               | Undo the last modification                                              |
-| redo()               | Redo the next modification                                              |
-| setGridLength(value) | Sets the size of the editor grid                                        |
-| setPalette(list)     | Sets the palette passing a list of colors in hexadecimal                |
-| generateJson()       | Exports the drawing to json string format compatible with the game view |
+| Method               | Description                                                                                         |
+| -------------------- | --------------------------------------------------------------------------------------------------- |
+| init(data)           | Initialize editor with the settings and optionally load the drawing when passing the data parameter |
+| maximize(value)      | Increases the editor area                                                                           |
+| minimize(value)      | Decreases the editor area                                                                           |
+| undo()               | Undo the last modification                                                                          |
+| redo()               | Redo the next modification                                                                          |
+| setGridLength(value) | Sets the size of the editor grid                                                                    |
+| setPalette(list)     | Sets the palette passing a list of colors in hexadecimal                                            |
+| generateJson()       | Exports the drawing to json string format compatible with the game view                             |
+| openJson(data)       | Load the drawing through the data                                                                   |
 
 ### Controls
 
