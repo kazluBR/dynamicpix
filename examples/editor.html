@@ -11,6 +11,11 @@
 
   <body>
     <div>
+      <input class="txt" type="text" id="filename" placeholder="json" readonly="readonly" />
+      <label class="btn" for="file-upload">Select a Json File</label>
+      <input type="file" id="file-upload" onchange="loadJson(event)" />
+    </div>
+    <div>
       <button class="btn" onclick="edt.maximize(5)" title="Maximize">
         <i class="fa fa-plus"></i>
       </button>
@@ -63,6 +68,23 @@
       ]
       const edt = new editor()
       edt.init()
+
+      function loadJson(event) {
+        let files = event.target.files
+        if (files.length <= 0) {
+          alert('Select a valid JSON file')
+          return false
+        }
+        let filename = document.getElementById('filename')
+        filename.value = files[0].name
+        let fr = new FileReader()
+        fr.onload = function (e) {
+          let result = e.target.result
+          let data = JSON.parse(result)
+          edt.openJson(data)
+        }
+        fr.readAsText(files.item(0))
+      }
 
       function setPalette(evt) {
         edt.setPalette(PALETTES[evt.value])
