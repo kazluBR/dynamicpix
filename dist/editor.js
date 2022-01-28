@@ -60,13 +60,17 @@ class editor {
 
   //#region Main Functions
   init(data) {
-    this.#createSvgDocument()
+    let svg = document.getElementsByTagName('svg')[0]
+    if (svg) svg.remove()
     if (data) {
+      this.#backgroundColor = data.colors[0]
+      this.#currentColor = data.colors[1]
       this.#palette = data.colors
       this.#width = data.settings.width
       this.#height = data.settings.height
       this.#gridLength = data.settings.gridLength
     }
+    this.#createSvgDocument()
     for (let i = 1; i < this.#palette.length; i++) {
       this.#createSquareColor(i)
     }
@@ -171,16 +175,6 @@ class editor {
     data.settings.horizontalNumbersLength = this.#getMaxNumbers(data.horizontalNumbers)
     data.settings.verticalNumbersLength = this.#getMaxNumbers(data.verticalNumbers)
     return JSON.stringify(data, null, 2)
-  }
-
-  openJson(data) {
-    this.setPalette(data.colors)
-    this.#width = data.settings.width
-    this.#height = data.settings.height
-    this.#gridLength = data.settings.gridLength
-    this.#refreshArea()
-    this.#refreshCursor()
-    this.#loadPoints(data)
   }
   //#endregion
 
@@ -561,11 +555,8 @@ class editor {
     for (let i = 0; i < MAX_WIDTH_DIMENSION; i++) {
       for (let j = 0; j < MAX_HEIGTH_DIMENSION; j++) {
         let square = document.getElementById('square_' + i + '.' + j)
-        let color = square.getAttribute('fill')
-        if (color != this.#backgroundColor) {
-          if (i >= this.#width || j >= this.#height) square.setAttribute('opacity', '0')
-          else square.setAttribute('opacity', '1')
-        }
+        if (i >= this.#width || j >= this.#height) square.setAttribute('opacity', '0')
+        else square.setAttribute('opacity', '1')
       }
     }
   }
@@ -760,15 +751,12 @@ class editor {
   }
 
   #loadPoints(data) {
-    let square, squareAux
+    let square
     for (let i = 0; i < this.#height; i++) {
       for (let j = 0; j < this.#width; j++) {
         square = document.getElementById('square_' + j + '.' + i)
         square.setAttribute('fill', data.colors[data.points[i][j]])
         square.setAttribute('opacity', '1')
-        squareAux = document.getElementById('square_aux_' + j + '.' + i)
-        squareAux.setAttribute('fill', data.colors[data.points[i][j]])
-        squareAux.setAttribute('opacity', '1')
       }
     }
   }

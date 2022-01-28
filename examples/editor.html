@@ -81,7 +81,7 @@
         fr.onload = function (e) {
           let result = e.target.result
           let data = JSON.parse(result)
-          edt.openJson(data)
+          edt.init(data)
         }
         fr.readAsText(files.item(0))
       }
