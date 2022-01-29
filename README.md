@@ -6,12 +6,12 @@ Javascript library to generate nonograms through a pixel editor and an interface
 
 On /dist you can find the files you need
 
-| File                                                                                         | Description         |
-| -------------------------------------------------------------------------------------------- | ------------------- |
-| [editor.js](/dist/editor.js)                                                                 | javascript es6 file |
-| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/1.0.0/editor-min.js)     | javascript minified |
-| [nonogram.js](/dist/nonogram.js)                                                             | javascript es6 file |
-| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/DynamicPix/dist/1.0.0/nonogram-min.js) | javascript minified |
+| File                                                                                          | Description         |
+| --------------------------------------------------------------------------------------------- | ------------------- |
+| [editor.js](/dist/editor.js)                                                                  | javascript es6 file |
+| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/v1.0.0/editor-min.js)     | javascript minified |
+| [nonogram.js](/dist/nonogram.js)                                                              | javascript es6 file |
+| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/v1.0.0/nonogram-min.js) | javascript minified |
 
 ## Editor
 
