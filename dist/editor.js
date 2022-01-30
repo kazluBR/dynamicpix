@@ -30,17 +30,7 @@ class editor {
     this.#width = config.width || 5
     this.#height = config.height || 5
     this.#gridLength = config.gridLength || 5
-    this.#palette = config.palette || [
-      '#ffffff',
-      '#8e3179',
-      '#ca3435',
-      '#ff91a4',
-      '#fcd667',
-      '#93dfb8',
-      '#b5b35c',
-      '#02a4d3',
-      '#00468c',
-    ]
+    this.#palette = config.palette || ['#ffffff', '#000000']
     this.#backgroundColor = this.#palette[0]
     this.#currentColor = this.#palette[1]
     this.#clicked = false
@@ -144,6 +134,8 @@ class editor {
     this.#backgroundColor = list[0]
     this.#refreshBackground(backgroundColorOld)
     this.#currentColor = list[1]
+    this.#refreshCursor()
+    this.#refreshArea()
   }
 
   generateJson() {

@@ -9,9 +9,9 @@ On /dist you can find the files you need
 | File                                                                                          | Description         |
 | --------------------------------------------------------------------------------------------- | ------------------- |
 | [editor.js](/dist/editor.js)                                                                  | javascript es6 file |
-| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/v1.0.0/editor-min.js)     | javascript minified |
+| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/1.0.0/editor-min.js)     | javascript minified |
 | [nonogram.js](/dist/nonogram.js)                                                              | javascript es6 file |
-| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/v1.0.0/nonogram-min.js) | javascript minified |
+| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/1.0.0/nonogram-min.js) | javascript minified |
 
 ## Editor
 
@@ -40,7 +40,7 @@ const config = {
   width: int, //defaults to 5
   height: int, //defaults to 5
   gridLength: int, //defaults to 5
-  palette: list, //defaults to fixed palette with 8 colors
+  palette: list, //defaults to fixed palette with black and white colors
 }
 const edt = new editor(config)
 ```
