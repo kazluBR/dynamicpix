@@ -9,9 +9,9 @@ On /dist you can find the files you need
 | File                                                                                          | Description         |
 | --------------------------------------------------------------------------------------------- | ------------------- |
 | [editor.js](/dist/editor.js)                                                                  | javascript es6 file |
-| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/1.0.0/editor-min.js)     | javascript minified |
+| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/v1.0.0/editor-min.js)     | javascript minified |
 | [nonogram.js](/dist/nonogram.js)                                                              | javascript es6 file |
-| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/1.0.0/nonogram-min.js) | javascript minified |
+| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/v1.0.0/nonogram-min.js) | javascript minified |
 
 ## Editor
 
@@ -102,6 +102,7 @@ You can configure this settings to customize your nonogram:
 const config = {
   size: int, //defaults to 20
   showErrorsOnCheck: bool, //defaults to false
+  finishCallback: () => {}, //defaults to console.log('Puzzle Finished!')
 }
 const nng = new nonogram(config)
 ```

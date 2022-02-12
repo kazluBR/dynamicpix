@@ -13,6 +13,7 @@ const NUMBER_DEFAULT_COLOR = '#ffffff'
 class nonogram {
   #size
   #showErrorsOnCheck
+  #finishCallback
   #data
   #totalValidated
   #clicked
@@ -27,6 +28,7 @@ class nonogram {
   constructor(config = {}) {
     this.#size = config.size || 20
     this.#showErrorsOnCheck = config.showErrorsOnCheck || false
+    this.#finishCallback = config.finishCallback || (() => console.log('Puzzle Finished!'))
     this.#data = {}
     this.#totalValidated = false
     this.#clicked = false
@@ -540,6 +542,7 @@ class nonogram {
       calculatedHorizontal.textContent = ''
       let calculatedVertical = document.getElementById('calculated_1')
       calculatedVertical.textContent = ''
+      this.#finishCallback()
     }
   }
 
