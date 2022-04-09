@@ -11,9 +11,12 @@
 
   <body>
     <div>
-      <input class="txt" type="text" id="filename" placeholder="json" readonly="readonly" />
-      <label class="btn" for="file-upload">Select a Json File</label>
-      <input type="file" id="file-upload" onchange="loadJson(event)" />
+      <input class="txt" type="text" id="filenameJson" placeholder="json" readonly="readonly" />
+      <label class="btn" for="file-upload-json">Select a Nonogram File</label>
+      <input type="file" id="file-upload-json" onchange="loadNonogram(event)" />
+      <input class="txt" type="text" id="filenameTxt" placeholder="txt" readonly="readonly" />
+      <label class="btn" for="file-upload-txt">Select a Save State File</label>
+      <input type="file" id="file-upload-txt" onchange="loadState(event)" />
     </div>
     <br />
     <div id="menu">
@@ -38,6 +41,9 @@
       <button class="btn" onclick="nng.solve()" title="Show Solution">
         <i class="fa fa-eye"></i>
       </button>
+      <button class="btn" onclick="exportState()" title="Save State">
+        <i class="fa fa-save"></i>
+      </button>
     </div>
     <hr />
     <div id="nonogram"></div>
@@ -45,13 +51,13 @@
       let data = {}
       const nng = new nonogram()
 
-      function loadJson(event) {
+      function loadNonogram(event) {
         let files = event.target.files
         if (files.length <= 0) {
           alert('Select a valid JSON file')
           return false
         }
-        let filename = document.getElementById('filename')
+        let filename = document.getElementById('filenameJson')
         filename.value = files[0].name
         let fr = new FileReader()
         fr.onload = function (e) {
@@ -70,6 +76,31 @@
       function check() {
         let errors = nng.check()
         alert(`${errors} errors found`)
+      }
+
+      function exportState() {
+        let txt = nng.getState()
+        let blob = new Blob([txt], { type: 'text/plain' })
+        let a = document.createElement('a')
+        a.download = 'state.txt'
+        a.href = window.URL.createObjectURL(blob)
+        a.click()
+      }
+
+      function loadState(event) {
+        let files = event.target.files
+        if (files.length <= 0) {
+          alert('Select a valid Text file')
+          return false
+        }
+        let filename = document.getElementById('filenameTxt')
+        filename.value = files[0].name
+        let fr = new FileReader()
+        fr.onload = function (e) {
+          let result = e.target.result
+          nng.loadState(result)
+        }
+        fr.readAsText(files.item(0))
       }
     </script>
   </body>
