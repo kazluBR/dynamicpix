@@ -170,12 +170,44 @@ class nonogram {
 
   solve() {
     if (this.#data != null) {
-      let square
       for (let i = 0; i < this.#data.settings.height; i++) {
         for (let j = 0; j < this.#data.settings.width; j++) {
-          square = document.getElementById('square_' + j + '.' + i)
+          let square = document.getElementById('square_' + j + '.' + i)
           square.setAttribute('fill', this.#data.colors[this.#data.points[i][j]])
           square.setAttribute('opacity', '1')
+        }
+      }
+      this.#validate()
+    }
+  }
+
+  getState() {
+    let state = ''
+    if (this.#data != null) {
+      for (let i = 0; i < this.#data.settings.height; i++) {
+        for (let j = 0; j < this.#data.settings.width; j++) {
+          let square = document.getElementById('square_' + j + '.' + i)
+          state += this.#data.colors.indexOf(square.getAttribute('fill')) + ','
+        }
+        state += ';'
+      }
+    }
+    return state
+  }
+
+  loadState(state) {
+    if (this.#data != null) {
+      let columns = state.split(';')
+      for (let i = 0; i < this.#data.settings.height; i++) {
+        let lines = columns[i].split(',')
+        for (let j = 0; j < this.#data.settings.width; j++) {
+          let square = document.getElementById('square_' + j + '.' + i)
+          square.setAttribute('fill', this.#data.colors[lines[j]])
+          if (lines[j] > 0) {
+            square.setAttribute('opacity', '1')
+          } else {
+            square.setAttribute('opacity', '0')
+          }
         }
       }
       this.#validate()
