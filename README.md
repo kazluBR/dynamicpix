@@ -6,12 +6,12 @@ Javascript library to generate nonograms through a pixel editor and an interface
 
 On /dist you can find the files you need
 
-| File                                                                                         | Description         |
-| -------------------------------------------------------------------------------------------- | ------------------- |
-| [editor.js](/dist/editor.js)                                                                 | javascript es6 file |
-| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/1.0.0/editor-min.js)     | javascript minified |
-| [nonogram.js](/dist/nonogram.js)                                                             | javascript es6 file |
-| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/1.0.0/nonogram-min.js) | javascript minified |
+| File                                                                                                  | Description         |
+| ----------------------------------------------------------------------------------------------------- | ------------------- |
+| [editor.js](/dist/editor.js)                                                                          | javascript es6 file |
+| [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/editor/1.0.0/editor-min.js)       | javascript minified |
+| [nonogram.js](/dist/nonogram.js)                                                                      | javascript es6 file |
+| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.0.0/nonogram-min.js) | javascript minified |
 
 ## Editor
 
@@ -36,11 +36,11 @@ You can configure this settings to customize your editor:
 
 ```javascript
 const config = {
-  size: int, //defaults to 20
-  width: int, //defaults to 5
-  height: int, //defaults to 5
-  gridLength: int, //defaults to 5
-  palette: list, //defaults to fixed palette with black and white colors
+  size: int, // defaults to 20
+  width: int, // defaults to 5
+  height: int, // defaults to 5
+  gridLength: int, // defaults to 5
+  palette: list, // defaults to fixed palette with black and white colors
 }
 const edt = new editor(config)
 ```
@@ -100,24 +100,24 @@ You can configure this settings to customize your nonogram:
 
 ```javascript
 const config = {
-  size: int, //defaults to 20
-  showErrorsOnCheck: bool, //defaults to false
-  finishCallback: () => {}, //defaults to console.log('Puzzle Finished!')
+  size: int, // defaults to 20
+  showErrorsOnCheck: bool, // defaults to false
+  finishCallback: () => {}, // defaults to console.log('Puzzle Finished!')
 }
 const nng = new nonogram(config)
 ```
 
-| Method          | Description                                       |
-| --------------- | ------------------------------------------------- |
-| init(data)      | Initialize the nonogram with the json data passed |
-| maximize(value) | Increases the editor area                         |
-| minimize(value) | Decreases the editor area                         |
-| undo()          | Undo the last modification                        |
-| redo()          | Redo the next modification                        |
-| check()         | Checks for current errors in the puzzle           |
-| solve()         | Reveals the solution of the puzzle                |
-| getState()      | Exports the current state to a string             |
-| loadState()     | Load the nonogram state through string            |
+| Method                | Description                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------- |
+| init(data, saveState) | Initialize the nonogram with the json data passed and optionally load the saved state |
+| maximize(value)       | Increases the editor area                                                             |
+| minimize(value)       | Decreases the editor area                                                             |
+| undo()                | Undo the last modification                                                            |
+| redo()                | Redo the next modification                                                            |
+| check()               | Checks for current errors in the puzzle                                               |
+| solve()               | Reveals the solution of the puzzle                                                    |
+| getState()            | Exports the current state to a string                                                 |
+| loadState()           | Load the nonogram state through string                                                |
 
 ### Controls
 
