@@ -150,12 +150,11 @@ class editor {
       horizontalNumbers: [],
       verticalNumbers: [],
     }
-    let square, color
     for (let i = 0; i < this.#height; i++) {
       data.points[i] = []
       for (let j = 0; j < this.#width; j++) {
-        square = document.getElementById('square_' + j + '.' + i)
-        color = square.getAttribute('fill')
+        let square = document.getElementById('square_' + j + '.' + i)
+        let color = square.getAttribute('fill')
         if (!data.colors.includes(color)) {
           data.colors.push(color)
         }
@@ -558,12 +557,11 @@ class editor {
       let squarePivot = document.getElementById('square_' + i + '.' + j)
       if (this.#clicked) squarePivot = document.getElementById('square_aux_' + i + '.' + j)
       let colorSquare = squarePivot.getAttribute('fill')
-      let square, squareAux
       let calcHorizontal = 1
       let countRight = i + 1
       while (countRight <= this.#width - 1) {
-        square = document.getElementById('square_' + countRight + '.' + j)
-        squareAux = document.getElementById('square_aux_' + countRight + '.' + j)
+        let square = document.getElementById('square_' + countRight + '.' + j)
+        let squareAux = document.getElementById('square_aux_' + countRight + '.' + j)
         if (
           square.getAttribute('fill') == colorSquare ||
           (squareAux.getAttribute('fill') == colorSquare && colorSquare != this.#backgroundColor)
@@ -574,8 +572,8 @@ class editor {
       }
       let countLeft = i - 1
       while (countLeft >= 0) {
-        square = document.getElementById('square_' + countLeft + '.' + j)
-        squareAux = document.getElementById('square_aux_' + countLeft + '.' + j)
+        let square = document.getElementById('square_' + countLeft + '.' + j)
+        let squareAux = document.getElementById('square_aux_' + countLeft + '.' + j)
         if (
           square.getAttribute('fill') == colorSquare ||
           (squareAux.getAttribute('fill') == colorSquare && colorSquare != this.#backgroundColor)
@@ -587,8 +585,8 @@ class editor {
       let calcVertical = 1
       let countDown = j + 1
       while (countDown <= this.#height - 1) {
-        square = document.getElementById('square_' + i + '.' + countDown)
-        squareAux = document.getElementById('square_aux_' + i + '.' + countDown)
+        let square = document.getElementById('square_' + i + '.' + countDown)
+        let squareAux = document.getElementById('square_aux_' + i + '.' + countDown)
         if (
           square.getAttribute('fill') == colorSquare ||
           (squareAux.getAttribute('fill') == colorSquare && colorSquare != this.#backgroundColor)
@@ -599,8 +597,8 @@ class editor {
       }
       let countUp = j - 1
       while (countUp >= 0) {
-        square = document.getElementById('square_' + i + '.' + countUp)
-        squareAux = document.getElementById('square_aux_' + i + '.' + countUp)
+        let square = document.getElementById('square_' + i + '.' + countUp)
+        let squareAux = document.getElementById('square_aux_' + i + '.' + countUp)
         if (
           square.getAttribute('fill') == colorSquare ||
           (squareAux.getAttribute('fill') == colorSquare && colorSquare != this.#backgroundColor)
@@ -626,10 +624,9 @@ class editor {
   }
 
   #cleanAllSquaresAux() {
-    let squareAux
     for (let i = 0; i < this.#width; i++) {
       for (let j = 0; j < this.#height; j++) {
-        squareAux = document.getElementById('square_aux_' + i + '.' + j)
+        let squareAux = document.getElementById('square_aux_' + i + '.' + j)
         if (squareAux.getAttribute('opacity') == '1') {
           squareAux.setAttribute('fill', this.#backgroundColor)
           squareAux.setAttribute('opacity', '0')
@@ -666,12 +663,11 @@ class editor {
   #refreshBackground(backgroundColorOld) {
     let background = document.getElementById('background')
     background.setAttribute('fill', this.#backgroundColor)
-    let square, squareAux
     for (let i = 0; i < MAX_WIDTH_DIMENSION; i++) {
       for (let j = 0; j < MAX_HEIGTH_DIMENSION; j++) {
-        squareAux = document.getElementById('square_aux_' + i + '.' + j)
+        let squareAux = document.getElementById('square_aux_' + i + '.' + j)
         squareAux.setAttribute('fill', this.#backgroundColor)
-        square = document.getElementById('square_' + i + '.' + j)
+        let square = document.getElementById('square_' + i + '.' + j)
         if (square.getAttribute('fill') == backgroundColorOld)
           square.setAttribute('fill', this.#backgroundColor)
       }
@@ -743,10 +739,9 @@ class editor {
   }
 
   #loadPoints(data) {
-    let square
     for (let i = 0; i < this.#height; i++) {
       for (let j = 0; j < this.#width; j++) {
-        square = document.getElementById('square_' + j + '.' + i)
+        let square = document.getElementById('square_' + j + '.' + i)
         square.setAttribute('fill', data.colors[data.points[i][j]])
         square.setAttribute('opacity', '1')
       }
@@ -975,7 +970,7 @@ class editor {
 
   #switchSquareColor() {
     let palette = document.getElementById('palette').children
-    let selected
+    let selected = 0
     for (let i = 0; i < palette.length; i++) {
       if (palette[i].getAttribute('stroke-width') == 3) {
         if (i == palette.length - 1) selected = 0
@@ -985,9 +980,8 @@ class editor {
     }
     this.#currentColor = this.#palette[selected + 1]
     palette[selected].setAttribute('stroke-width', '3')
-    let squareColor
     for (let i = 1; i < this.#palette.length; i++) {
-      squareColor = document.getElementById('squareColor_' + i)
+      let squareColor = document.getElementById('squareColor_' + i)
       if (i != selected + 1) squareColor.setAttribute('stroke-width', '1')
     }
     this.#refreshCursor()
@@ -995,15 +989,14 @@ class editor {
 
   #endColorsChange() {
     if (this.#clicked) {
-      let squareAux, id, square, squareColor
       for (let i = 0; i < this.#width; i++) {
         for (let j = 0; j < this.#height; j++) {
-          squareAux = document.getElementById('square_aux_' + i + '.' + j)
+          let squareAux = document.getElementById('square_aux_' + i + '.' + j)
           if (squareAux.getAttribute('opacity') == '1') {
-            id = squareAux.getAttribute('id')
+            let id = squareAux.getAttribute('id')
             id = id.replace('square_aux_', 'square_')
-            square = document.getElementById(id)
-            squareColor = squareAux.getAttribute('fill')
+            let square = document.getElementById(id)
+            let squareColor = squareAux.getAttribute('fill')
             square.setAttribute('fill', squareColor)
             if (squareColor == this.#backgroundColor) square.setAttribute('opacity', '0')
             else square.setAttribute('opacity', '1')
