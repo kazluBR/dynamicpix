@@ -56,9 +56,8 @@ class nonogram {
     this.#changeSvgDocumentSize()
     this.#totalValidated = false
     this.#colorSelected = data.colors[1]
-    for (let i = 1; i < this.#data.colors.length; i++) {
-      this.#createSquareColor(i)
-    }
+    this.#loadPalette()
+
     let pos_x = this.#data.settings.horizontalNumbersLength * this.#size
     let pos_y = this.#data.settings.verticalNumbersLength * this.#size
     this.#createBackground(pos_x, pos_y)
@@ -224,26 +223,34 @@ class nonogram {
       return false
     }
     let svg = document.createElementNS(SVG_LIB, 'svg')
-    let transform = 'translate(' + TRANSLATE_X + ',' + TRANSLATE_Y + ')'
     let palette = document.createElementNS(SVG_LIB, 'g')
-    palette.setAttribute('transform', transform)
     palette.setAttribute('id', 'palette')
     svg.appendChild(palette)
-    let calculatedY = TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5
-    transform = 'translate(' + TRANSLATE_X + ',' + calculatedY + ')'
     let main = document.createElementNS(SVG_LIB, 'g')
     main.setAttribute('id', 'main')
-    main.setAttribute('transform', transform)
     svg.appendChild(main)
     let components = document.createElementNS(SVG_LIB, 'g')
     components.setAttribute('id', 'components')
-    components.setAttribute('transform', transform)
     svg.appendChild(components)
     let aux = document.createElementNS(SVG_LIB, 'g')
     aux.setAttribute('id', 'aux')
-    aux.setAttribute('transform', transform)
     svg.appendChild(aux)
     nonogramElement.appendChild(svg)
+  }
+
+  #loadPalette() {
+    let transform = 'translate(' + TRANSLATE_X + ',' + TRANSLATE_Y + ')'
+    document.getElementById('palette').setAttribute('transform', transform)
+    if (this.#data.colors.length > 2) {
+      let calculatedY = TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5
+      transform = 'translate(' + TRANSLATE_X + ',' + calculatedY + ')'
+      for (let i = 1; i < this.#data.colors.length; i++) {
+        this.#createSquareColor(i)
+      }
+    }
+    document.getElementById('main').setAttribute('transform', transform)
+    document.getElementById('components').setAttribute('transform', transform)
+    document.getElementById('aux').setAttribute('transform', transform)
   }
 
   #createSquareColor(i) {
