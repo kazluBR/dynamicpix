@@ -1108,6 +1108,10 @@ class nonogram {
 
   #endColorsChange() {
     if (this.#clicked && this.#data) {
+      let move = {
+        action: '',
+        squares: [],
+      }
       for (let i = 0; i < this.#data.settings.width; i++) {
         for (let j = 0; j < this.#data.settings.height; j++) {
           let squareAux = document.getElementById('square_aux_' + i + '.' + j)
@@ -1121,6 +1125,8 @@ class nonogram {
             else square.setAttribute('opacity', '1')
             squareAux.setAttribute('fill', this.#data.colors[0])
             squareAux.setAttribute('opacity', '0')
+            move.action = 'PAINT'
+            move.squares.push({ i, j })
           }
           let markAux = document.getElementById('mark_aux_' + i + '.' + j)
           if (markAux.getAttribute('opacity') == '1') {
@@ -1129,6 +1135,8 @@ class nonogram {
             let mark = document.getElementById(id)
             mark.setAttribute('opacity', '1')
             markAux.setAttribute('opacity', '0')
+            move.action = 'MARK'
+            move.squares.push({ i, j })
           } else if (markAux.getAttribute('opacity') == '0.1') {
             let id = markAux.getAttribute('id')
             id = id.replace('mark_aux_', 'mark_')
@@ -1141,6 +1149,8 @@ class nonogram {
       this.#clicked = false
       this.#validate()
       this.#addState()
+      let receiveMoveEvent = new CustomEvent('receiveMove', { detail: move })
+      document.dispatchEvent(receiveMoveEvent)
     }
   }
   //#endregion

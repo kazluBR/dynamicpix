@@ -130,3 +130,27 @@ const nng = new nonogram(config)
 | Right Pressing | Mark the squares while you hover over them                          |
 | Right Release  | Stop marking squares                                                |
 | Middle Click   | Switch color to paint (or you can select directly from the palette) |
+
+### Events
+
+You can configure an event listener to show the moves made:
+
+```javascript
+document.addEventListener('receiveMove', (e) => {
+  console.log(e.detail)
+})
+```
+
+e.detail:
+
+```json
+{
+  "action": "str", // PAINT | MARK
+  "squares": [
+    {
+      "i": 0,
+      "j": 0
+    }
+  ]
+}
+```
