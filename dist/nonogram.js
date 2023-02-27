@@ -1109,7 +1109,8 @@ class nonogram {
   #endColorsChange() {
     if (this.#clicked && this.#data) {
       let move = {
-        action: '',
+        action: this.#markSelected ? 'MARK' : 'PAINT',
+        color: this.#colorSelected,
         squares: [],
       }
       for (let i = 0; i < this.#data.settings.width; i++) {
@@ -1125,7 +1126,6 @@ class nonogram {
             else square.setAttribute('opacity', '1')
             squareAux.setAttribute('fill', this.#data.colors[0])
             squareAux.setAttribute('opacity', '0')
-            move.action = 'PAINT'
             move.squares.push({ i, j })
           }
           let markAux = document.getElementById('mark_aux_' + i + '.' + j)
@@ -1135,7 +1135,6 @@ class nonogram {
             let mark = document.getElementById(id)
             mark.setAttribute('opacity', '1')
             markAux.setAttribute('opacity', '0')
-            move.action = 'MARK'
             move.squares.push({ i, j })
           } else if (markAux.getAttribute('opacity') == '0.1') {
             let id = markAux.getAttribute('id')

@@ -117,7 +117,7 @@ const nng = new nonogram(config)
 | check()               | Checks for current errors in the puzzle                                               |
 | solve()               | Reveals the solution of the puzzle                                                    |
 | getState()            | Exports the current state to a string                                                 |
-| loadState()           | Load the nonogram state through string                                                |
+| loadState(state)      | Load the nonogram state through string                                                |
 
 ### Controls
 
@@ -146,6 +146,7 @@ e.detail:
 ```json
 {
   "action": "str", // PAINT | MARK
+  "color": "str", // Hex color
   "squares": [
     {
       "i": 0,
