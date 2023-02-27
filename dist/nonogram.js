@@ -214,6 +214,38 @@ class nonogram {
       this.#validate()
     }
   }
+
+  makeMove(move) {
+    if (move.action == 'PAINT') {
+      for (let k = 0; k < move.squares.length; k++) {
+        let square = document.getElementById(
+          'square_' + move.squares[k].i + '.' + move.squares[k].j,
+        )
+        square.setAttribute('fill', move.color)
+        if (move.color == this.#data.colors[0]) square.setAttribute('opacity', '0')
+        else square.setAttribute('opacity', '1')
+        let squareAux = document.getElementById(
+          'square_aux_' + move.squares[k].i + '.' + move.squares[k].j,
+        )
+        squareAux.setAttribute('fill', this.#data.colors[0])
+        squareAux.setAttribute('opacity', '0')
+      }
+    } else {
+      for (let k = 0; k < move.squares.length; k++) {
+        let mark = document.getElementById('mark_' + move.squares[k].i + '.' + move.squares[k].j)
+        let markAux = document.getElementById(
+          'mark_aux_' + move.squares[k].i + '.' + move.squares[k].j,
+        )
+        if (move.action == 'MARK') {
+          mark.setAttribute('opacity', '1')
+          markAux.setAttribute('opacity', '0')
+        } else if (move.action == 'UNMARK') {
+          mark.setAttribute('opacity', '0')
+          markAux.setAttribute('opacity', '0')
+        }
+      }
+    }
+  }
   //#endregion
 
   //#region Auxiliar Functions

@@ -118,6 +118,7 @@ const nng = new nonogram(config)
 | solve()               | Reveals the solution of the puzzle                                                    |
 | getState()            | Exports the current state to a string                                                 |
 | loadState(state)      | Load the nonogram state through string                                                |
+| makeMove(move)        | Makes move through Move Object                                                        |
 
 ### Controls
 
@@ -137,11 +138,11 @@ You can configure an event listener to show the moves made:
 
 ```javascript
 document.addEventListener('receiveMove', (e) => {
-  console.log(e.detail)
+  console.log(e.detail) // Move Object
 })
 ```
 
-e.detail:
+Move Object:
 
 ```json
 {
