@@ -145,7 +145,7 @@ e.detail:
 
 ```json
 {
-  "action": "str", // PAINT | MARK
+  "action": "str", // PAINT | MARK | UNMARK
   "color": "str", // Hex color
   "squares": [
     {

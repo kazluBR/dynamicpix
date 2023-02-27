@@ -1142,6 +1142,8 @@ class nonogram {
             let mark = document.getElementById(id)
             mark.setAttribute('opacity', '0')
             markAux.setAttribute('opacity', '0')
+            move.squares.push({ i, j })
+            move.action = 'UNMARK'
           }
         }
       }
