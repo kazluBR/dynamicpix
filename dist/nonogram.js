@@ -24,6 +24,7 @@ class nonogram {
   #colorSquare
   #colorSelected
   #markSelected
+  #freeze
 
   constructor(config = {}) {
     this.#size = config.size || 20
@@ -39,6 +40,7 @@ class nonogram {
     this.#colorSquare = null
     this.#colorSelected = null
     this.#markSelected = null
+    this.#freeze = false
     document.body.onmousedown = (e) => {
       if (e.button == 1) {
         this.#switchSquareColor()
@@ -262,6 +264,14 @@ class nonogram {
       }
     }
     this.#addState()
+  }
+
+  freeze() {
+    this.#freeze = true
+  }
+
+  unfreeze() {
+    this.#freeze = false
   }
   //#endregion
 
@@ -936,7 +946,7 @@ class nonogram {
   }
 
   #highlightSquare(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -960,7 +970,7 @@ class nonogram {
   }
 
   #fadeSquare(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -988,7 +998,7 @@ class nonogram {
   }
 
   #initColorsChange(evt) {
-    if (!this.#totalValidated && evt.button != 1) {
+    if (!this.#totalValidated && evt.button != 1 && !this.#freeze) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -1053,7 +1063,7 @@ class nonogram {
   }
 
   #changeColorSquares(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -1093,7 +1103,7 @@ class nonogram {
   }
 
   #markSquareNumber(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let opacity = evt.target.getAttribute('opacity')
       let id = evt.target.getAttribute('id')
       id = id.replace('squareNumber_', '')
@@ -1115,7 +1125,7 @@ class nonogram {
   }
 
   #markNumber(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let fill = evt.target.getAttribute('fill')
       let id = evt.target.getAttribute('id')
       id = id.replace('number_', '')

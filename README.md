@@ -120,6 +120,8 @@ const nng = new nonogram(config)
 | loadState(state)      | Load the nonogram state through string                                                |
 | makeMove(move)        | Makes move through Move Object                                                        |
 | undoMove(move)        | Undo move through Move Object                                                         |
+| freeze()              | Prevents play moves                                                                   |
+| unfreeze()            | Releases play moves                                                                   |
 
 ### Controls
 
