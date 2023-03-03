@@ -224,27 +224,44 @@ class nonogram {
         square.setAttribute('fill', move.color)
         if (move.color == this.#data.colors[0]) square.setAttribute('opacity', '0')
         else square.setAttribute('opacity', '1')
-        let squareAux = document.getElementById(
-          'square_aux_' + move.squares[k].i + '.' + move.squares[k].j,
-        )
-        squareAux.setAttribute('fill', this.#data.colors[0])
-        squareAux.setAttribute('opacity', '0')
       }
     } else {
       for (let k = 0; k < move.squares.length; k++) {
         let mark = document.getElementById('mark_' + move.squares[k].i + '.' + move.squares[k].j)
-        let markAux = document.getElementById(
-          'mark_aux_' + move.squares[k].i + '.' + move.squares[k].j,
-        )
         if (move.action == 'MARK') {
           mark.setAttribute('opacity', '1')
-          markAux.setAttribute('opacity', '0')
         } else if (move.action == 'UNMARK') {
           mark.setAttribute('opacity', '0')
-          markAux.setAttribute('opacity', '0')
         }
       }
     }
+    this.#addState()
+  }
+
+  undoMove(move) {
+    if (move.action == 'PAINT') {
+      for (let k = 0; k < move.squares.length; k++) {
+        let square = document.getElementById(
+          'square_' + move.squares[k].i + '.' + move.squares[k].j,
+        )
+        square.setAttribute('fill', move.squares[k].previousColor)
+        if (move.squares[k].previousColor == this.#data.colors[0]) {
+          square.setAttribute('opacity', '0')
+        } else {
+          square.setAttribute('opacity', '1')
+        }
+      }
+    } else {
+      for (let k = 0; k < move.squares.length; k++) {
+        let mark = document.getElementById('mark_' + move.squares[k].i + '.' + move.squares[k].j)
+        if (move.action == 'MARK') {
+          mark.setAttribute('opacity', '0')
+        } else if (move.action == 'UNMARK') {
+          mark.setAttribute('opacity', '1')
+        }
+      }
+    }
+    this.#addState()
   }
   //#endregion
 
@@ -1153,12 +1170,13 @@ class nonogram {
             id = id.replace('square_aux_', 'square_')
             let square = document.getElementById(id)
             let squareColor = squareAux.getAttribute('fill')
+            let previousColor = square.getAttribute('fill')
             square.setAttribute('fill', squareColor)
             if (squareColor == this.#data.colors[0]) square.setAttribute('opacity', '0')
             else square.setAttribute('opacity', '1')
             squareAux.setAttribute('fill', this.#data.colors[0])
             squareAux.setAttribute('opacity', '0')
-            move.squares.push({ i, j })
+            move.squares.push({ i, j, previousColor })
           }
           let markAux = document.getElementById('mark_aux_' + i + '.' + j)
           if (markAux.getAttribute('opacity') == '1') {

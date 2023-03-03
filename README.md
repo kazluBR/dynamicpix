@@ -119,6 +119,7 @@ const nng = new nonogram(config)
 | getState()            | Exports the current state to a string                                                 |
 | loadState(state)      | Load the nonogram state through string                                                |
 | makeMove(move)        | Makes move through Move Object                                                        |
+| undoMove(move)        | Undo move through Move Object                                                         |
 
 ### Controls
 
@@ -151,7 +152,8 @@ Move Object:
   "squares": [
     {
       "i": 0,
-      "j": 0
+      "j": 0,
+      "previousColor": "str" // Hex color
     }
   ]
 }
