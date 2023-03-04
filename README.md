@@ -102,6 +102,7 @@ You can configure this settings to customize your nonogram:
 const config = {
   size: int, // defaults to 20
   showErrorsOnCheck: bool, // defaults to false
+  showErrorsImmediately: bool, // defaults to false
   finishCallback: () => {}, // defaults to alert('Puzzle Finished!')
 }
 const nng = new nonogram(config)
