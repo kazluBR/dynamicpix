@@ -1148,21 +1148,23 @@ class nonogram {
 
   #switchSquareColor() {
     let palette = document.getElementById('palette').children
-    let selected = 0
-    for (let i = 0; i < palette.length; i++) {
-      if (palette[i].getAttribute('stroke-width') == 3) {
-        if (i == palette.length - 1) selected = 0
-        else selected = i + 1
-        break
+    if (palette.length > 0) {
+      let selected = 0
+      for (let i = 0; i < palette.length; i++) {
+        if (palette[i].getAttribute('stroke-width') == 3) {
+          if (i == palette.length - 1) selected = 0
+          else selected = i + 1
+          break
+        }
       }
+      this.#colorSelected = this.#data.colors[selected + 1]
+      palette[selected].setAttribute('stroke-width', '3')
+      for (let i = 1; i < this.#data.colors.length; i++) {
+        let squareColor = document.getElementById('squareColor_' + i)
+        if (i != selected + 1) squareColor.setAttribute('stroke-width', '1')
+      }
+      this.#refreshCursor()
     }
-    this.#colorSelected = this.#data.colors[selected + 1]
-    palette[selected].setAttribute('stroke-width', '3')
-    for (let i = 1; i < this.#data.colors.length; i++) {
-      let squareColor = document.getElementById('squareColor_' + i)
-      if (i != selected + 1) squareColor.setAttribute('stroke-width', '1')
-    }
-    this.#refreshCursor()
   }
 
   #endColorsChange() {
