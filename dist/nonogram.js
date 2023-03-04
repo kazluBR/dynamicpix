@@ -13,6 +13,7 @@ const NUMBER_DEFAULT_COLOR = '#ffffff'
 class nonogram {
   #size
   #showErrorsOnCheck
+  #showErrorsImmediately
   #finishCallback
   #data
   #totalValidated
@@ -24,11 +25,13 @@ class nonogram {
   #colorSquare
   #colorSelected
   #markSelected
+  #freeze
 
   constructor(config = {}) {
     this.#size = config.size || 20
     this.#showErrorsOnCheck = config.showErrorsOnCheck || false
-    this.#finishCallback = config.finishCallback || (() => console.log('Puzzle Finished!'))
+    this.#showErrorsImmediately = config.showErrorsImmediately || false
+    this.#finishCallback = config.finishCallback || (() => alert('Puzzle Finished!'))
     this.#data = {}
     this.#totalValidated = false
     this.#clicked = false
@@ -39,6 +42,7 @@ class nonogram {
     this.#colorSquare = null
     this.#colorSelected = null
     this.#markSelected = null
+    this.#freeze = false
     document.body.onmousedown = (e) => {
       if (e.button == 1) {
         this.#switchSquareColor()
@@ -56,9 +60,8 @@ class nonogram {
     this.#changeSvgDocumentSize()
     this.#totalValidated = false
     this.#colorSelected = data.colors[1]
-    for (let i = 1; i < this.#data.colors.length; i++) {
-      this.#createSquareColor(i)
-    }
+    this.#loadPalette()
+
     let pos_x = this.#data.settings.horizontalNumbersLength * this.#size
     let pos_y = this.#data.settings.verticalNumbersLength * this.#size
     this.#createBackground(pos_x, pos_y)
@@ -66,6 +69,9 @@ class nonogram {
       for (let j = 0; j < this.#data.settings.height; j++) {
         this.#createMark(pos_x, pos_y, i, j)
         this.#createSquare(pos_x, pos_y, i, j)
+        if (this.#showErrorsImmediately) {
+          this.#createErrorMark(pos_x, pos_y, i, j)
+        }
         this.#createMarkAux(pos_x, pos_y, i, j)
         this.#createSquareAux(pos_x, pos_y, i, j)
       }
@@ -215,6 +221,63 @@ class nonogram {
       this.#validate()
     }
   }
+
+  makeMove(move) {
+    if (move.action == 'PAINT') {
+      for (let k = 0; k < move.squares.length; k++) {
+        let square = document.getElementById(
+          'square_' + move.squares[k].i + '.' + move.squares[k].j,
+        )
+        square.setAttribute('fill', move.color)
+        if (move.color == this.#data.colors[0]) square.setAttribute('opacity', '0')
+        else square.setAttribute('opacity', '1')
+      }
+    } else {
+      for (let k = 0; k < move.squares.length; k++) {
+        let mark = document.getElementById('mark_' + move.squares[k].i + '.' + move.squares[k].j)
+        if (move.action == 'MARK') {
+          mark.setAttribute('opacity', '1')
+        } else if (move.action == 'UNMARK') {
+          mark.setAttribute('opacity', '0')
+        }
+      }
+    }
+    this.#addState()
+  }
+
+  undoMove(move) {
+    if (move.action == 'PAINT') {
+      for (let k = 0; k < move.squares.length; k++) {
+        let square = document.getElementById(
+          'square_' + move.squares[k].i + '.' + move.squares[k].j,
+        )
+        square.setAttribute('fill', move.squares[k].previousColor)
+        if (move.squares[k].previousColor == this.#data.colors[0]) {
+          square.setAttribute('opacity', '0')
+        } else {
+          square.setAttribute('opacity', '1')
+        }
+      }
+    } else {
+      for (let k = 0; k < move.squares.length; k++) {
+        let mark = document.getElementById('mark_' + move.squares[k].i + '.' + move.squares[k].j)
+        if (move.action == 'MARK') {
+          mark.setAttribute('opacity', '0')
+        } else if (move.action == 'UNMARK') {
+          mark.setAttribute('opacity', '1')
+        }
+      }
+    }
+    this.#addState()
+  }
+
+  freeze() {
+    this.#freeze = true
+  }
+
+  unfreeze() {
+    this.#freeze = false
+  }
   //#endregion
 
   //#region Auxiliar Functions
@@ -224,26 +287,34 @@ class nonogram {
       return false
     }
     let svg = document.createElementNS(SVG_LIB, 'svg')
-    let transform = 'translate(' + TRANSLATE_X + ',' + TRANSLATE_Y + ')'
     let palette = document.createElementNS(SVG_LIB, 'g')
-    palette.setAttribute('transform', transform)
     palette.setAttribute('id', 'palette')
     svg.appendChild(palette)
-    let calculatedY = TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5
-    transform = 'translate(' + TRANSLATE_X + ',' + calculatedY + ')'
     let main = document.createElementNS(SVG_LIB, 'g')
     main.setAttribute('id', 'main')
-    main.setAttribute('transform', transform)
     svg.appendChild(main)
     let components = document.createElementNS(SVG_LIB, 'g')
     components.setAttribute('id', 'components')
-    components.setAttribute('transform', transform)
     svg.appendChild(components)
     let aux = document.createElementNS(SVG_LIB, 'g')
     aux.setAttribute('id', 'aux')
-    aux.setAttribute('transform', transform)
     svg.appendChild(aux)
     nonogramElement.appendChild(svg)
+  }
+
+  #loadPalette() {
+    let transform = 'translate(' + TRANSLATE_X + ',' + TRANSLATE_Y + ')'
+    document.getElementById('palette').setAttribute('transform', transform)
+    if (this.#data.colors.length > 2) {
+      let calculatedY = TRANSLATE_Y + SQUARE_COLOR_SIZE * 1.5
+      transform = 'translate(' + TRANSLATE_X + ',' + calculatedY + ')'
+      for (let i = 1; i < this.#data.colors.length; i++) {
+        this.#createSquareColor(i)
+      }
+    }
+    document.getElementById('main').setAttribute('transform', transform)
+    document.getElementById('components').setAttribute('transform', transform)
+    document.getElementById('aux').setAttribute('transform', transform)
   }
 
   #createSquareColor(i) {
@@ -306,6 +377,23 @@ class nonogram {
       '-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;',
     )
     document.getElementById('aux').appendChild(markAux)
+  }
+
+  #createErrorMark(pos_x, pos_y, i, j) {
+    let errorMark = document.createElementNS(SVG_LIB, 'text')
+    errorMark.setAttribute('id', 'error_mark_' + i + '.' + j)
+    errorMark.setAttribute('text-anchor', 'middle')
+    errorMark.setAttribute('font-family', 'serif')
+    errorMark.setAttribute('font-size', this.#size)
+    errorMark.setAttribute('x', pos_x + (i + 0.5) * this.#size)
+    errorMark.setAttribute('y', pos_y + (j + 0.85) * this.#size)
+    errorMark.setAttribute('opacity', '0')
+    errorMark.textContent = '\u2715'
+    errorMark.setAttribute(
+      'style',
+      '-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;',
+    )
+    document.getElementById('main').appendChild(errorMark)
   }
 
   #createSquare(pos_x, pos_y, i, j) {
@@ -864,6 +952,25 @@ class nonogram {
       }
     }
   }
+
+  #invertColor(hex) {
+    if (hex.indexOf('#') === 0) {
+      hex = hex.slice(1)
+    }
+    if (hex.length === 3) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2]
+    }
+    let r = (255 - parseInt(hex.slice(0, 2), 16)).toString(16),
+      g = (255 - parseInt(hex.slice(2, 4), 16)).toString(16),
+      b = (255 - parseInt(hex.slice(4, 6), 16)).toString(16)
+    return '#' + this.#padZero(r) + this.#padZero(g) + this.#padZero(b)
+  }
+
+  #padZero(str, len) {
+    len = len || 2
+    let zeros = new Array(len).join('0')
+    return (zeros + str).slice(-len)
+  }
   //#endregion
 
   //#region Event Functions
@@ -880,7 +987,7 @@ class nonogram {
   }
 
   #highlightSquare(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -904,7 +1011,7 @@ class nonogram {
   }
 
   #fadeSquare(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -932,7 +1039,7 @@ class nonogram {
   }
 
   #initColorsChange(evt) {
-    if (!this.#totalValidated && evt.button != 1) {
+    if (!this.#totalValidated && evt.button != 1 && !this.#freeze) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -997,7 +1104,7 @@ class nonogram {
   }
 
   #changeColorSquares(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -1037,7 +1144,7 @@ class nonogram {
   }
 
   #markSquareNumber(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let opacity = evt.target.getAttribute('opacity')
       let id = evt.target.getAttribute('id')
       id = id.replace('squareNumber_', '')
@@ -1059,7 +1166,7 @@ class nonogram {
   }
 
   #markNumber(evt) {
-    if (!this.#totalValidated) {
+    if (!this.#totalValidated && !this.#freeze) {
       let fill = evt.target.getAttribute('fill')
       let id = evt.target.getAttribute('id')
       id = id.replace('number_', '')
@@ -1082,25 +1189,32 @@ class nonogram {
 
   #switchSquareColor() {
     let palette = document.getElementById('palette').children
-    let selected = 0
-    for (let i = 0; i < palette.length; i++) {
-      if (palette[i].getAttribute('stroke-width') == 3) {
-        if (i == palette.length - 1) selected = 0
-        else selected = i + 1
-        break
+    if (palette.length > 0) {
+      let selected = 0
+      for (let i = 0; i < palette.length; i++) {
+        if (palette[i].getAttribute('stroke-width') == 3) {
+          if (i == palette.length - 1) selected = 0
+          else selected = i + 1
+          break
+        }
       }
+      this.#colorSelected = this.#data.colors[selected + 1]
+      palette[selected].setAttribute('stroke-width', '3')
+      for (let i = 1; i < this.#data.colors.length; i++) {
+        let squareColor = document.getElementById('squareColor_' + i)
+        if (i != selected + 1) squareColor.setAttribute('stroke-width', '1')
+      }
+      this.#refreshCursor()
     }
-    this.#colorSelected = this.#data.colors[selected + 1]
-    palette[selected].setAttribute('stroke-width', '3')
-    for (let i = 1; i < this.#data.colors.length; i++) {
-      let squareColor = document.getElementById('squareColor_' + i)
-      if (i != selected + 1) squareColor.setAttribute('stroke-width', '1')
-    }
-    this.#refreshCursor()
   }
 
   #endColorsChange() {
     if (this.#clicked && this.#data) {
+      let move = {
+        action: this.#markSelected ? 'MARK' : 'PAINT',
+        color: this.#colorSelected,
+        squares: [],
+      }
       for (let i = 0; i < this.#data.settings.width; i++) {
         for (let j = 0; j < this.#data.settings.height; j++) {
           let squareAux = document.getElementById('square_aux_' + i + '.' + j)
@@ -1109,11 +1223,25 @@ class nonogram {
             id = id.replace('square_aux_', 'square_')
             let square = document.getElementById(id)
             let squareColor = squareAux.getAttribute('fill')
+            let previousColor = square.getAttribute('fill')
             square.setAttribute('fill', squareColor)
             if (squareColor == this.#data.colors[0]) square.setAttribute('opacity', '0')
             else square.setAttribute('opacity', '1')
             squareAux.setAttribute('fill', this.#data.colors[0])
             squareAux.setAttribute('opacity', '0')
+            move.squares.push({ i, j, previousColor })
+            if (this.#showErrorsImmediately) {
+              let errorMark = document.getElementById('error_mark_' + i + '.' + j)
+              if (
+                squareColor == this.#data.colors[this.#data.points[j][i]] ||
+                squareColor == this.#data.colors[0]
+              ) {
+                errorMark.setAttribute('opacity', '0')
+              } else {
+                errorMark.setAttribute('fill', this.#invertColor(squareColor))
+                errorMark.setAttribute('opacity', '1')
+              }
+            }
           }
           let markAux = document.getElementById('mark_aux_' + i + '.' + j)
           if (markAux.getAttribute('opacity') == '1') {
@@ -1122,18 +1250,27 @@ class nonogram {
             let mark = document.getElementById(id)
             mark.setAttribute('opacity', '1')
             markAux.setAttribute('opacity', '0')
+            move.squares.push({ i, j })
+            if (this.#showErrorsImmediately) {
+              let errorMark = document.getElementById('error_mark_' + i + '.' + j)
+              errorMark.setAttribute('opacity', '0')
+            }
           } else if (markAux.getAttribute('opacity') == '0.1') {
             let id = markAux.getAttribute('id')
             id = id.replace('mark_aux_', 'mark_')
             let mark = document.getElementById(id)
             mark.setAttribute('opacity', '0')
             markAux.setAttribute('opacity', '0')
+            move.squares.push({ i, j })
+            move.action = 'UNMARK'
           }
         }
       }
       this.#clicked = false
       this.#validate()
       this.#addState()
+      let receiveMoveEvent = new CustomEvent('receiveMove', { detail: move })
+      document.dispatchEvent(receiveMoveEvent)
     }
   }
   //#endregion
