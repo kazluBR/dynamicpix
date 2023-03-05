@@ -49,7 +49,18 @@
     <div id="nonogram"></div>
     <script>
       let data = {}
-      const nng = new nonogram()
+      
+      const config = {
+        size: 15,
+        showErrorsOnCheck: true,
+        showErrorsImmediately: true,
+        finishCallback: () => console.log('Puzzle Finished!'),
+      }
+      const nng = new nonogram(config)
+
+      document.addEventListener('receiveMove', (e) => {
+        console.log(e.detail)
+      })
 
       function loadNonogram(event) {
         let files = event.target.files

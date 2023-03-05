@@ -1054,34 +1054,40 @@ class nonogram {
       if (this.#colorSquare == this.#data.colors[0]) {
         if (markOpacity == '0') {
           if (evt.button == 0) {
+            // blank to painted
             evt.target.setAttribute('fill', this.#colorSelected)
             evt.target.setAttribute('opacity', '1')
             square.setAttribute('fill', this.#colorSelected)
             square.setAttribute('opacity', '1')
             this.#colorSquare = this.#colorSelected
           } else {
+            // blank to marked
             markAux.setAttribute('opacity', '1')
             mark.setAttribute('opacity', '1')
             this.#markSelected = true
           }
         } else {
           if (evt.button == 0) {
+            // marked to painted
             evt.target.setAttribute('fill', this.#colorSelected)
             evt.target.setAttribute('opacity', '1')
             square.setAttribute('fill', this.#colorSelected)
             square.setAttribute('opacity', '1')
             this.#colorSquare = this.#colorSelected
           }
+          // marked to blank
           markAux.setAttribute('opacity', '0.1')
           mark.setAttribute('opacity', '0')
         }
       } else {
         if (evt.button == 0) {
           if (this.#colorSquare != this.#colorSelected) {
+            // painted to painted (another color)
             evt.target.setAttribute('fill', this.#colorSelected)
             square.setAttribute('fill', this.#colorSelected)
             this.#colorSquare = this.#colorSelected
           } else {
+            // painted to blank
             evt.target.setAttribute('fill', this.#data.colors[0])
             evt.target.setAttribute('opacity', '0')
             square.setAttribute('fill', this.#data.colors[0])
@@ -1089,6 +1095,7 @@ class nonogram {
             this.#colorSquare = this.#data.colors[0]
           }
         } else {
+          // painted to marked
           evt.target.setAttribute('fill', this.#data.colors[0])
           evt.target.setAttribute('opacity', '0')
           square.setAttribute('fill', this.#data.colors[0])
