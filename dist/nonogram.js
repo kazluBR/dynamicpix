@@ -14,6 +14,7 @@ class nonogram {
   #size
   #showErrorsOnCheck
   #showErrorsImmediately
+  #keepCorrectPaintedSquares
   #finishCallback
   #data
   #totalValidated
@@ -32,6 +33,7 @@ class nonogram {
     this.#size = config.size || 20
     this.#showErrorsOnCheck = config.showErrorsOnCheck || false
     this.#showErrorsImmediately = config.showErrorsImmediately || false
+    this.#keepCorrectPaintedSquares = config.keepCorrectPaintedSquares || false
     this.#finishCallback = config.finishCallback || (() => alert('Puzzle Finished!'))
     this.#data = {}
     this.#totalValidated = false
@@ -1069,6 +1071,14 @@ class nonogram {
           mark.setAttribute('opacity', '0')
         }
       } else {
+        if (this.#keepCorrectPaintedSquares) {
+          if (
+            this.#colorSquarePrevious ==
+            this.#data.colors[this.#data.points[this.#squareJ][this.#squareI]]
+          ) {
+            return
+          }
+        }
         if (evt.button == 0) {
           if (this.#colorSquarePrevious != this.#colorSelected) {
             // painted to painted (another color)
