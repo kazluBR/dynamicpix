@@ -66,7 +66,15 @@
         ['#f5efeb', '#d3473d', '#f6ad0f', '#86bcd1', '#316a96', '#2e243f'],
         ['#f7e7c6', '#331e50', '#a63725', '#d68e49'],
       ]
-      const edt = new editor()
+
+      const config = {
+        size: 15,
+        width: 10,
+        height: 10,
+        gridLength: 5,
+        palette: PALETTES[0],
+      }
+      const edt = new editor(config)
       edt.init()
 
       function loadJson(event) {

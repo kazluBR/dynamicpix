@@ -11,7 +11,7 @@ On /dist you can find the files you need
 | [editor.js](/dist/editor.js)                                                                          | javascript es6 file |
 | [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/editor/1.0.0/editor-min.js)       | javascript minified |
 | [nonogram.js](/dist/nonogram.js)                                                                      | javascript es6 file |
-| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.1.0/nonogram-min.js) | javascript minified |
+| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.2.0/nonogram-min.js) | javascript minified |
 
 ## Editor
 
@@ -103,6 +103,7 @@ const config = {
   size: int, // defaults to 20
   showErrorsOnCheck: bool, // defaults to false
   showErrorsImmediately: bool, // defaults to false
+  keepCorrectPaintedSquares: bool, // defaults to false
   finishCallback: () => {}, // defaults to alert('Puzzle Finished!')
 }
 const nng = new nonogram(config)
@@ -173,3 +174,5 @@ Move Object:
 - 1.0.0: First version - [javascript minified](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.0.0/nonogram-min.js)
 
 - 1.1.0: [Pull Request](https://github.com/kazluBR/dynamicpix/pull/28) - [javascript minified](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.1.0/nonogram-min.js)
+
+- 1.2.0: [Pull Request](https://github.com/kazluBR/dynamicpix/pull/29) - [javascript minified](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.2.0/nonogram-min.js)

@@ -14,6 +14,7 @@ class nonogram {
   #size
   #showErrorsOnCheck
   #showErrorsImmediately
+  #keepCorrectPaintedSquares
   #finishCallback
   #data
   #totalValidated
@@ -23,6 +24,7 @@ class nonogram {
   #squareI
   #squareJ
   #colorSquare
+  #colorSquarePrevious
   #colorSelected
   #markSelected
   #freeze
@@ -31,6 +33,7 @@ class nonogram {
     this.#size = config.size || 20
     this.#showErrorsOnCheck = config.showErrorsOnCheck || false
     this.#showErrorsImmediately = config.showErrorsImmediately || false
+    this.#keepCorrectPaintedSquares = config.keepCorrectPaintedSquares || false
     this.#finishCallback = config.finishCallback || (() => alert('Puzzle Finished!'))
     this.#data = {}
     this.#totalValidated = false
@@ -155,18 +158,6 @@ class nonogram {
               signalVertical.setAttribute('fill', SIGNAL_ERROR_COLOR)
             }
             errors++
-          } else {
-            mark = document.getElementById('mark_' + i + '.' + j)
-            markOpacity = mark.getAttribute('opacity')
-            if (this.#data.points[j][i] != 0 && markOpacity == '1') {
-              if (this.#showErrorsOnCheck) {
-                signalHorizontal.setAttribute('opacity', '1')
-                signalHorizontal.setAttribute('fill', SIGNAL_ERROR_COLOR)
-                signalVertical.setAttribute('opacity', '1')
-                signalVertical.setAttribute('fill', SIGNAL_ERROR_COLOR)
-              }
-              errors++
-            }
           }
         }
       }
@@ -1046,49 +1037,65 @@ class nonogram {
       this.#squareI = parseInt(idSplited[0])
       this.#squareJ = parseInt(idSplited[1])
       let square = document.getElementById('square_' + this.#squareI + '.' + this.#squareJ)
-      this.#colorSquare = square.getAttribute('fill')
+      this.#colorSquarePrevious = square.getAttribute('fill')
       let markAux = document.getElementById('mark_aux_' + this.#squareI + '.' + this.#squareJ)
       let mark = document.getElementById('mark_' + this.#squareI + '.' + this.#squareJ)
       let markOpacity = mark.getAttribute('opacity')
       this.#markSelected = false
-      if (this.#colorSquare == this.#data.colors[0]) {
+      if (this.#colorSquarePrevious == this.#data.colors[0]) {
         if (markOpacity == '0') {
           if (evt.button == 0) {
+            // blank to painted
             evt.target.setAttribute('fill', this.#colorSelected)
             evt.target.setAttribute('opacity', '1')
             square.setAttribute('fill', this.#colorSelected)
             square.setAttribute('opacity', '1')
             this.#colorSquare = this.#colorSelected
           } else {
+            // blank to marked
             markAux.setAttribute('opacity', '1')
             mark.setAttribute('opacity', '1')
             this.#markSelected = true
           }
         } else {
           if (evt.button == 0) {
+            // marked to painted
             evt.target.setAttribute('fill', this.#colorSelected)
             evt.target.setAttribute('opacity', '1')
             square.setAttribute('fill', this.#colorSelected)
             square.setAttribute('opacity', '1')
             this.#colorSquare = this.#colorSelected
           }
+          // marked to blank
           markAux.setAttribute('opacity', '0.1')
           mark.setAttribute('opacity', '0')
         }
       } else {
+        if (this.#keepCorrectPaintedSquares) {
+          if (
+            this.#colorSquarePrevious ==
+            this.#data.colors[this.#data.points[this.#squareJ][this.#squareI]]
+          ) {
+            return
+          }
+        }
         if (evt.button == 0) {
-          if (this.#colorSquare != this.#colorSelected) {
+          if (this.#colorSquarePrevious != this.#colorSelected) {
+            // painted to painted (another color)
             evt.target.setAttribute('fill', this.#colorSelected)
+            evt.target.setAttribute('opacity', '1')
             square.setAttribute('fill', this.#colorSelected)
             this.#colorSquare = this.#colorSelected
           } else {
+            // painted to blank
             evt.target.setAttribute('fill', this.#data.colors[0])
-            evt.target.setAttribute('opacity', '0')
+            evt.target.setAttribute('opacity', '1')
             square.setAttribute('fill', this.#data.colors[0])
             square.setAttribute('opacity', '0')
             this.#colorSquare = this.#data.colors[0]
           }
         } else {
+          // painted to marked
           evt.target.setAttribute('fill', this.#data.colors[0])
           evt.target.setAttribute('opacity', '0')
           square.setAttribute('fill', this.#data.colors[0])
@@ -1212,7 +1219,7 @@ class nonogram {
     if (this.#clicked && this.#data) {
       let move = {
         action: this.#markSelected ? 'MARK' : 'PAINT',
-        color: this.#colorSelected,
+        color: this.#colorSquare,
         squares: [],
       }
       for (let i = 0; i < this.#data.settings.width; i++) {
@@ -1224,6 +1231,8 @@ class nonogram {
             let square = document.getElementById(id)
             let squareColor = squareAux.getAttribute('fill')
             let previousColor = square.getAttribute('fill')
+            if (previousColor != this.#colorSquarePrevious)
+              previousColor = this.#colorSquarePrevious
             square.setAttribute('fill', squareColor)
             if (squareColor == this.#data.colors[0]) square.setAttribute('opacity', '0')
             else square.setAttribute('opacity', '1')
@@ -1261,8 +1270,10 @@ class nonogram {
             let mark = document.getElementById(id)
             mark.setAttribute('opacity', '0')
             markAux.setAttribute('opacity', '0')
-            move.squares.push({ i, j })
-            move.action = 'UNMARK'
+            if (move.squares.length == 0) {
+              move.squares.push({ i, j })
+              move.action = 'UNMARK'
+            }
           }
         }
       }
