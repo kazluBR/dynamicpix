@@ -156,18 +156,6 @@ class nonogram {
               signalVertical.setAttribute('fill', SIGNAL_ERROR_COLOR)
             }
             errors++
-          } else {
-            mark = document.getElementById('mark_' + i + '.' + j)
-            markOpacity = mark.getAttribute('opacity')
-            if (this.#data.points[j][i] != 0 && markOpacity == '1') {
-              if (this.#showErrorsOnCheck) {
-                signalHorizontal.setAttribute('opacity', '1')
-                signalHorizontal.setAttribute('fill', SIGNAL_ERROR_COLOR)
-                signalVertical.setAttribute('opacity', '1')
-                signalVertical.setAttribute('fill', SIGNAL_ERROR_COLOR)
-              }
-              errors++
-            }
           }
         }
       }
