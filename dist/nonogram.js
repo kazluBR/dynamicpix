@@ -927,15 +927,19 @@ class nonogram {
     let square = document.getElementById('square_' + i + '.' + j)
     let markAux = document.getElementById('mark_aux_' + i + '.' + j)
     let mark = document.getElementById('mark_' + i + '.' + j)
+    let squareColor = square.getAttribute('fill')
+    if (this.#keepCorrectPaintedSquares) {
+      if (squareColor == this.#data.colors[this.#data.points[j][i]]) {
+        return
+      }
+    }
     if (this.#markSelected) {
-      let squareColor = square.getAttribute('fill')
       if (squareColor == this.#data.colors[0]) markAux.setAttribute('opacity', '1')
     } else if (this.#colorSquare == this.#data.colors[0]) {
       squareAux.setAttribute('fill', this.#colorSquare)
       squareAux.setAttribute('opacity', '1')
       markAux.setAttribute('opacity', '0.1')
     } else {
-      let squareColor = square.getAttribute('fill')
       let markOpacity = mark.getAttribute('opacity')
       if (squareColor == this.#data.colors[0] && markOpacity == '0') {
         squareAux.setAttribute('fill', this.#colorSquare)
@@ -1037,12 +1041,13 @@ class nonogram {
       this.#squareI = parseInt(idSplited[0])
       this.#squareJ = parseInt(idSplited[1])
       let square = document.getElementById('square_' + this.#squareI + '.' + this.#squareJ)
-      this.#colorSquarePrevious = square.getAttribute('fill')
+      this.#colorSquare = square.getAttribute('fill')
       let markAux = document.getElementById('mark_aux_' + this.#squareI + '.' + this.#squareJ)
       let mark = document.getElementById('mark_' + this.#squareI + '.' + this.#squareJ)
       let markOpacity = mark.getAttribute('opacity')
       this.#markSelected = false
-      if (this.#colorSquarePrevious == this.#data.colors[0]) {
+      this.#colorSquarePrevious = this.#colorSquare
+      if (this.#colorSquare == this.#data.colors[0]) {
         if (markOpacity == '0') {
           if (evt.button == 0) {
             // blank to painted
@@ -1073,14 +1078,13 @@ class nonogram {
       } else {
         if (this.#keepCorrectPaintedSquares) {
           if (
-            this.#colorSquarePrevious ==
-            this.#data.colors[this.#data.points[this.#squareJ][this.#squareI]]
+            this.#colorSquare == this.#data.colors[this.#data.points[this.#squareJ][this.#squareI]]
           ) {
             return
           }
         }
         if (evt.button == 0) {
-          if (this.#colorSquarePrevious != this.#colorSelected) {
+          if (this.#colorSquare != this.#colorSelected) {
             // painted to painted (another color)
             evt.target.setAttribute('fill', this.#colorSelected)
             evt.target.setAttribute('opacity', '1')
