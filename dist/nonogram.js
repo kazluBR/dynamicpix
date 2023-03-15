@@ -233,6 +233,7 @@ class nonogram {
         }
       }
     }
+    this.#validate()
     this.#addState()
   }
 
@@ -259,6 +260,7 @@ class nonogram {
         }
       }
     }
+    this.#validate()
     this.#addState()
   }
 
@@ -929,7 +931,7 @@ class nonogram {
     let mark = document.getElementById('mark_' + i + '.' + j)
     let squareColor = square.getAttribute('fill')
     if (this.#keepCorrectPaintedSquares) {
-      if (squareColor == this.#data.colors[this.#data.points[j][i]]) {
+      if (squareColor == this.#data.colors[this.#data.points[j][i]] && !this.#markSelected) {
         return
       }
     }
