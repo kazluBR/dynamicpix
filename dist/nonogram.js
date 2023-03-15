@@ -233,6 +233,7 @@ class nonogram {
         }
       }
     }
+    this.#validate()
     this.#addState()
   }
 
@@ -259,6 +260,7 @@ class nonogram {
         }
       }
     }
+    this.#validate()
     this.#addState()
   }
 
