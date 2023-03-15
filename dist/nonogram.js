@@ -930,14 +930,12 @@ class nonogram {
     let markAux = document.getElementById('mark_aux_' + i + '.' + j)
     let mark = document.getElementById('mark_' + i + '.' + j)
     let squareColor = square.getAttribute('fill')
-    if (this.#keepCorrectPaintedSquares) {
-      if (squareColor == this.#data.colors[this.#data.points[j][i]] && !this.#markSelected) {
-        return
-      }
-    }
     if (this.#markSelected) {
       if (squareColor == this.#data.colors[0]) markAux.setAttribute('opacity', '1')
     } else if (this.#colorSquare == this.#data.colors[0]) {
+      if (squareColor == this.#data.colors[this.#data.points[j][i]]) {
+        return
+      }
       squareAux.setAttribute('fill', this.#colorSquare)
       squareAux.setAttribute('opacity', '1')
       markAux.setAttribute('opacity', '0.1')
