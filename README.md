@@ -11,7 +11,7 @@ On /dist you can find the files you need
 | [editor.js](/dist/editor.js)                                                                          | javascript es6 file |
 | [editor-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/editor/1.0.0/editor-min.js)       | javascript minified |
 | [nonogram.js](/dist/nonogram.js)                                                                      | javascript es6 file |
-| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.2.2/nonogram-min.js) | javascript minified |
+| [nonogram-min.js](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.2.3/nonogram-min.js) | javascript minified |
 
 ## Editor
 
@@ -180,3 +180,5 @@ Move Object:
 - 1.2.1: [Pull Request](https://github.com/kazluBR/dynamicpix/pull/30) - [javascript minified](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.2.1/nonogram-min.js)
 
 - 1.2.2: [Pull Request](https://github.com/kazluBR/dynamicpix/pull/31) - [javascript minified](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.2.2/nonogram-min.js)
+
+- 1.2.3: [Pull Request](https://github.com/kazluBR/dynamicpix/pull/32) - [javascript minified](https://cdn.jsdelivr.net/gh/kazluBR/dynamicpix/dist/nonogram/1.2.3/nonogram-min.js)

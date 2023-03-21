@@ -930,14 +930,12 @@ class nonogram {
     let markAux = document.getElementById('mark_aux_' + i + '.' + j)
     let mark = document.getElementById('mark_' + i + '.' + j)
     let squareColor = square.getAttribute('fill')
-    if (this.#keepCorrectPaintedSquares) {
-      if (squareColor == this.#data.colors[this.#data.points[j][i]] && !this.#markSelected) {
-        return
-      }
-    }
     if (this.#markSelected) {
       if (squareColor == this.#data.colors[0]) markAux.setAttribute('opacity', '1')
     } else if (this.#colorSquare == this.#data.colors[0]) {
+      if (squareColor == this.#data.colors[this.#data.points[j][i]]) {
+        return
+      }
       squareAux.setAttribute('fill', this.#colorSquare)
       squareAux.setAttribute('opacity', '1')
       markAux.setAttribute('opacity', '0.1')
@@ -984,7 +982,7 @@ class nonogram {
   }
 
   #highlightSquare(evt) {
-    if (!this.#totalValidated && !this.#freeze) {
+    if (!this.#totalValidated) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -1008,7 +1006,7 @@ class nonogram {
   }
 
   #fadeSquare(evt) {
-    if (!this.#totalValidated && !this.#freeze) {
+    if (!this.#totalValidated) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
@@ -1036,119 +1034,124 @@ class nonogram {
   }
 
   #initColorsChange(evt) {
-    if (!this.#totalValidated && evt.button != 1 && !this.#freeze) {
+    if (!this.#totalValidated && evt.button != 1) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
       this.#squareI = parseInt(idSplited[0])
       this.#squareJ = parseInt(idSplited[1])
-      let square = document.getElementById('square_' + this.#squareI + '.' + this.#squareJ)
-      this.#colorSquare = square.getAttribute('fill')
-      let markAux = document.getElementById('mark_aux_' + this.#squareI + '.' + this.#squareJ)
-      let mark = document.getElementById('mark_' + this.#squareI + '.' + this.#squareJ)
-      let markOpacity = mark.getAttribute('opacity')
-      this.#markSelected = false
-      this.#colorSquarePrevious = this.#colorSquare
-      if (this.#colorSquare == this.#data.colors[0]) {
-        if (markOpacity == '0') {
-          if (evt.button == 0) {
-            // blank to painted
-            evt.target.setAttribute('fill', this.#colorSelected)
-            evt.target.setAttribute('opacity', '1')
-            square.setAttribute('fill', this.#colorSelected)
-            square.setAttribute('opacity', '1')
-            this.#colorSquare = this.#colorSelected
+      if (!this.#freeze) {
+        let square = document.getElementById('square_' + this.#squareI + '.' + this.#squareJ)
+        this.#colorSquare = square.getAttribute('fill')
+        let markAux = document.getElementById('mark_aux_' + this.#squareI + '.' + this.#squareJ)
+        let mark = document.getElementById('mark_' + this.#squareI + '.' + this.#squareJ)
+        let markOpacity = mark.getAttribute('opacity')
+        this.#markSelected = false
+        this.#colorSquarePrevious = this.#colorSquare
+        if (this.#colorSquare == this.#data.colors[0]) {
+          if (markOpacity == '0') {
+            if (evt.button == 0) {
+              // blank to painted
+              evt.target.setAttribute('fill', this.#colorSelected)
+              evt.target.setAttribute('opacity', '1')
+              square.setAttribute('fill', this.#colorSelected)
+              square.setAttribute('opacity', '1')
+              this.#colorSquare = this.#colorSelected
+            } else {
+              // blank to marked
+              markAux.setAttribute('opacity', '1')
+              mark.setAttribute('opacity', '1')
+              this.#markSelected = true
+            }
           } else {
-            // blank to marked
+            if (evt.button == 0) {
+              // marked to painted
+              evt.target.setAttribute('fill', this.#colorSelected)
+              evt.target.setAttribute('opacity', '1')
+              square.setAttribute('fill', this.#colorSelected)
+              square.setAttribute('opacity', '1')
+              this.#colorSquare = this.#colorSelected
+            }
+            // marked to blank
+            markAux.setAttribute('opacity', '0.1')
+            mark.setAttribute('opacity', '0')
+          }
+        } else {
+          if (this.#keepCorrectPaintedSquares) {
+            if (
+              this.#colorSquare ==
+              this.#data.colors[this.#data.points[this.#squareJ][this.#squareI]]
+            ) {
+              return
+            }
+          }
+          if (evt.button == 0) {
+            if (this.#colorSquare != this.#colorSelected) {
+              // painted to painted (another color)
+              evt.target.setAttribute('fill', this.#colorSelected)
+              evt.target.setAttribute('opacity', '1')
+              square.setAttribute('fill', this.#colorSelected)
+              this.#colorSquare = this.#colorSelected
+            } else {
+              // painted to blank
+              evt.target.setAttribute('fill', this.#data.colors[0])
+              evt.target.setAttribute('opacity', '1')
+              square.setAttribute('fill', this.#data.colors[0])
+              square.setAttribute('opacity', '0')
+              this.#colorSquare = this.#data.colors[0]
+            }
+          } else {
+            // painted to marked
+            evt.target.setAttribute('fill', this.#data.colors[0])
+            evt.target.setAttribute('opacity', '0')
+            square.setAttribute('fill', this.#data.colors[0])
+            square.setAttribute('opacity', '0')
             markAux.setAttribute('opacity', '1')
             mark.setAttribute('opacity', '1')
             this.#markSelected = true
           }
-        } else {
-          if (evt.button == 0) {
-            // marked to painted
-            evt.target.setAttribute('fill', this.#colorSelected)
-            evt.target.setAttribute('opacity', '1')
-            square.setAttribute('fill', this.#colorSelected)
-            square.setAttribute('opacity', '1')
-            this.#colorSquare = this.#colorSelected
-          }
-          // marked to blank
-          markAux.setAttribute('opacity', '0.1')
-          mark.setAttribute('opacity', '0')
         }
-      } else {
-        if (this.#keepCorrectPaintedSquares) {
-          if (
-            this.#colorSquare == this.#data.colors[this.#data.points[this.#squareJ][this.#squareI]]
-          ) {
-            return
-          }
-        }
-        if (evt.button == 0) {
-          if (this.#colorSquare != this.#colorSelected) {
-            // painted to painted (another color)
-            evt.target.setAttribute('fill', this.#colorSelected)
-            evt.target.setAttribute('opacity', '1')
-            square.setAttribute('fill', this.#colorSelected)
-            this.#colorSquare = this.#colorSelected
-          } else {
-            // painted to blank
-            evt.target.setAttribute('fill', this.#data.colors[0])
-            evt.target.setAttribute('opacity', '1')
-            square.setAttribute('fill', this.#data.colors[0])
-            square.setAttribute('opacity', '0')
-            this.#colorSquare = this.#data.colors[0]
-          }
-        } else {
-          // painted to marked
-          evt.target.setAttribute('fill', this.#data.colors[0])
-          evt.target.setAttribute('opacity', '0')
-          square.setAttribute('fill', this.#data.colors[0])
-          square.setAttribute('opacity', '0')
-          markAux.setAttribute('opacity', '1')
-          mark.setAttribute('opacity', '1')
-          this.#markSelected = true
-        }
+        this.#clicked = true
       }
-      this.#clicked = true
       this.#refreshCalculatedValues(this.#squareI, this.#squareJ)
     }
   }
 
   #changeColorSquares(evt) {
-    if (!this.#totalValidated && !this.#freeze) {
+    if (!this.#totalValidated) {
       let id = evt.target.getAttribute('id')
       id = id.replace('square_aux_', '')
       let idSplited = id.split('.')
       let i = parseInt(idSplited[0])
       let j = parseInt(idSplited[1])
-      let count = 0
-      if (this.#clicked) {
-        this.#cleanAllSquaresAndMarksAux()
-        if (i > this.#squareI && j == this.#squareJ) {
-          count = this.#squareI
-          while (count <= i) {
-            this.#refreshSquareAndMark(count, this.#squareJ)
-            count++
-          }
-        } else if (i < this.#squareI && j == this.#squareJ) {
-          count = i
-          while (count <= this.#squareI) {
-            this.#refreshSquareAndMark(count, this.#squareJ)
-            count++
-          }
-        } else if (i == this.#squareI && j > this.#squareJ) {
-          count = this.#squareJ
-          while (count <= j) {
-            this.#refreshSquareAndMark(this.#squareI, count)
-            count++
-          }
-        } else if (i == this.#squareI && j < this.#squareJ) {
-          count = j
-          while (count <= this.#squareJ) {
-            this.#refreshSquareAndMark(this.#squareI, count)
-            count++
+      if (!this.#freeze) {
+        let count = 0
+        if (this.#clicked) {
+          this.#cleanAllSquaresAndMarksAux()
+          if (i > this.#squareI && j == this.#squareJ) {
+            count = this.#squareI
+            while (count <= i) {
+              this.#refreshSquareAndMark(count, this.#squareJ)
+              count++
+            }
+          } else if (i < this.#squareI && j == this.#squareJ) {
+            count = i
+            while (count <= this.#squareI) {
+              this.#refreshSquareAndMark(count, this.#squareJ)
+              count++
+            }
+          } else if (i == this.#squareI && j > this.#squareJ) {
+            count = this.#squareJ
+            while (count <= j) {
+              this.#refreshSquareAndMark(this.#squareI, count)
+              count++
+            }
+          } else if (i == this.#squareI && j < this.#squareJ) {
+            count = j
+            while (count <= this.#squareJ) {
+              this.#refreshSquareAndMark(this.#squareI, count)
+              count++
+            }
           }
         }
       }
@@ -1157,7 +1160,7 @@ class nonogram {
   }
 
   #markSquareNumber(evt) {
-    if (!this.#totalValidated && !this.#freeze) {
+    if (!this.#totalValidated) {
       let opacity = evt.target.getAttribute('opacity')
       let id = evt.target.getAttribute('id')
       id = id.replace('squareNumber_', '')
@@ -1179,7 +1182,7 @@ class nonogram {
   }
 
   #markNumber(evt) {
-    if (!this.#totalValidated && !this.#freeze) {
+    if (!this.#totalValidated) {
       let fill = evt.target.getAttribute('fill')
       let id = evt.target.getAttribute('id')
       id = id.replace('number_', '')
